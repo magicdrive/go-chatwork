@@ -1,6 +1,11 @@
 package api
 
-import "reflect"
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"reflect"
+)
 
 const ApiHost = "https://api.chatwork.com"
 const ApiVersion = "v2"
@@ -12,9 +17,28 @@ type ApiSpec struct {
 	Params      map[string]string
 }
 
-func call(spec ApiSpec) (string, error) {
-	return "", nil
+type ToApiSpecIntf interface {
+	ToApiSpec() ApiSpec
+}
 
+func Call(spec_data ToApiSpecIntf) (string, error) {
+	data := spec_data.ToApiSpec()
+
+	req, _ := http.NewRequest(
+		data.Method, fmt.Sprintf("%s/%s/%s", ApiHost, ApiVersion, data.ResouceName), nil)
+	req.Header.Set("X-ChatworkToken", data.Credential)
+
+	//TODO:  param & methods
+	client := new(http.Client)
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	byteArray, _ := ioutil.ReadAll(resp.Body)
+
+	return string(byteArray), nil
 }
 
 func StructToMap(data interface{}) map[string]string {
