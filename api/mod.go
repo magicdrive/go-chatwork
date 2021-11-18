@@ -6,7 +6,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"reflect"
+
+	json "github.com/goccy/go-json"
 )
 
 const ApiHost = "https://api.chatwork.com"
@@ -75,17 +76,12 @@ func HttpRequest(data ApiSpec) *http.Request {
 	}
 }
 
-func StructToMap(data interface{}) map[string]string {
-
+func JsonStringToMap(data string) (map[string]string, error) {
 	result := make(map[string]string)
-	elem := reflect.ValueOf(data).Elem()
-	size := elem.NumField()
-
-	for i := 0; i < size; i++ {
-		key := elem.Type().Field(i).Name
-		value := elem.Field(i).String()
-		result[key] = value
+	if err := json.Unmarshal([]byte(data), &result); err != nil {
+		return nil, err
+	} else {
+		return result, nil
 	}
-
-	return result
 }
+
