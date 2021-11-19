@@ -1,2 +1,6 @@
 package api
 
+func Contacts() {
+	
+}
+
