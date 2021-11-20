@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	json "github.com/goccy/go-json"
+	"github.com/magicdrive/go-chatwork/api"
 )
 
 type MeResource struct {
@@ -42,7 +43,7 @@ func NewMe(credential string) ContactsResource {
 }
 
 func (c MeResource) Get() (MeData, error) {
-	spec := ApiSpec{
+	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
 		ResouceName: c.ResourceName,
@@ -51,7 +52,7 @@ func (c MeResource) Get() (MeData, error) {
 
 	result := MeData{}
 
-	str, err := Call(spec)
+	str, err := api.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), result)
 	}
