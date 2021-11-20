@@ -20,12 +20,7 @@ type ApiSpec struct {
 	Params      map[string]string
 }
 
-type ToApiSpecIntf interface {
-	ToApiSpec() ApiSpec
-}
-
-func Call(spec ToApiSpecIntf) ([]byte, error) {
-	data := spec.ToApiSpec()
+func Call(data ApiSpec) ([]byte, error) {
 
 	req := HttpRequest(data)
 	req.Header.Set("X-ChatworkToken", data.Credential)
@@ -76,7 +71,7 @@ func HttpRequest(data ApiSpec) *http.Request {
 	}
 }
 
-func JsonStringToMap(data string) (map[string]string, error) {
+func JsonToMap(data []byte) (map[string]string, error) {
 	result := make(map[string]string)
 	if err := json.Unmarshal([]byte(data), &result); err != nil {
 		return nil, err
@@ -84,4 +79,3 @@ func JsonStringToMap(data string) (map[string]string, error) {
 		return result, nil
 	}
 }
-
