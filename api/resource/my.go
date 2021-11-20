@@ -1,6 +1,9 @@
 package resource
 
-import "github.com/magicdrive/go-chatwork/api/my"
+import (
+	"github.com/magicdrive/go-chatwork/api/resource/my_sub"
+	my "github.com/magicdrive/go-chatwork/api/resource/my_sub"
+)
 
 type MyResource struct {
 	ResourceName string
@@ -16,7 +19,7 @@ func My(credential string) MyResource {
 }
 
 func (c MeResource) Status() my.StatusResource {
-	return my.NewStatus(c.ResourceName, c.Credential)
+	return my_sub.NewStatus(c.ResourceName, c.Credential)
 }
 
 func (c MeResource) Tasks() my.TasksResource {

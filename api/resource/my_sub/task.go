@@ -1,4 +1,4 @@
-package my
+package my_sub
 
 import (
 	"encoding/json"
