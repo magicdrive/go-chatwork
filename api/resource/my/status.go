@@ -21,10 +21,10 @@ type StatusData struct {
 	MytaskNum      int `json:"mytask_num"`
 }
 
-func NewStatus(parent api.MyResource) StatusResource {
+func NewStatus(parent string, credential string) StatusResource {
 	data := StatusResource{
-		ResourceName: parent.ResourceName + `/status`,
-		Credential:   parent.Credential,
+		ResourceName: parent + `/status`,
+		Credential:   credential,
 	}
 	return data
 

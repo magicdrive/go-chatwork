@@ -41,10 +41,10 @@ const (
 	Open
 )
 
-func NewTasks(parent api.MyResource) TasksResource {
+func NewTasks(parent string, credential string) TasksResource {
 	data := TasksResource{
-		ResourceName: parent.ResourceName + `/tasks`,
-		Credential:   parent.Credential,
+		ResourceName: parent + `/tasks`,
+		Credential:   credential,
 	}
 	return data
 
