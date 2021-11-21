@@ -20,6 +20,11 @@ type ApiSpec struct {
 	Params      map[string]string
 }
 
+const (
+	ChatworkBoolFalse = iota
+	ChatworkBoolTrue
+)
+
 func Call(data ApiSpec) ([]byte, error) {
 
 	req := HttpRequest(data)
