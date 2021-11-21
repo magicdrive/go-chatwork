@@ -1,8 +1,9 @@
 package my_sub
 
 import (
-	"encoding/json"
 	"net/http"
+
+	json "github.com/goccy/go-json"
 
 	"github.com/magicdrive/go-chatwork/api"
 )

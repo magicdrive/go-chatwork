@@ -1,6 +1,7 @@
 package resource
 
 import (
+	"fmt"
 	"net/http"
 
 	json "github.com/goccy/go-json"
@@ -31,7 +32,7 @@ func NewIncommingRequests(credential string) IncommingRequestsResource {
 	return data
 }
 
-func (c IncommingRequestsResource) Get() ([]IncommingRequestData, error) {
+func (c IncommingRequestsResource) List() ([]IncommingRequestData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
@@ -39,7 +40,7 @@ func (c IncommingRequestsResource) Get() ([]IncommingRequestData, error) {
 		Params:      nil,
 	}
 
-	result := make([]IncommingRequestData, 32)
+	result := make([]IncommingRequestData, 0, 32)
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -53,7 +54,7 @@ func (c IncommingRequestsResource) Accept(incomming_request_id int) (IncommingRe
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
-		ResouceName: c.ResourceName + `/` + string(incomming_request_id),
+		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, incomming_request_id),
 		Params:      nil,
 	}
 
@@ -71,7 +72,7 @@ func (c IncommingRequestsResource) Delete(incomming_request_id int) (bool, error
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodDelete,
-		ResouceName: c.ResourceName + `/` + string(incomming_request_id),
+		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, incomming_request_id),
 		Params:      nil,
 	}
 

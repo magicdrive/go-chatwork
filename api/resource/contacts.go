@@ -31,7 +31,7 @@ func Contacts(credential string) ContactsResource {
 	return data
 }
 
-func (c ContactsResource) Get() ([]ContactData, error) {
+func (c ContactsResource) List() ([]ContactData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
@@ -39,7 +39,7 @@ func (c ContactsResource) Get() ([]ContactData, error) {
 		Params:      nil,
 	}
 
-	result := make([]ContactData, 32)
+	result := make([]ContactData, 0, 32)
 
 	str, err := api.Call(spec)
 	if err == nil {

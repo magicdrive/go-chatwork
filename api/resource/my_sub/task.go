@@ -1,8 +1,9 @@
 package my_sub
 
 import (
-	"encoding/json"
 	"net/http"
+
+	json "github.com/goccy/go-json"
 
 	"github.com/magicdrive/go-chatwork/api"
 )
@@ -31,7 +32,7 @@ type TaskData struct {
 	LimitType string `json:"limit_type"`
 }
 
-type ParamsGet struct {
+type TasksListParam struct {
 	AssignedByAccountId int `json:"assigned_by_account_id"`
 	Status              int `json:"status"`
 }
@@ -50,7 +51,7 @@ func NewTasks(parent string, credential string) TasksResource {
 
 }
 
-func (c TasksResource) Get(params ParamsGet) ([]TaskData, error) {
+func (c TasksResource) List(params TasksListParam) ([]TaskData, error) {
 
 	b, _ := json.Marshal(params)
 	p, _ := api.JsonToMap(b)
@@ -62,7 +63,7 @@ func (c TasksResource) Get(params ParamsGet) ([]TaskData, error) {
 		Params:      p,
 	}
 
-	result := make([]TaskData, 32)
+	result := make([]TaskData, 0, 32)
 
 	str, err := api.Call(spec)
 	if err == nil {
