@@ -6,6 +6,7 @@ import (
 
 	json "github.com/goccy/go-json"
 	"github.com/magicdrive/go-chatwork/api"
+	rooms "github.com/magicdrive/go-chatwork/api/resource/rooms_sub"
 )
 
 type RoomsResource struct {
@@ -176,22 +177,22 @@ func (c RoomsResource) Delete(room_id int, action int) error {
 	return err
 }
 
-func (c RoomsResource) Files() {
-
+func (c RoomsResource) Files() rooms.FilesResource {
+	return rooms.NewFilesResource(c.ResourceName, c.Credential)
 }
 
-func (c RoomsResource) Link() {
-
+func (c RoomsResource) Link() rooms.LinkResource {
+	return rooms.NewLinkResource(c.ResourceName, c.Credential)
 }
 
-func (c RoomsResource) Member() {
-
+func (c RoomsResource) Members() rooms.MembersResource {
+	return rooms.NewMembersResource(c.ResourceName, c.Credential)
 }
 
-func (c RoomsResource) Message() {
-
+func (c RoomsResource) Message() rooms.MessagesResource {
+	return rooms.NewMessagesResource(c.ResourceName, c.Credential)
 }
 
-func (c RoomsResource) Tasks() {
-
+func (c RoomsResource) Tasks() rooms.TasksResource {
+	return rooms.NewTasksResource(c.ResourceName, c.Credential)
 }

@@ -55,7 +55,7 @@ const (
 	TaskBodyDone = "done"
 )
 
-func NewTasks(parent string, credential string) TasksResource {
+func NewTasksResource(parent string, credential string) TasksResource {
 	data := TasksResource{
 		ResourceName: parent + `/%d/tasks`,
 		Credential:   credential,

@@ -37,7 +37,7 @@ type MembersUpdateParam struct {
 	MembersReadonlyIds []int `json:"members_readonly_ids"`
 }
 
-func NewMembers(parent string, credential string) MembersResource {
+func NewMembersResource(parent string, credential string) MembersResource {
 	data := MembersResource{
 		ResourceName: parent + `/%d/members`,
 		Credential:   credential,

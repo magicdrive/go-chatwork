@@ -41,7 +41,7 @@ type MessageReadStatusData struct {
 	MetionNum int `json:"mention_num"`
 }
 
-func NewMessages(parent string, credential string) MessagesResource {
+func NewMessagesResource(parent string, credential string) MessagesResource {
 	data := MessagesResource{
 		ResourceName: parent + `/%d/messages`,
 		Credential:   credential,
