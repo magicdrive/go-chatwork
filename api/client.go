@@ -3,9 +3,12 @@ package api
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 	"net/url"
+	"os"
 
 	json "github.com/goccy/go-json"
 )
@@ -20,10 +23,42 @@ type ApiSpec struct {
 	Params      map[string]string
 }
 
+type ApiSpecMultipart struct {
+	Credential  string
+	Method      string
+	ResouceName string
+	Params      map[string]io.Reader
+}
+
 const (
 	ChatworkBoolFalse = iota
 	ChatworkBoolTrue
 )
+
+func CallMultipart(data ApiSpecMultipart) ([]byte, error) {
+
+	req, err := HttpRequestMultipart(data)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("X-ChatworkToken", data.Credential)
+
+	client := new(http.Client)
+
+	if resp, err := client.Do(req); err != nil {
+		return []byte{}, err
+	} else {
+
+		defer resp.Body.Close()
+
+		if body, err := ioutil.ReadAll(resp.Body); err != nil {
+			return []byte{}, err
+		} else {
+			return body, nil
+		}
+	}
+
+}
 
 func Call(data ApiSpec) ([]byte, error) {
 
@@ -83,4 +118,45 @@ func JsonToMap(data []byte) (map[string]string, error) {
 	} else {
 		return result, nil
 	}
+}
+
+func HttpRequestMultipart(data ApiSpecMultipart) (*http.Request, error) {
+
+	endpoint := fmt.Sprintf("%s/%s/%s", ApiHost, ApiVersion, data.ResouceName)
+	values := data.Params
+
+	var b bytes.Buffer
+	writer := multipart.NewWriter(&b)
+
+	for key, r := range values {
+		var fieldw io.Writer
+		var err error
+		if x, ok := r.(io.Closer); ok {
+			defer x.Close()
+		}
+
+		if x, ok := r.(*os.File); ok {
+			if fieldw, err = writer.CreateFormFile(key, x.Name()); err != nil {
+				return nil, err
+			}
+		} else {
+			if fieldw, err = writer.CreateFormField(key); err != nil {
+				return nil, err
+			}
+		}
+		if _, err := io.Copy(fieldw, r); err != nil {
+			return nil, err
+		}
+	}
+
+	defer writer.Close()
+
+	req, err := http.NewRequest(data.Method, endpoint, &b)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+
+	return req, err
 }
