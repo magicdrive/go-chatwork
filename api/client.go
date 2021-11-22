@@ -127,6 +127,7 @@ func HttpRequestMultipart(data ApiSpecMultipart) (*http.Request, error) {
 
 	var b bytes.Buffer
 	writer := multipart.NewWriter(&b)
+	defer writer.Close()
 
 	for key, r := range values {
 		var fieldw io.Writer
@@ -148,8 +149,6 @@ func HttpRequestMultipart(data ApiSpecMultipart) (*http.Request, error) {
 			return nil, err
 		}
 	}
-
-	defer writer.Close()
 
 	req, err := http.NewRequest(data.Method, endpoint, &b)
 	if err != nil {

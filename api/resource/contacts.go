@@ -23,7 +23,7 @@ type ContactData struct {
 	AvatarImageUrl   string `json:"avatar_image_url"`
 }
 
-func Contacts(credential string) ContactsResource {
+func NewContactsResource(credential string) ContactsResource {
 	data := ContactsResource{
 		ResourceName: `/contacts`,
 		Credential:   credential,

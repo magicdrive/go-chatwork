@@ -8,12 +8,12 @@ import (
 	"github.com/magicdrive/go-chatwork/api"
 )
 
-type IncommingRequestsResource struct {
+type IncomingRequestsResource struct {
 	ResourceName string
 	Credential   string
 }
 
-type IncommingRequestData struct {
+type IncomingRequestData struct {
 	AccountID        int    `json:"account_id"`
 	RoomID           int    `json:"room_id"`
 	Name             string `json:"name"`
@@ -24,15 +24,15 @@ type IncommingRequestData struct {
 	AvatarImageURL   string `json:"avatar_image_url"`
 }
 
-func NewIncommingRequests(credential string) IncommingRequestsResource {
-	data := IncommingRequestsResource{
-		ResourceName: `/incomming_requests`,
+func NewIncomingRequestsResource(credential string) IncomingRequestsResource {
+	data := IncomingRequestsResource{
+		ResourceName: `/incoming_requests`,
 		Credential:   credential,
 	}
 	return data
 }
 
-func (c IncommingRequestsResource) List() ([]IncommingRequestData, error) {
+func (c IncomingRequestsResource) List() ([]IncomingRequestData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
@@ -40,7 +40,7 @@ func (c IncommingRequestsResource) List() ([]IncommingRequestData, error) {
 		Params:      nil,
 	}
 
-	result := make([]IncommingRequestData, 0, 32)
+	result := make([]IncomingRequestData, 0, 32)
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -50,15 +50,15 @@ func (c IncommingRequestsResource) List() ([]IncommingRequestData, error) {
 	return result, err
 }
 
-func (c IncommingRequestsResource) Accept(incomming_request_id int) (IncommingRequestData, error) {
+func (c IncomingRequestsResource) Accept(incoming_request_id int) (IncomingRequestData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
-		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, incomming_request_id),
+		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, incoming_request_id),
 		Params:      nil,
 	}
 
-	result := IncommingRequestData{}
+	result := IncomingRequestData{}
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -68,11 +68,11 @@ func (c IncommingRequestsResource) Accept(incomming_request_id int) (IncommingRe
 	return result, err
 }
 
-func (c IncommingRequestsResource) Delete(incomming_request_id int) (bool, error) {
+func (c IncomingRequestsResource) Delete(incoming_request_id int) (bool, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodDelete,
-		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, incomming_request_id),
+		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, incoming_request_id),
 		Params:      nil,
 	}
 

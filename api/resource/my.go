@@ -9,7 +9,7 @@ type MyResource struct {
 	Credential   string
 }
 
-func My(credential string) MyResource {
+func NewMyResource(credential string) MyResource {
 	data := MyResource{
 		ResourceName: `/my`,
 		Credential:   credential,

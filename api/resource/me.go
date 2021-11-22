@@ -34,7 +34,7 @@ type MeData struct {
 	LoginMail        string `json:"login_mail"`
 }
 
-func NewMe(credential string) MeResource {
+func NewMeResource(credential string) MeResource {
 	data := MeResource{
 		ResourceName: `/me`,
 		Credential:   credential,

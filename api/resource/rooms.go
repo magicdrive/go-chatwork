@@ -77,8 +77,8 @@ var (
 	_roomAction = []string{"leave", "delete"}
 )
 
-func NewRoomsResource(credential string) MyResource {
-	data := MyResource{
+func NewRoomsResource(credential string) RoomsResource {
+	data := RoomsResource{
 		ResourceName: `/rooms`,
 		Credential:   credential,
 	}
