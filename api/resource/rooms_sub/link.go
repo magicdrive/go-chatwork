@@ -25,9 +25,9 @@ type LinkDeleteData struct {
 }
 
 type LinkParam struct {
-	Code           string `json:"code"`
-	Description    string `json:"description"`
-	NeedAcceptance bool   `json:"need_acceptance"`
+	Code           *string `json:"code"`
+	Description    *string `json:"description"`
+	NeedAcceptance *bool   `json:"need_acceptance"`
 }
 
 func NewLinkResource(parent string, credential string) LinkResource {

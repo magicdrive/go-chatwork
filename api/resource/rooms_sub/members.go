@@ -33,8 +33,8 @@ type MembersRoomAuthorityData struct {
 
 type MembersUpdateParam struct {
 	MembersAdminIds    []int `json:"members_admin_ids"`
-	MembersMemberIds   []int `json:"members_member_ids"`
-	MembersReadonlyIds []int `json:"members_readonly_ids"`
+	MembersMemberIds   *[]int `json:"members_member_ids"`
+	MembersReadonlyIds *[]int `json:"members_readonly_ids"`
 }
 
 func NewMembersResource(parent string, credential string) MembersResource {

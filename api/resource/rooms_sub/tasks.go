@@ -34,15 +34,15 @@ type TaskData struct {
 }
 
 type TasksListParam struct {
-	AccountID           int `json:"account_id"`
-	AssignedByAccountId int `json:"assigned_by_account_id"`
-	Status              int `json:"status"`
+	AccountID           *int `json:"account_id"`
+	AssignedByAccountId *int `json:"assigned_by_account_id"`
+	Status              *string `json:"status"`
 }
 
 type TaskPostParam struct {
 	Body      string `json:"body"`
-	Limit     int    `json:"limit"`
-	LimitType string `json:"limit_type"`
+	Limit     *int    `json:"limit"`
+	LimitType *string `json:"limit_type"`
 	ToIds     []int  `json:"to_ids"`
 }
 

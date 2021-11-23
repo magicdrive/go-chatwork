@@ -31,21 +31,21 @@ type RoomData struct {
 }
 
 type RoomsCreateParam struct {
-	Description        string `json:"description"`
-	IconPreset         string `json:"icon_preset"`
-	Link               bool   `json:"link"`
-	LinkCode           string `json:"link_code"`
-	LinkNeedAcceptance bool   `json:"link_need_acceptance"`
-	MembersAdminIds    []int  `json:"members_admin_ids"`
-	MembersMemberIds   []int  `json:"members_member_ids"`
-	MembersReadonlyIds []int  `json:"members_readonly_ids"`
-	Name               string `json:"name"`
+	Description        string  `json:"description"`
+	IconPreset         string  `json:"icon_preset"`
+	Link               bool    `json:"link"`
+	LinkCode           string  `json:"link_code"`
+	LinkNeedAcceptance bool    `json:"link_need_acceptance"`
+	MembersAdminIds    *[]int  `json:"members_admin_ids"`
+	MembersMemberIds   []int   `json:"members_member_ids"`
+	MembersReadonlyIds []int   `json:"members_readonly_ids"`
+	Name               *string `json:"name"`
 }
 
 type RoomsUpdateParam struct {
-	Description string `json:"description"`
-	IconPreset  string `json:"icon_preset"`
-	Name        string `json:"name"`
+	Description *string `json:"description"`
+	IconPreset  *string `json:"icon_preset"`
+	Name        *string `json:"name"`
 }
 
 const (
@@ -163,13 +163,13 @@ func (c RoomsResource) Update(room_id int, params RoomsUpdateParam) error {
 
 }
 
-func (c RoomsResource) Delete(room_id int, action int) error {
+func (c RoomsResource) Delete(room_id int, action *int) error {
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPost,
 		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, room_id),
-		Params:      map[string]string{"action": _roomAction[action]},
+		Params:      map[string]string{"action": _roomAction[*action]},
 	}
 
 	_, err := api.Call(spec)

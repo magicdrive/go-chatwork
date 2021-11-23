@@ -33,8 +33,8 @@ type TaskData struct {
 }
 
 type TasksListParam struct {
-	AssignedByAccountId int `json:"assigned_by_account_id"`
-	Status              int `json:"status"`
+	AssignedByAccountId *int `json:"assigned_by_account_id"`
+	Status              *int `json:"status"`
 }
 
 const (

@@ -91,13 +91,13 @@ func (c MessagesResource) Post(room_id int, params MessagePostParam) (MessagePos
 	return result, err
 }
 
-func (c MessagesResource) Read(room_id int, message_id int) (MessageReadStatusData, error) {
+func (c MessagesResource) Read(room_id int, message_id *int) (MessageReadStatusData, error) {
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
-		ResouceName: fmt.Sprintf(c.ResourceName+"/%d/read", room_id, message_id),
-		Params:      nil,
+		ResouceName: fmt.Sprintf(c.ResourceName+"/read", room_id),
+		Params:      map[string]string{"message_id": strconv.Itoa(*message_id)},
 	}
 
 	result := MessageReadStatusData{}
@@ -110,12 +110,12 @@ func (c MessagesResource) Read(room_id int, message_id int) (MessageReadStatusDa
 	return result, err
 
 }
-func (c MessagesResource) Unread(room_id int, message_id int) (MessageReadStatusData, error) {
+func (c MessagesResource) Unread(room_id int, message_id *int) (MessageReadStatusData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
-		ResouceName: fmt.Sprintf(c.ResourceName+"/%d/unread", room_id, message_id),
-		Params:      nil,
+		ResouceName: fmt.Sprintf(c.ResourceName+"/unread", room_id),
+		Params:      map[string]string{"message_id": strconv.Itoa(*message_id)},
 	}
 
 	result := MessageReadStatusData{}
