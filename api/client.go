@@ -20,7 +20,7 @@ type ApiSpec struct {
 	Credential  string
 	Method      string
 	ResouceName string
-	Params      map[string]string
+	Params      map[string]*string
 }
 
 type ApiSpecMultipart struct {
@@ -89,35 +89,54 @@ func HttpRequest(data ApiSpec) *http.Request {
 
 		req, _ := http.NewRequest(data.Method, endpoint, nil)
 
-		params := req.URL.Query()
-		for key := range data.Params {
-			params.Add(key, data.Params[key])
-		}
+		if data.Params != nil {
+			params := req.URL.Query()
+			for key := range data.Params {
+				params.Add(key, data.Params[key])
+			}
 
-		req.URL.RawQuery = params.Encode()
+			req.URL.RawQuery = params.Encode()
+
+		}
 		return req
 
 	} else {
 
-		params := url.Values{}
-		for key := range data.Params {
-			params.Add(key, data.Params[key])
+		if data.Params != nil {
+			params := url.Values{}
+			for key := range data.Params {
+				params.Add(key, data.Params[key])
+			}
+
+			req, _ := http.NewRequest(data.Method, endpoint, bytes.NewBufferString(params.Encode()))
+			req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+			return req
+
+		} else {
+
+			req, _ := http.NewRequest(data.Method, endpoint, nil)
+			req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+			return req
 		}
-
-		req, _ := http.NewRequest(data.Method, endpoint, bytes.NewBufferString(params.Encode()))
-		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-
-		return req
 	}
 }
 
-func JsonToMap(data []byte) (map[string]string, error) {
-	result := make(map[string]string)
-	if err := json.Unmarshal([]byte(data), &result); err != nil {
+func JsonToMap(data []byte) (map[string]*string, error) {
+	result := make(map[string]*string)
+	unmarshaled := make(map[string]*string)
+
+	if err := json.Unmarshal([]byte(data), &unmarshaled); err != nil {
 		return nil, err
-	} else {
-		return result, nil
 	}
+
+	for key := range unmarshaled {
+		if unmarshaled[key] != nil {
+			result[key] = unmarshaled[key]
+		}
+	}
+	return result, nil
 }
 
 func HttpRequestMultipart(data ApiSpecMultipart) (*http.Request, error) {

@@ -43,11 +43,12 @@ func NewFilesResource(parent string, credential string) FilesResource {
 }
 
 func (c FilesResource) List(room_id int, account_id *int) ([]FileData, error) {
+	_account_id := strconv.Itoa(*account_id)
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
-		Params:      map[string]string{"account_id": strconv.Itoa(*account_id)},
+		Params:      map[string]*string{"account_id": &_account_id},
 	}
 
 	result := make([]FileData, 0, 32)
@@ -87,12 +88,13 @@ func (c FilesResource) Upload(room_id int, filepath string, message *string) (Fi
 	return result, err
 }
 
-func (c FilesResource) Get(room_id int, file_id int, create_download_flag *int) (FileData, error) {
+func (c FilesResource) Get(room_id int, file_id int, create_download_flag int) (FileData, error) {
+	_create_download_flag := strconv.Itoa(create_download_flag)
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/%d", room_id, file_id),
-		Params:      map[string]string{"create_download_flag": strconv.Itoa(*create_download_flag)},
+		Params:      map[string]*string{"create_download_flag": &_create_download_flag},
 	}
 
 	result := FileData{}

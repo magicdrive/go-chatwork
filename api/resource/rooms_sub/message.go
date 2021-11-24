@@ -51,12 +51,13 @@ func NewMessagesResource(parent string, credential string) MessagesResource {
 }
 
 func (c MessagesResource) List(room_id string, force int) ([]MessageData, error) {
+	_force := strconv.Itoa(force)
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
-		Params:      map[string]string{"force": strconv.Itoa(force)},
+		Params:      map[string]*string{"force": &_force},
 	}
 
 	result := make([]MessageData, 0, 32)
