@@ -14,8 +14,22 @@ type nullableInt struct {
 	asNull bool
 }
 
-func Int(v int64, as_null bool) nullableInt {
-	return nullableInt{
+func Int(v int64) *nullableInt {
+	return &nullableInt{
+		value:  v,
+		asNull: false,
+	}
+}
+
+func NilInt() *nullableInt {
+	return &nullableInt{
+		value:  0,
+		asNull: true,
+	}
+}
+
+func NullableInt(v int64, as_null bool) *nullableInt {
+	return &nullableInt{
 		value:  v,
 		asNull: as_null,
 	}

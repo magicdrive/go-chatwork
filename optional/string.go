@@ -13,7 +13,21 @@ type nullableString struct {
 	asNull bool
 }
 
-func String(v string, as_null bool) *nullableString {
+func String(v string) *nullableString {
+	return &nullableString{
+		value:  v,
+		asNull: false,
+	}
+}
+
+func NilString() *nullableString {
+	return &nullableString{
+		value:  "",
+		asNull: true,
+	}
+}
+
+func NullableString(v string, as_null bool) *nullableString {
 	return &nullableString{
 		value:  v,
 		asNull: as_null,
