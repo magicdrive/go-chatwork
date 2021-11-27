@@ -53,7 +53,7 @@ func (c *NullableInt) Get() int64 {
 	if c.valid {
 		return c.value
 	}
-	panic(errors.New("NullableString: `Get` was called without being validated.(*NullableString.Valid())"))
+	panic(errors.New("NullableInt: `Get` was called without being validated.(*NullableInt.Valid())"))
 }
 
 func (c *NullableInt) Value() (int64, error) {
@@ -93,7 +93,7 @@ func (c *NullableInt) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
-	c.asNull = true
+	c.asNull = false
 	return nil
 
 }

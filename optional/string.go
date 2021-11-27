@@ -80,7 +80,7 @@ func (c *NullableString) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	c.asNull = true
+	c.asNull = false
 	return nil
 
 }
