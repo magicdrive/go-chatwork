@@ -11,6 +11,7 @@ import (
 	"os"
 
 	json "github.com/goccy/go-json"
+	"github.com/magicdrive/go-chatwork/optional"
 )
 
 const ApiHost = "https://api.chatwork.com"
@@ -20,7 +21,7 @@ type ApiSpec struct {
 	Credential  string
 	Method      string
 	ResouceName string
-	Params      map[string]*string
+	Params      map[string]*optional.NullableString
 }
 
 type ApiSpecMultipart struct {
@@ -92,7 +93,9 @@ func HttpRequest(data ApiSpec) *http.Request {
 		if data.Params != nil {
 			params := req.URL.Query()
 			for key := range data.Params {
-				params.Add(key, data.Params[key])
+				if data.Params[key].IsPresent() {
+					params.Add(key, data.Params[key].Valid().Get())
+				}
 			}
 
 			req.URL.RawQuery = params.Encode()
@@ -105,7 +108,9 @@ func HttpRequest(data ApiSpec) *http.Request {
 		if data.Params != nil {
 			params := url.Values{}
 			for key := range data.Params {
-				params.Add(key, data.Params[key])
+				if data.Params[key].IsPresent() {
+					params.Add(key, data.Params[key].Valid().Get())
+				}
 			}
 
 			req, _ := http.NewRequest(data.Method, endpoint, bytes.NewBufferString(params.Encode()))
@@ -123,9 +128,9 @@ func HttpRequest(data ApiSpec) *http.Request {
 	}
 }
 
-func JsonToMap(data []byte) (map[string]*string, error) {
-	result := make(map[string]*string)
-	unmarshaled := make(map[string]*string)
+func JsonToMap(data []byte) (map[string]*optional.NullableString, error) {
+	result := make(map[string]*optional.NullableString)
+	unmarshaled := make(map[string]*optional.NullableString)
 
 	if err := json.Unmarshal([]byte(data), &unmarshaled); err != nil {
 		return nil, err

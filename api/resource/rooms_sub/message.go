@@ -8,6 +8,7 @@ import (
 	json "github.com/goccy/go-json"
 
 	"github.com/magicdrive/go-chatwork/api"
+	"github.com/magicdrive/go-chatwork/optional"
 )
 
 type MessagesResource struct {
@@ -51,13 +52,14 @@ func NewMessagesResource(parent string, credential string) MessagesResource {
 }
 
 func (c MessagesResource) List(room_id string, force int) ([]MessageData, error) {
-	_force := strconv.Itoa(force)
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
-		Params:      map[string]*string{"force": &_force},
+		Params: map[string]*optional.NullableString{
+			"force": optional.String(strconv.Itoa(force)),
+		},
 	}
 
 	result := make([]MessageData, 0, 32)
@@ -92,13 +94,20 @@ func (c MessagesResource) Post(room_id int, params MessagePostParam) (MessagePos
 	return result, err
 }
 
-func (c MessagesResource) Read(room_id int, message_id *int) (MessageReadStatusData, error) {
-
+func (c MessagesResource) Read(room_id int, message_id *optional.NullableInt) (MessageReadStatusData, error) {
+	var _message_id *optional.NullableString
+	if message_id.IsPresent() {
+		_message_id = optional.String(strconv.FormatInt(message_id.Valid().Get(), 10))
+	} else {
+		_message_id = optional.NilString()
+	}
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/read", room_id),
-		Params:      map[string]string{"message_id": strconv.Itoa(*message_id)},
+		Params: map[string]*optional.NullableString{
+			"message_id": _message_id,
+		},
 	}
 
 	result := MessageReadStatusData{}
@@ -111,12 +120,20 @@ func (c MessagesResource) Read(room_id int, message_id *int) (MessageReadStatusD
 	return result, err
 
 }
-func (c MessagesResource) Unread(room_id int, message_id *int) (MessageReadStatusData, error) {
+func (c MessagesResource) Unread(room_id int, message_id *optional.NullableInt) (MessageReadStatusData, error) {
+	var _message_id *optional.NullableString
+	if message_id.IsPresent() {
+		_message_id = optional.String(strconv.FormatInt(message_id.Valid().Get(), 10))
+	} else {
+		_message_id = optional.NilString()
+	}
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/unread", room_id),
-		Params:      map[string]string{"message_id": strconv.Itoa(*message_id)},
+		Params: map[string]*optional.NullableString{
+			"message_id": _message_id,
+		},
 	}
 
 	result := MessageReadStatusData{}
@@ -153,7 +170,7 @@ func (c MessagesResource) Edit(room_id int, message_id int, body string) (Messag
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/%d", room_id, message_id),
-		Params:      map[string]string{"body": body},
+		Params:      map[string]*optional.NullableString{"body": optional.String(body)},
 	}
 
 	result := MessagePostData{}

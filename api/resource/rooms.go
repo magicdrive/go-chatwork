@@ -7,6 +7,7 @@ import (
 	json "github.com/goccy/go-json"
 	"github.com/magicdrive/go-chatwork/api"
 	rooms "github.com/magicdrive/go-chatwork/api/resource/rooms_sub"
+	"github.com/magicdrive/go-chatwork/optional"
 )
 
 type RoomsResource struct {
@@ -31,41 +32,41 @@ type RoomData struct {
 }
 
 type RoomsCreateParam struct {
-	Description        string  `json:"description"`
-	IconPreset         string  `json:"icon_preset"`
-	Link               bool    `json:"link"`
-	LinkCode           string  `json:"link_code"`
-	LinkNeedAcceptance bool    `json:"link_need_acceptance"`
-	MembersAdminIds    *[]int  `json:"members_admin_ids"`
-	MembersMemberIds   []int   `json:"members_member_ids"`
-	MembersReadonlyIds []int   `json:"members_readonly_ids"`
-	Name               *string `json:"name"`
+	Description        string                  `json:"description"`
+	IconPreset         optional.NullableString `json:"icon_preset"`
+	Link               bool                    `json:"link"`
+	LinkCode           string                  `json:"link_code"`
+	LinkNeedAcceptance bool                    `json:"link_need_acceptance"`
+	MembersAdminIds    []int                   `json:"members_admin_ids"`
+	MembersMemberIds   []optional.NullableInt  `json:"members_member_ids"`
+	MembersReadonlyIds []optional.NullableInt  `json:"members_readonly_ids"`
+	Name               string                  `json:"name"`
 }
 
 type RoomsUpdateParam struct {
-	Description *string `json:"description"`
-	IconPreset  *string `json:"icon_preset"`
-	Name        *string `json:"name"`
+	Description optional.NullableString `json:"description"`
+	IconPreset  optional.NullableString `json:"icon_preset"`
+	Name        optional.NullableString `json:"name"`
 }
 
-const (
-	IconPresetGroup    = "group"
-	IconPresetCheck    = "check"
-	IconPresetDocument = "document"
-	IconPresetMeeting  = "meeting"
-	IconPresetEvent    = "event"
-	IconPresetProject  = "project"
-	IconPresetBusiness = "business"
-	IconPresetStudy    = "study"
-	IconPresetSecurity = "security"
-	IconPresetStar     = "star"
-	IconPresetIdea     = "idea"
-	IconPresetHeart    = "heart"
-	IconPresetMagcup   = "magcup"
-	IconPresetBeer     = "beer"
-	IconPresetMusic    = "music"
-	IconPresetSports   = "sports"
-	IconPresetTravel   = "travel"
+var (
+	IconPresetGroup    = optional.String("group")
+	IconPresetCheck    = optional.String("check")
+	IconPresetDocument = optional.String("document")
+	IconPresetMeeting  = optional.String("meeting")
+	IconPresetEvent    = optional.String("event")
+	IconPresetProject  = optional.String("project")
+	IconPresetBusiness = optional.String("business")
+	IconPresetStudy    = optional.String("study")
+	IconPresetSecurity = optional.String("security")
+	IconPresetStar     = optional.String("star")
+	IconPresetIdea     = optional.String("idea")
+	IconPresetHeart    = optional.String("heart")
+	IconPresetMagcup   = optional.String("magcup")
+	IconPresetBeer     = optional.String("beer")
+	IconPresetMusic    = optional.String("music")
+	IconPresetSports   = optional.String("sports")
+	IconPresetTravel   = optional.String("travel")
 )
 
 const (
@@ -74,7 +75,10 @@ const (
 )
 
 var (
-	_roomAction = []string{"leave", "delete"}
+	_roomAction = []*optional.NullableString{
+		optional.String("leave"),
+		optional.String("delete"),
+	}
 )
 
 func NewRoomsResource(credential string) RoomsResource {
@@ -163,13 +167,13 @@ func (c RoomsResource) Update(room_id int, params RoomsUpdateParam) error {
 
 }
 
-func (c RoomsResource) Delete(room_id int, action *int) error {
+func (c RoomsResource) Delete(room_id int, action int) error {
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPost,
 		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, room_id),
-		Params:      map[string]string{"action": _roomAction[*action]},
+		Params:      map[string]*optional.NullableString{"action": _roomAction[action]},
 	}
 
 	_, err := api.Call(spec)

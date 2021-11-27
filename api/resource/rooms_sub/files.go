@@ -10,6 +10,7 @@ import (
 
 	json "github.com/goccy/go-json"
 	"github.com/magicdrive/go-chatwork/api"
+	"github.com/magicdrive/go-chatwork/optional"
 )
 
 type FilesResource struct {
@@ -31,7 +32,7 @@ type FileData struct {
 }
 
 type FileUploadData struct {
-	Public bool `json:"public"`
+	Public *optional.NullableInt `json:"public"`
 }
 
 func NewFilesResource(parent string, credential string) FilesResource {
@@ -42,13 +43,13 @@ func NewFilesResource(parent string, credential string) FilesResource {
 	return data
 }
 
-func (c FilesResource) List(room_id int, account_id *int) ([]FileData, error) {
-	_account_id := strconv.Itoa(*account_id)
+func (c FilesResource) List(room_id int, account_id int) ([]FileData, error) {
+	_account_id := optional.String(strconv.Itoa(account_id))
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
-		Params:      map[string]*string{"account_id": &_account_id},
+		Params:      map[string]*optional.NullableString{"account_id": _account_id},
 	}
 
 	result := make([]FileData, 0, 32)
@@ -61,21 +62,25 @@ func (c FilesResource) List(room_id int, account_id *int) ([]FileData, error) {
 	return result, err
 }
 
-func (c FilesResource) Upload(room_id int, filepath string, message *string) (FileUploadData, error) {
+func (c FilesResource) Upload(room_id int, filepath string, message optional.NullableString) (FileUploadData, error) {
 
 	file_entity, err := os.Open(filepath)
 	if err != nil {
 		return FileUploadData{}, err
+	}
+	params := map[string]io.Reader{
+		"file": file_entity,
+	}
+	if message.IsPresent() {
+		s, _ := message.Value()
+		params["message"] = strings.NewReader(s)
 	}
 
 	spec := api.ApiSpecMultipart{
 		Credential:  c.Credential,
 		Method:      http.MethodPost,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
-		Params: map[string]io.Reader{
-			"file":    file_entity,
-			"message": strings.NewReader("hello world!"),
-		},
+		Params:      params,
 	}
 
 	result := FileUploadData{}
@@ -89,12 +94,12 @@ func (c FilesResource) Upload(room_id int, filepath string, message *string) (Fi
 }
 
 func (c FilesResource) Get(room_id int, file_id int, create_download_flag int) (FileData, error) {
-	_create_download_flag := strconv.Itoa(create_download_flag)
+	_create_download_flag := optional.String(strconv.Itoa(create_download_flag))
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/%d", room_id, file_id),
-		Params:      map[string]*string{"create_download_flag": &_create_download_flag},
+		Params:      map[string]*optional.NullableString{"create_download_flag": _create_download_flag},
 	}
 
 	result := FileData{}

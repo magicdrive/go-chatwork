@@ -6,6 +6,7 @@ import (
 	json "github.com/goccy/go-json"
 
 	"github.com/magicdrive/go-chatwork/api"
+	"github.com/magicdrive/go-chatwork/optional"
 )
 
 type TasksResource struct {
@@ -33,13 +34,13 @@ type TaskData struct {
 }
 
 type TasksListParam struct {
-	AssignedByAccountId *int `json:"assigned_by_account_id"`
-	Status              *int `json:"status"`
+	AssignedByAccountId *optional.NullableInt `json:"assigned_by_account_id"`
+	Status              *optional.NullableInt `json:"status"`
 }
 
-const (
-	Done = iota
-	Open
+var (
+	Done = optional.Int(1)
+	Open = optional.Int(2)
 )
 
 func NewTasks(parent string, credential string) TasksResource {

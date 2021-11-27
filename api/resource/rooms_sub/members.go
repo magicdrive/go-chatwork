@@ -7,6 +7,7 @@ import (
 	json "github.com/goccy/go-json"
 
 	"github.com/magicdrive/go-chatwork/api"
+	"github.com/magicdrive/go-chatwork/optional"
 )
 
 type MembersResource struct {
@@ -32,9 +33,9 @@ type MembersRoomAuthorityData struct {
 }
 
 type MembersUpdateParam struct {
-	MembersAdminIds    []int `json:"members_admin_ids"`
-	MembersMemberIds   *[]int `json:"members_member_ids"`
-	MembersReadonlyIds *[]int `json:"members_readonly_ids"`
+	MembersAdminIds    []int                   `json:"members_admin_ids"`
+	MembersMemberIds   []*optional.NullableInt `json:"members_member_ids"`
+	MembersReadonlyIds []*optional.NullableInt `json:"members_readonly_ids"`
 }
 
 func NewMembersResource(parent string, credential string) MembersResource {

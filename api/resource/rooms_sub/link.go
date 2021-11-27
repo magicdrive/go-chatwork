@@ -6,6 +6,7 @@ import (
 
 	json "github.com/goccy/go-json"
 	"github.com/magicdrive/go-chatwork/api"
+	"github.com/magicdrive/go-chatwork/optional"
 )
 
 type LinkResource struct {
@@ -25,9 +26,9 @@ type LinkDeleteData struct {
 }
 
 type LinkParam struct {
-	Code           *string `json:"code"`
-	Description    *string `json:"description"`
-	NeedAcceptance *bool   `json:"need_acceptance"`
+	Code           *optional.NullableString `json:"code"`
+	Description    *optional.NullableString `json:"description"`
+	NeedAcceptance *optional.NullableInt    `json:"need_acceptance"`
 }
 
 func NewLinkResource(parent string, credential string) LinkResource {

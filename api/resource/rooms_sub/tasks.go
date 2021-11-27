@@ -7,6 +7,7 @@ import (
 	json "github.com/goccy/go-json"
 
 	"github.com/magicdrive/go-chatwork/api"
+	"github.com/magicdrive/go-chatwork/optional"
 )
 
 type TasksResource struct {
@@ -34,16 +35,16 @@ type TaskData struct {
 }
 
 type TasksListParam struct {
-	AccountID           *int `json:"account_id"`
-	AssignedByAccountId *int `json:"assigned_by_account_id"`
-	Status              *string `json:"status"`
+	AccountID           *optional.NullableInt    `json:"account_id"`
+	AssignedByAccountId *optional.NullableInt    `json:"assigned_by_account_id"`
+	Status              *optional.NullableString `json:"status"`
 }
 
 type TaskPostParam struct {
-	Body      string `json:"body"`
-	Limit     *int    `json:"limit"`
-	LimitType *string `json:"limit_type"`
-	ToIds     []int  `json:"to_ids"`
+	Body      string                   `json:"body"`
+	Limit     *optional.NullableInt    `json:"limit"`
+	LimitType *optional.NullableString `json:"limit_type"`
+	ToIds     []int                    `json:"to_ids"`
 }
 
 type TaskPostData struct {
@@ -131,7 +132,7 @@ func (c TasksResource) Edit(room_id int, task_id int, body string) (TaskPostData
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/%d/status", room_id, task_id),
-		Params:      map[string]string{"body": body},
+		Params:      map[string]*optional.NullableString{"body": optional.String(body)},
 	}
 
 	result := TaskPostData{}

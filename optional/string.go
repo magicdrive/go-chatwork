@@ -8,45 +8,69 @@ import (
 	"github.com/goccy/go-json"
 )
 
-type nullableString struct {
+type NullableString struct {
 	value  string
 	asNull bool
+	valid  bool
 }
 
-func String(v string) *nullableString {
-	return &nullableString{
+func String(v string) *NullableString {
+	return &NullableString{
 		value:  v,
 		asNull: false,
+		valid:  true,
 	}
 }
 
-func NilString() *nullableString {
-	return &nullableString{
+func NilString() *NullableString {
+	return &NullableString{
 		value:  "",
 		asNull: true,
+		valid:  false,
 	}
 }
 
-func NullableString(v string, as_null bool) *nullableString {
-	return &nullableString{
+func NewNullableString(v string, as_null bool) *NullableString {
+	return &NullableString{
 		value:  v,
 		asNull: as_null,
+		valid:  false,
 	}
 }
 
-func (c *nullableString) Value() (string, error) {
+func (c *NullableString) Valid() *NullableString {
+	c.valid = true
+	return c
+}
+
+func (c *NullableString) Invalid() *NullableString {
+	c.valid = false
+	return c
+}
+
+func (c *NullableString) Get() string {
+	if c.valid {
+		return c.value
+	}
+	panic(errors.New("NullableString: `Get` was called without being validated.(*NullableString.Valid())"))
+}
+
+func (c *NullableString) Value() (string, error) {
 	if c.asNull {
-		return "", errors.New("this value is null.")
+		return "", errors.New("NullableString: This value is null.")
 	}
 	return c.value, nil
 }
 
-func (c *nullableString) IsNull() bool {
+func (c *NullableString) IsNull() bool {
 	return c.asNull
-
 }
 
-func (c *nullableString) UnmarshalJSON(data []byte) error {
+func (c *NullableString) IsPresent() bool {
+	return !c.asNull
+}
+
+func (c *NullableString) UnmarshalJSON(data []byte) error {
 	if bytes.Equal(data, []byte("null")) {
 		c.asNull = true
 		return nil
@@ -61,7 +85,7 @@ func (c *nullableString) UnmarshalJSON(data []byte) error {
 
 }
 
-func (c *nullableString) MarshalJSON() ([]byte, error) {
+func (c *NullableString) MarshalJSON() ([]byte, error) {
 	if c.asNull {
 		return []byte("null"), nil
 	} else {
