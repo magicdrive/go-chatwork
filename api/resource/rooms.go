@@ -32,11 +32,11 @@ type RoomData struct {
 }
 
 type RoomsCreateParam struct {
-	Description        string                  `json:"description"`
+	Description        optional.NullableString `json:"description"`
 	IconPreset         optional.NullableString `json:"icon_preset"`
-	Link               bool                    `json:"link"`
-	LinkCode           string                  `json:"link_code"`
-	LinkNeedAcceptance bool                    `json:"link_need_acceptance"`
+	Link               optional.NullableBool   `json:"link"`
+	LinkCode           optional.NullableString `json:"link_code"`
+	LinkNeedAcceptance optional.NullableBool   `json:"link_need_acceptance"`
 	MembersAdminIds    []int                   `json:"members_admin_ids"`
 	MembersMemberIds   []optional.NullableInt  `json:"members_member_ids"`
 	MembersReadonlyIds []optional.NullableInt  `json:"members_readonly_ids"`
@@ -70,15 +70,8 @@ var (
 )
 
 const (
-	RoomLeave = iota
-	RoomDelete
-)
-
-var (
-	_roomAction = []*optional.NullableString{
-		optional.String("leave"),
-		optional.String("delete"),
-	}
+	RoomLeave  = "leave"
+	RoomDelete = "delete"
 )
 
 func NewRoomsResource(credential string) RoomsResource {
@@ -167,13 +160,15 @@ func (c RoomsResource) Update(room_id int, params RoomsUpdateParam) error {
 
 }
 
-func (c RoomsResource) Delete(room_id int, action int) error {
+func (c RoomsResource) Delete(room_id int, action string) error {
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPost,
 		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, room_id),
-		Params:      map[string]*optional.NullableString{"action": _roomAction[action]},
+		Params: map[string]*optional.NullableString{
+			"action_type": optional.String(action),
+		},
 	}
 
 	_, err := api.Call(spec)

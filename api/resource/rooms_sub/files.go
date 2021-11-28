@@ -5,7 +5,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
 
 	json "github.com/goccy/go-json"
@@ -43,13 +42,14 @@ func NewFilesResource(parent string, credential string) FilesResource {
 	return data
 }
 
-func (c FilesResource) List(room_id int, account_id int) ([]FileData, error) {
-	_account_id := optional.String(strconv.Itoa(account_id))
+func (c FilesResource) List(room_id int, account_id *optional.NullableInt) ([]FileData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
-		Params:      map[string]*optional.NullableString{"account_id": _account_id},
+		Params: map[string]*optional.NullableString{
+			"account_id": account_id.ToNullableString(),
+		},
 	}
 
 	result := make([]FileData, 0, 32)
@@ -72,7 +72,7 @@ func (c FilesResource) Upload(room_id int, filepath string, message optional.Nul
 		"file": file_entity,
 	}
 	if message.IsPresent() {
-		s, _ := message.Value()
+		s, _ := message.Valid().Get()
 		params["message"] = strings.NewReader(s)
 	}
 
@@ -93,13 +93,14 @@ func (c FilesResource) Upload(room_id int, filepath string, message optional.Nul
 	return result, err
 }
 
-func (c FilesResource) Get(room_id int, file_id int, create_download_flag int) (FileData, error) {
-	_create_download_flag := optional.String(strconv.Itoa(create_download_flag))
+func (c FilesResource) Get(room_id int, file_id int, create_download_flag *optional.NullableInt) (FileData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/%d", room_id, file_id),
-		Params:      map[string]*optional.NullableString{"create_download_flag": _create_download_flag},
+		Params: map[string]*optional.NullableString{
+			"create_download_flag": create_download_flag.ToNullableString(),
+		},
 	}
 
 	result := FileData{}

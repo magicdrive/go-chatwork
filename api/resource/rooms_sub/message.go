@@ -29,8 +29,8 @@ type MessageData struct {
 }
 
 type MessagePostParam struct {
-	Body       string `json:"body"`
-	SelfUnread int    `json:"self_unread"`
+	Body       string                 `json:"body"`
+	SelfUnread *optional.NullableBool `json:"self_unread"`
 }
 
 type MessagePostData struct {
@@ -51,14 +51,14 @@ func NewMessagesResource(parent string, credential string) MessagesResource {
 
 }
 
-func (c MessagesResource) List(room_id string, force int) ([]MessageData, error) {
+func (c MessagesResource) List(room_id string, force optional.NullableBool) ([]MessageData, error) {
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
 		Params: map[string]*optional.NullableString{
-			"force": optional.String(strconv.Itoa(force)),
+			"force": force.ToNullableString(),
 		},
 	}
 
@@ -95,18 +95,13 @@ func (c MessagesResource) Post(room_id int, params MessagePostParam) (MessagePos
 }
 
 func (c MessagesResource) Read(room_id int, message_id *optional.NullableInt) (MessageReadStatusData, error) {
-	var _message_id *optional.NullableString
-	if message_id.IsPresent() {
-		_message_id = optional.String(strconv.FormatInt(message_id.Valid().Get(), 10))
-	} else {
-		_message_id = optional.NilString()
-	}
+
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/read", room_id),
 		Params: map[string]*optional.NullableString{
-			"message_id": _message_id,
+			"message_id": message_id.ToNullableString(),
 		},
 	}
 

@@ -51,9 +51,14 @@ type TaskPostData struct {
 	TaskId []int `json:"task_ids"`
 }
 
-const (
-	TaskBodyOpen = "open"
-	TaskBodyDone = "done"
+var (
+	TaskLimitTypeNone = optional.String("none")
+	TaskLimitTypeDate = optional.String("date")
+	TaskLimitTypeTime = optional.String("time")
+)
+var (
+	TaskBodyStatusOpen = optional.String("open")
+	TaskBodyStatusDone = optional.String("done")
 )
 
 func NewTasksResource(parent string, credential string) TasksResource {

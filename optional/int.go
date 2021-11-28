@@ -63,6 +63,16 @@ func (c *NullableInt) Value() (int64, error) {
 	return c.value, nil
 }
 
+func (c *NullableInt) ToNullableString() (*NullableString) {
+	if c.asNull {
+		return NilString()
+	}
+
+	s := strconv.FormatInt(c.value, 10)
+
+	return String(s)
+}
+
 func (c *NullableInt) IsNull() bool {
 	return c.asNull
 }

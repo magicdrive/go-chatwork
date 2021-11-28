@@ -70,6 +70,18 @@ func (c *NullableBool) IsPresent() bool {
 	return !c.asNull
 }
 
+func (c *NullableBool) ToNullableString() (*NullableString) {
+	if c.asNull {
+		return NilString()
+	}
+
+	if c.value {
+		return String("1")
+	} else {
+		return String("0")
+	}
+}
+
 func (c *NullableBool) UnmarshalJSON(data []byte) error {
 	if bytes.Equal(data, []byte("null")) {
 		c.asNull = true
@@ -83,9 +95,9 @@ func (c *NullableBool) UnmarshalJSON(data []byte) error {
 		}
 
 		switch str {
-		case "true":
+		case "1":
 			c.value = true
-		case "false":
+		case "0":
 			c.value = false
 		default:
 			return fmt.Errorf("A value that cannot be interpreted as a bool: %v", err)
@@ -103,13 +115,10 @@ func (c *NullableBool) MarshalJSON() ([]byte, error) {
 	if c.asNull {
 		return []byte("nil"), nil
 	} else {
-		switch c.value {
-		case true:
-			return []byte("true"), nil
-		case false:
-			return []byte("false"), nil
-		default:
-			panic(errors.New("Deadcode!!!"))
+		if c.value {
+			return []byte("1"), nil
+		} else {
+			return []byte("0"), nil
 		}
 	}
 }

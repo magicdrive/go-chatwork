@@ -44,16 +44,17 @@ func NewMembersResource(parent string, credential string) MembersResource {
 		Credential:   credential,
 	}
 	return data
-
 }
 
-func (c MembersResource) List(room_id string) ([]MemberData, error) {
+func (c MembersResource) List(room_id string, force *optional.NullableBool) ([]MemberData, error) {
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
-		Params:      nil,
+		Params: map[string]*optional.NullableString{
+			"force": force.ToNullableString(),
+		},
 	}
 
 	result := make([]MemberData, 0, 32)
