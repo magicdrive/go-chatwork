@@ -22,6 +22,22 @@ func Bool(v bool) *NullableBool {
 	}
 }
 
+func BoolTrue() *NullableBool {
+	return &NullableBool{
+		value:  true,
+		asNull: false,
+		valid:  true,
+	}
+}
+
+func BoolFalse() *NullableBool {
+	return &NullableBool{
+		value:  false,
+		asNull: false,
+		valid:  true,
+	}
+}
+
 func NilBool() *NullableBool {
 	return &NullableBool{
 		value:  false,
@@ -70,7 +86,7 @@ func (c *NullableBool) IsPresent() bool {
 	return !c.asNull
 }
 
-func (c *NullableBool) ToNullableString() (*NullableString) {
+func (c *NullableBool) ToNullableString() *NullableString {
 	if c.asNull {
 		return NilString()
 	}

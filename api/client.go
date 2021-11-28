@@ -31,11 +31,6 @@ type ApiSpecMultipart struct {
 	Params      map[string]io.Reader
 }
 
-const (
-	ChatworkBoolFalse = iota
-	ChatworkBoolTrue
-)
-
 func CallMultipart(data ApiSpecMultipart) ([]byte, error) {
 
 	req, err := HttpRequestMultipart(data)
