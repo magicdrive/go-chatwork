@@ -1,1 +1,1 @@
-# [WIP] go-chatwork
+# go-chatwork
