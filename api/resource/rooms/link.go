@@ -1,4 +1,4 @@
-package rooms_sub
+package rooms
 
 import (
 	"fmt"

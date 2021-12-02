@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/magicdrive/go-chatwork"
-	rooms "github.com/magicdrive/go-chatwork/api/resource/rooms_sub"
+	rooms "github.com/magicdrive/go-chatwork/api/resource/rooms"
 	"github.com/magicdrive/go-chatwork/optional"
 )
 
