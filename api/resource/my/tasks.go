@@ -1,4 +1,4 @@
-package my_sub
+package my
 
 import (
 	"net/http"
@@ -39,8 +39,8 @@ type TasksListParam struct {
 }
 
 var (
-	Done = optional.Int(1)
-	Open = optional.Int(2)
+	TaskStatusDone = optional.Int(1)
+	TaskStatusOpen = optional.Int(2)
 )
 
 func NewTasks(parent string, credential string) TasksResource {

@@ -6,7 +6,7 @@ import (
 
 	json "github.com/goccy/go-json"
 	"github.com/magicdrive/go-chatwork/api"
-	rooms "github.com/magicdrive/go-chatwork/api/resource/rooms_sub"
+	rooms "github.com/magicdrive/go-chatwork/api/resource/rooms"
 	"github.com/magicdrive/go-chatwork/optional"
 )
 

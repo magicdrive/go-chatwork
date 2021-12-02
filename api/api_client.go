@@ -17,6 +17,8 @@ import (
 const ApiHost = "https://api.chatwork.com"
 const ApiVersion = "v2"
 
+var ApiEndpoint = fmt.Sprintf("%s/%s", ApiHost, ApiVersion)
+
 type ApiSpec struct {
 	Credential  string
 	Method      string
@@ -79,7 +81,7 @@ func Call(data ApiSpec) ([]byte, error) {
 
 func HttpRequest(data ApiSpec) *http.Request {
 
-	endpoint := fmt.Sprintf("%s/%s/%s", ApiHost, ApiVersion, data.ResouceName)
+	endpoint := fmt.Sprintf("%s/%s%s", ApiHost, ApiVersion, data.ResouceName)
 
 	if data.Method == http.MethodGet {
 
@@ -141,7 +143,7 @@ func JsonToMap(data []byte) (map[string]*optional.NullableString, error) {
 
 func HttpRequestMultipart(data ApiSpecMultipart) (*http.Request, error) {
 
-	endpoint := fmt.Sprintf("%s/%s/%s", ApiHost, ApiVersion, data.ResouceName)
+	endpoint := fmt.Sprintf("%s/%s", ApiEndpoint, data.ResouceName)
 	values := data.Params
 
 	var b bytes.Buffer

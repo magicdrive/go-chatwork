@@ -1,4 +1,4 @@
-package my_sub
+package my
 
 import (
 	"net/http"

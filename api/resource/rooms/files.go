@@ -72,7 +72,7 @@ func (c FilesResource) Upload(room_id int, filepath string, message optional.Nul
 		"file": file_entity,
 	}
 	if message.IsPresent() {
-		s, _ := message.Valid().Get()
+		s := message.Valid().Get()
 		params["message"] = strings.NewReader(s)
 	}
 
