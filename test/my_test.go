@@ -17,7 +17,7 @@ func TestGetMyStatus(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
 
-	mystatus := client.My().Status()
+	target := client.My().Status()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -33,11 +33,11 @@ func TestGetMyStatus(t *testing.T) {
 	}
 	`
 
-	httpmock.RegisterResponder("GET", fmt.Sprintf("%s%s", api.ApiEndpoint, mystatus.ResourceName),
+	httpmock.RegisterResponder("GET", fmt.Sprintf("%s%s", api.ApiEndpoint, target.ResourceName),
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
-	actual, err := mystatus.Get()
+	actual, err := target.Get()
 	assert.Nil(t, err)
 
 	expected := my.StatusData{}

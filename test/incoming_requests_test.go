@@ -121,10 +121,7 @@ func TestDeleteIncomingRequests(t *testing.T) {
 		httpmock.NewStringResponder(http.StatusOK, mock_json),
 	)
 
-	actural, err := target.Delete(request_id)
+	err := target.Delete(request_id)
 	assert.Nil(t, err)
 
-	expected := true
-
-	assert.Equal(t, expected, actural)
 }

@@ -15,6 +15,23 @@ type NullableInt struct {
 	valid  bool
 }
 
+func IntArray(a ...int64) []*NullableInt {
+	result := make([]*NullableInt, 0, 32)
+	for _, v := range a {
+		item := &NullableInt{
+			value:  v,
+			asNull: false,
+			valid:  true,
+		}
+		result = append(result, item)
+	}
+	return result
+}
+
+func IntEmptyArray(a ...int64) []*NullableInt {
+	return []*NullableInt{}
+}
+
 func Int(v int64) *NullableInt {
 	return &NullableInt{
 		value:  v,
@@ -63,7 +80,7 @@ func (c *NullableInt) Value() (int64, error) {
 	return c.value, nil
 }
 
-func (c *NullableInt) ToNullableString() (*NullableString) {
+func (c *NullableInt) ToNullableString() *NullableString {
 	if c.asNull {
 		return NilString()
 	}

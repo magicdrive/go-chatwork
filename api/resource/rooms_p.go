@@ -30,23 +30,28 @@ type RoomData struct {
 	IconPath       string `json:"icon_path"`
 	LastUpdateTime int    `json:"last_update_time"`
 }
+type RoomCreateData struct {
+	RoomID int `json:"room_id"`
+}
+
+type RoomUpdateData RoomsCreateParam
 
 type RoomsCreateParam struct {
-	Description        optional.NullableString `json:"description"`
-	IconPreset         optional.NullableString `json:"icon_preset"`
-	Link               optional.NullableBool   `json:"link"`
-	LinkCode           optional.NullableString `json:"link_code"`
-	LinkNeedAcceptance optional.NullableBool   `json:"link_need_acceptance"`
-	MembersAdminIds    []int                   `json:"members_admin_ids"`
-	MembersMemberIds   []optional.NullableInt  `json:"members_member_ids"`
-	MembersReadonlyIds []optional.NullableInt  `json:"members_readonly_ids"`
-	Name               string                  `json:"name"`
+	Description        *optional.NullableString `json:"description"`
+	IconPreset         *optional.NullableString `json:"icon_preset"`
+	Link               *optional.NullableBool   `json:"link"`
+	LinkCode           *optional.NullableString `json:"link_code"`
+	LinkNeedAcceptance *optional.NullableBool   `json:"link_need_acceptance"`
+	MembersAdminIds    []int                    `json:"members_admin_ids"`
+	MembersMemberIds   []*optional.NullableInt  `json:"members_member_ids"`
+	MembersReadonlyIds []*optional.NullableInt  `json:"members_readonly_ids"`
+	Name               string                   `json:"name"`
 }
 
 type RoomsUpdateParam struct {
-	Description optional.NullableString `json:"description"`
-	IconPreset  optional.NullableString `json:"icon_preset"`
-	Name        optional.NullableString `json:"name"`
+	Description *optional.NullableString `json:"description"`
+	IconPreset  *optional.NullableString `json:"icon_preset"`
+	Name        *optional.NullableString `json:"name"`
 }
 
 var (
@@ -100,7 +105,7 @@ func (c RoomsResource) List() ([]RoomData, error) {
 	return result, err
 }
 
-func (c RoomsResource) Create(params RoomsCreateParam) error {
+func (c RoomsResource) Create(params RoomsCreateParam) (RoomCreateData, error) {
 
 	b, _ := json.Marshal(params)
 	p, _ := api.JsonToMap(b)
@@ -112,21 +117,21 @@ func (c RoomsResource) Create(params RoomsCreateParam) error {
 		Params:      p,
 	}
 
-	result := make([]RoomData, 0, 32)
+	result := RoomCreateData{}
 
 	str, err := api.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
 
-	return err
+	return result, err
 }
 
 func (c RoomsResource) Get(room_id int) (RoomData, error) {
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
-		Method:      http.MethodPost,
+		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, room_id),
 		Params:      nil,
 	}
@@ -142,21 +147,26 @@ func (c RoomsResource) Get(room_id int) (RoomData, error) {
 
 }
 
-func (c RoomsResource) Update(room_id int, params RoomsUpdateParam) error {
+func (c RoomsResource) Update(room_id int, params RoomsUpdateParam) (RoomUpdateData, error) {
 
 	b, _ := json.Marshal(params)
 	p, _ := api.JsonToMap(b)
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
-		Method:      http.MethodPost,
+		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, room_id),
 		Params:      p,
 	}
 
-	_, err := api.Call(spec)
+	result := RoomUpdateData{}
 
-	return err
+	str, err := api.Call(spec)
+	if err == nil {
+		json.Unmarshal([]byte(str), &result)
+	}
+
+	return result, err
 
 }
 
@@ -164,7 +174,7 @@ func (c RoomsResource) Delete(room_id int, action string) error {
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
-		Method:      http.MethodPost,
+		Method:      http.MethodDelete,
 		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, room_id),
 		Params: map[string]*optional.NullableString{
 			"action_type": optional.String(action),

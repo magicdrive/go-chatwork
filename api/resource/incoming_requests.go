@@ -68,7 +68,7 @@ func (c IncomingRequestsResource) Accept(incoming_request_id int) (IncomingReque
 	return result, err
 }
 
-func (c IncomingRequestsResource) Delete(incoming_request_id int) (bool, error) {
+func (c IncomingRequestsResource) Delete(incoming_request_id int) error {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodDelete,
@@ -78,5 +78,5 @@ func (c IncomingRequestsResource) Delete(incoming_request_id int) (bool, error) 
 
 	_, err := api.Call(spec)
 
-	return err == nil, err
+	return err
 }
