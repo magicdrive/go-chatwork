@@ -54,7 +54,7 @@ func (c MeResource) Get() (MeData, error) {
 
 	str, err := api.Call(spec)
 	if err == nil {
-		json.Unmarshal([]byte(str), result)
+		json.Unmarshal([]byte(str), &result)
 	}
 
 	return result, err
