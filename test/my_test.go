@@ -41,8 +41,8 @@ func TestGetMyStatus(t *testing.T) {
 	assert.Nil(t, err)
 
 	expected := my.StatusData{}
-	_err_ := json.Unmarshal([]byte(mock_json), &expected)
-	assert.Nil(t, _err_)
+	err = json.Unmarshal([]byte(mock_json), &expected)
+	assert.Nil(t, err)
 
 	assert.Equal(t, expected, actual)
 }
@@ -92,9 +92,9 @@ func TestMyTasks(t *testing.T) {
 	assert.Nil(t, err)
 
 	expected := make([]my.TaskData, 0, 32)
-	err1 := json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mock_json), &expected)
 
-	assert.Nil(t, err1)
+	assert.Nil(t, err)
 
 	assert.Equal(t, expected, actual)
 }
