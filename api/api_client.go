@@ -143,7 +143,7 @@ func JsonToMap(data []byte) (map[string]*optional.NullableString, error) {
 
 func HttpRequestMultipart(data ApiSpecMultipart) (*http.Request, error) {
 
-	endpoint := fmt.Sprintf("%s/%s", ApiEndpoint, data.ResouceName)
+	endpoint := fmt.Sprintf("%s%s", ApiEndpoint, data.ResouceName)
 	values := data.Params
 
 	var b bytes.Buffer

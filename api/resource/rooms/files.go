@@ -56,13 +56,13 @@ func (c FilesResource) List(room_id int, account_id *optional.NullableInt) ([]Fi
 
 	str, err := api.Call(spec)
 	if err == nil {
-		json.Unmarshal([]byte(str), result)
+		json.Unmarshal([]byte(str), &result)
 	}
 
 	return result, err
 }
 
-func (c FilesResource) Upload(room_id int, filepath string, message optional.NullableString) (FileUploadData, error) {
+func (c FilesResource) Upload(room_id int, filepath string, message *optional.NullableString) (FileUploadData, error) {
 
 	file_entity, err := os.Open(filepath)
 	if err != nil {
@@ -93,11 +93,11 @@ func (c FilesResource) Upload(room_id int, filepath string, message optional.Nul
 	return result, err
 }
 
-func (c FilesResource) Get(room_id int, file_id int, create_download_flag *optional.NullableInt) (FileData, error) {
+func (c FilesResource) Get(room_id int, file_id int, create_download_flag *optional.NullableBool) (FileData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
-		Method:      http.MethodPut,
-		ResouceName: fmt.Sprintf(c.ResourceName+"/%d", room_id, file_id),
+		Method:      http.MethodGet,
+		ResouceName: fmt.Sprintf(c.ResourceName+`/%d`, room_id, file_id),
 		Params: map[string]*optional.NullableString{
 			"create_download_flag": create_download_flag.ToNullableString(),
 		},
@@ -107,7 +107,7 @@ func (c FilesResource) Get(room_id int, file_id int, create_download_flag *optio
 
 	str, err := api.Call(spec)
 	if err == nil {
-		json.Unmarshal([]byte(str), result)
+		json.Unmarshal([]byte(str), &result)
 	}
 
 	return result, err
