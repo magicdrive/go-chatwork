@@ -3,7 +3,6 @@ package rooms
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 
 	json "github.com/goccy/go-json"
 
@@ -34,7 +33,7 @@ type MessagePostParam struct {
 }
 
 type MessagePostData struct {
-	MessageId int `json:"message_id"`
+	MessageId string `json:"message_id"`
 }
 
 type MessageReadStatusData struct {
@@ -51,7 +50,7 @@ func NewMessagesResource(parent string, credential string) MessagesResource {
 
 }
 
-func (c MessagesResource) List(room_id string, force optional.NullableBool) ([]MessageData, error) {
+func (c MessagesResource) List(room_id int, force *optional.NullableBool) ([]MessageData, error) {
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
@@ -94,14 +93,14 @@ func (c MessagesResource) Post(room_id int, params MessagePostParam) (MessagePos
 	return result, err
 }
 
-func (c MessagesResource) Read(room_id int, message_id *optional.NullableInt) (MessageReadStatusData, error) {
+func (c MessagesResource) Read(room_id int, message_id *optional.NullableString) (MessageReadStatusData, error) {
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/read", room_id),
 		Params: map[string]*optional.NullableString{
-			"message_id": message_id.ToNullableString(),
+			"message_id": message_id,
 		},
 	}
 
@@ -115,19 +114,13 @@ func (c MessagesResource) Read(room_id int, message_id *optional.NullableInt) (M
 	return result, err
 
 }
-func (c MessagesResource) Unread(room_id int, message_id *optional.NullableInt) (MessageReadStatusData, error) {
-	var _message_id *optional.NullableString
-	if message_id.IsPresent() {
-		_message_id = optional.String(strconv.FormatInt(message_id.Valid().Get(), 10))
-	} else {
-		_message_id = optional.NilString()
-	}
+func (c MessagesResource) Unread(room_id int, message_id *optional.NullableString) (MessageReadStatusData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/unread", room_id),
 		Params: map[string]*optional.NullableString{
-			"message_id": _message_id,
+			"message_id": message_id,
 		},
 	}
 
@@ -141,11 +134,11 @@ func (c MessagesResource) Unread(room_id int, message_id *optional.NullableInt) 
 	return result, err
 }
 
-func (c MessagesResource) Get(room_id int, message_id int) (MessageData, error) {
+func (c MessagesResource) Get(room_id int, message_id string) (MessageData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
-		ResouceName: fmt.Sprintf(c.ResourceName+"/%d", room_id, message_id),
+		ResouceName: fmt.Sprintf(c.ResourceName+"/%s", room_id, message_id),
 		Params:      nil,
 	}
 
@@ -160,11 +153,11 @@ func (c MessagesResource) Get(room_id int, message_id int) (MessageData, error) 
 
 }
 
-func (c MessagesResource) Edit(room_id int, message_id int, body string) (MessagePostData, error) {
+func (c MessagesResource) Edit(room_id int, message_id string, body string) (MessagePostData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
-		ResouceName: fmt.Sprintf(c.ResourceName+"/%d", room_id, message_id),
+		ResouceName: fmt.Sprintf(c.ResourceName+"/%s", room_id, message_id),
 		Params:      map[string]*optional.NullableString{"body": optional.String(body)},
 	}
 
@@ -176,14 +169,13 @@ func (c MessagesResource) Edit(room_id int, message_id int, body string) (Messag
 	}
 
 	return result, err
-
 }
 
-func (c MessagesResource) Delete(room_id int, message_id int, body string) (MessagePostData, error) {
+func (c MessagesResource) Delete(room_id int, message_id string) (MessagePostData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodDelete,
-		ResouceName: fmt.Sprintf(c.ResourceName+"/%d", room_id, message_id),
+		ResouceName: fmt.Sprintf(c.ResourceName+"/%s", room_id, message_id),
 		Params:      nil,
 	}
 
