@@ -1,12 +1,8 @@
 package optional
 
 import (
-	"bytes"
 	"errors"
-	"fmt"
 	"strconv"
-
-	"github.com/goccy/go-json"
 )
 
 type NullableInt64 struct {
@@ -81,36 +77,9 @@ func (c *NullableInt64) IsPresent() bool {
 	return !c.asNull
 }
 
-func (c *NullableInt64) UnmarshalJSON(data []byte) error {
-	if bytes.Equal(data, []byte("null")) {
-		c.asNull = true
-		return nil
-	}
-
-	if err := json.Unmarshal(data, &c.value); err != nil {
-
-		var str string
-		if err := json.Unmarshal(data, &str); err != nil {
-			return fmt.Errorf("Couldn't unmarshal number string: %v", err)
-		}
-
-		n, err := strconv.ParseInt(str, 10, 64)
-		if err != nil {
-			return fmt.Errorf("A value that cannot be interpreted as a int: %v", err)
-		}
-		c.value = n
-		c.asNull = false
-		return nil
-	}
-
-	c.asNull = false
-	return nil
-
-}
-
 func (c *NullableInt64) MarshalJSON() ([]byte, error) {
 	if c.asNull {
-		return []byte("nil"), nil
+		return []byte("null"), nil
 	} else {
 		return []byte(strconv.FormatInt(c.value, 10)), nil
 	}

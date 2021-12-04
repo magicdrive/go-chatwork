@@ -1,8 +1,6 @@
 package optional
 
 import (
-	"bytes"
-
 	"github.com/magicdrive/go-chatwork/api/param"
 )
 
@@ -27,25 +25,11 @@ func EmptyStringArray() *NullableStringArray {
 	return result
 }
 
-func (c *NullableStringArray) UnmarshalJSON(data []byte) error {
-	if bytes.Equal(data, []byte("null")) {
-		c.asNull = true
-		return nil
-	}
-	v := &param.StringArrayParam{}
-	err := v.UnmarshalJSON(data)
-	if err != nil {
-		return err
-	}
-	c.values = v
-	c.asNull = false
-	return nil
-}
-
 func (c *NullableStringArray) MarshalJSON() ([]byte, error) {
 	if c.asNull {
 		return []byte("null"), nil
 	} else {
-		return c.values.MarshalJSON()
+		b, err :=  c.values.MarshalJSON()
+		return b, err
 	}
 }

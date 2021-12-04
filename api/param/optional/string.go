@@ -1,11 +1,8 @@
 package optional
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
-
-	"github.com/goccy/go-json"
 )
 
 type NullableString struct {
@@ -68,21 +65,6 @@ func (c *NullableString) IsNull() bool {
 
 func (c *NullableString) IsPresent() bool {
 	return !c.asNull
-}
-
-func (c *NullableString) UnmarshalJSON(data []byte) error {
-	if bytes.Equal(data, []byte("null")) {
-		c.asNull = true
-		return nil
-	}
-
-	if err := json.Unmarshal(data, &c.value); err != nil {
-		return err
-	}
-
-	c.asNull = false
-	return nil
-
 }
 
 func (c *NullableString) MarshalJSON() ([]byte, error) {

@@ -1,11 +1,7 @@
 package optional
 
 import (
-	"bytes"
 	"errors"
-	"fmt"
-
-	"github.com/goccy/go-json"
 )
 
 type NullableBool struct {
@@ -96,35 +92,6 @@ func (c *NullableBool) ToNullableString() *NullableString {
 	} else {
 		return String("0")
 	}
-}
-
-func (c *NullableBool) UnmarshalJSON(data []byte) error {
-	if bytes.Equal(data, []byte("null")) {
-		c.asNull = true
-		return nil
-	}
-
-	if err := json.Unmarshal(data, &c.value); err != nil {
-		var str string
-		if err := json.Unmarshal(data, &str); err != nil {
-			return fmt.Errorf("Couldn't unmarshal number string: %v", err)
-		}
-
-		switch str {
-		case "1":
-			c.value = true
-		case "0":
-			c.value = false
-		default:
-			return fmt.Errorf("A value that cannot be interpreted as a bool: %v", err)
-		}
-		c.asNull = false
-		return nil
-	}
-
-	c.asNull = false
-	return nil
-
 }
 
 func (c *NullableBool) MarshalJSON() ([]byte, error) {
