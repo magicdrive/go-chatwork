@@ -28,7 +28,7 @@ type LinkDeleteData struct {
 type LinkParam struct {
 	Code           *optional.NullableString `json:"code"`
 	Description    *optional.NullableString `json:"description"`
-	NeedAcceptance *optional.NullableInt    `json:"need_acceptance"`
+	NeedAcceptance *optional.NullableBool   `json:"need_acceptance"`
 }
 
 func NewLinkResource(parent string, credential string) LinkResource {
@@ -51,7 +51,7 @@ func (c LinkResource) Get(room_id int) (LinkData, error) {
 
 	str, err := api.Call(spec)
 	if err == nil {
-		json.Unmarshal([]byte(str), result)
+		json.Unmarshal([]byte(str), &result)
 	}
 
 	return result, err
@@ -71,7 +71,7 @@ func (c LinkResource) Create(room_id int, params LinkParam) (LinkData, error) {
 
 	str, err := api.Call(spec)
 	if err == nil {
-		json.Unmarshal([]byte(str), result)
+		json.Unmarshal([]byte(str), &result)
 	}
 
 	return result, err
@@ -92,7 +92,7 @@ func (c LinkResource) Edit(room_id int, params LinkParam) (LinkData, error) {
 
 	str, err := api.Call(spec)
 	if err == nil {
-		json.Unmarshal([]byte(str), result)
+		json.Unmarshal([]byte(str), &result)
 	}
 
 	return result, err
@@ -111,7 +111,7 @@ func (c LinkResource) Delete(room_id int) (LinkDeleteData, error) {
 
 	str, err := api.Call(spec)
 	if err == nil {
-		json.Unmarshal([]byte(str), result)
+		json.Unmarshal([]byte(str), &result)
 	}
 
 	return result, err

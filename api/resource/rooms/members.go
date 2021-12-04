@@ -46,7 +46,7 @@ func NewMembersResource(parent string, credential string) MembersResource {
 	return data
 }
 
-func (c MembersResource) List(room_id string, force *optional.NullableBool) ([]MemberData, error) {
+func (c MembersResource) List(room_id int, force *optional.NullableBool) ([]MemberData, error) {
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
