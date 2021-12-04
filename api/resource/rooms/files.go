@@ -12,12 +12,12 @@ import (
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 )
 
-type FilesResource struct {
+type RoomFilesResource struct {
 	ResourceName string
 	Credential   string
 }
 
-type FileData struct {
+type RoomFileData struct {
 	FileID  int `json:"file_id"`
 	Account struct {
 		AccountID      int    `json:"account_id"`
@@ -30,19 +30,19 @@ type FileData struct {
 	UploadTime int    `json:"upload_time"`
 }
 
-type FileUploadData struct {
+type RoomFileUploadData struct {
 	Public *optional.NullableInt `json:"public"`
 }
 
-func NewFilesResource(parent string, credential string) FilesResource {
-	data := FilesResource{
+func NewRoomFilesResource(parent string, credential string) RoomFilesResource {
+	data := RoomFilesResource{
 		ResourceName: parent + `/%d/files`,
 		Credential:   credential,
 	}
 	return data
 }
 
-func (c FilesResource) List(room_id int, account_id *optional.NullableInt) ([]FileData, error) {
+func (c RoomFilesResource) List(room_id int, account_id *optional.NullableInt) ([]RoomFileData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
@@ -52,7 +52,7 @@ func (c FilesResource) List(room_id int, account_id *optional.NullableInt) ([]Fi
 		},
 	}
 
-	result := make([]FileData, 0, 32)
+	result := make([]RoomFileData, 0, 32)
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -62,11 +62,11 @@ func (c FilesResource) List(room_id int, account_id *optional.NullableInt) ([]Fi
 	return result, err
 }
 
-func (c FilesResource) Upload(room_id int, filepath string, message *optional.NullableString) (FileUploadData, error) {
+func (c RoomFilesResource) Upload(room_id int, filepath string, message *optional.NullableString) (RoomFileUploadData, error) {
 
 	file_entity, err := os.Open(filepath)
 	if err != nil {
-		return FileUploadData{}, err
+		return RoomFileUploadData{}, err
 	}
 	params := map[string]io.Reader{
 		"file": file_entity,
@@ -83,7 +83,7 @@ func (c FilesResource) Upload(room_id int, filepath string, message *optional.Nu
 		Params:      params,
 	}
 
-	result := FileUploadData{}
+	result := RoomFileUploadData{}
 
 	str, err := api.CallMultipart(spec)
 	if err == nil {
@@ -93,7 +93,7 @@ func (c FilesResource) Upload(room_id int, filepath string, message *optional.Nu
 	return result, err
 }
 
-func (c FilesResource) Get(room_id int, file_id int, create_download_flag *optional.NullableBool) (FileData, error) {
+func (c RoomFilesResource) Get(room_id int, file_id int, create_download_flag *optional.NullableBool) (RoomFileData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
@@ -103,7 +103,7 @@ func (c FilesResource) Get(room_id int, file_id int, create_download_flag *optio
 		},
 	}
 
-	result := FileData{}
+	result := RoomFileData{}
 
 	str, err := api.Call(spec)
 	if err == nil {

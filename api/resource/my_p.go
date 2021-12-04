@@ -17,10 +17,10 @@ func NewMyResource(credential string) MyResource {
 	return data
 }
 
-func (c MyResource) Status() my.StatusResource {
-	return my.NewStatus(c.ResourceName, c.Credential)
+func (c MyResource) Status() my.MyStatusResource {
+	return my.NewMyStatus(c.ResourceName, c.Credential)
 }
 
-func (c MyResource) Tasks() my.TasksResource {
-	return my.NewTasks(c.ResourceName, c.Credential)
+func (c MyResource) Tasks() my.MyTasksResource {
+	return my.NewMyTasks(c.ResourceName, c.Credential)
 }

@@ -45,7 +45,7 @@ func TestGetRoomsFileUpload(t *testing.T) {
 	actual, err := target.Upload(room_id, file_path, message)
 	assert.Nil(t, err)
 
-	expected := rooms.FileUploadData{}
+	expected := rooms.RoomFileUploadData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 	assert.Nil(t, err)
 
@@ -87,7 +87,7 @@ func TestRoomsFileGet(t *testing.T) {
 	actual, err := target.Get(room_id, file_id, create_download_flag)
 	assert.Nil(t, err)
 
-	expected := rooms.FileData{}
+	expected := rooms.RoomFileData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 
 	assert.Nil(t, err)
@@ -131,7 +131,7 @@ func TestRoomsFileList(t *testing.T) {
 	actual, err := target.List(room_id, account_id)
 	assert.Nil(t, err)
 
-	expected := make([]rooms.FileData, 0, 32)
+	expected := make([]rooms.RoomFileData, 0, 32)
 	err = json.Unmarshal([]byte(mock_json), &expected)
 
 	assert.Nil(t, err)

@@ -51,7 +51,7 @@ func TestListRoomsMembers(t *testing.T) {
 	actual, err := target.List(room_id, force)
 	assert.Nil(t, err)
 
-	expected := make([]rooms.MemberData, 0, 32)
+	expected := make([]rooms.RoomMemberData, 0, 32)
 	err = json.Unmarshal([]byte(mock_json), &expected)
 	assert.Nil(t, err)
 
@@ -81,7 +81,7 @@ func TestUpdateRoomsMembers(t *testing.T) {
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
-	params := rooms.MembersUpdateParam{
+	params := chatwork.RoomMembersUpdateParam{
 		MembersAdminIds:    param.IntArray(1, 2, 3),
 		MembersMemberIds:   optional.IntArray(10, 11, 12, 13),
 		MembersReadonlyIds: optional.IntArray(111, 112, 114),
@@ -90,7 +90,7 @@ func TestUpdateRoomsMembers(t *testing.T) {
 	actual, err := target.Update(room_id, params)
 	assert.Nil(t, err)
 
-	expected := rooms.MembersRoomAuthorityData{}
+	expected := rooms.RoomMembersAuthorityData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 
 	assert.Nil(t, err)

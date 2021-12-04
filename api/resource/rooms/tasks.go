@@ -11,12 +11,12 @@ import (
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 )
 
-type TasksResource struct {
+type RoomTasksResource struct {
 	ResourceName string
 	Credential   string
 }
 
-type TaskData struct {
+type RoomTaskData struct {
 	TaskID  int `json:"task_id"`
 	Account struct {
 		AccountID      int    `json:"account_id"`
@@ -35,35 +35,35 @@ type TaskData struct {
 	LimitType string `json:"limit_type"`
 }
 
-type TasksListParam struct {
+type RoomTasksListParam struct {
 	AccountID           *optional.NullableInt    `json:"account_id"`
 	AssignedByAccountId *optional.NullableInt    `json:"assigned_by_account_id"`
 	Status              *optional.NullableString `json:"status"`
 }
 
-type TaskPostParam struct {
+type RoomTaskPostParam struct {
 	Body      string                   `json:"body"`
 	Limit     *optional.NullableInt64  `json:"limit"`
 	LimitType *optional.NullableString `json:"limit_type"`
 	ToIds     *param.IntArrayParam     `json:"to_ids"`
 }
 
-type TaskPostData struct {
+type RoomTaskPostData struct {
 	TaskId []int `json:"task_ids"`
 }
 
 var (
-	TaskLimitTypeNone = optional.String("none")
-	TaskLimitTypeDate = optional.String("date")
-	TaskLimitTypeTime = optional.String("time")
+	RoomTaskLimitTypeNone = optional.String("none")
+	RoomTaskLimitTypeDate = optional.String("date")
+	RoomTaskLimitTypeTime = optional.String("time")
 )
 var (
-	TaskBodyStatusOpen = optional.String("open")
-	TaskBodyStatusDone = optional.String("done")
+	RoomTaskBodyStatusOpen = optional.String("open")
+	RoomTaskBodyStatusDone = optional.String("done")
 )
 
-func NewTasksResource(parent string, credential string) TasksResource {
-	data := TasksResource{
+func NewRoomTasksResource(parent string, credential string) RoomTasksResource {
+	data := RoomTasksResource{
 		ResourceName: parent + `/%d/tasks`,
 		Credential:   credential,
 	}
@@ -71,7 +71,7 @@ func NewTasksResource(parent string, credential string) TasksResource {
 
 }
 
-func (c TasksResource) List(room_id int, params TasksListParam) ([]TaskData, error) {
+func (c RoomTasksResource) List(room_id int, params RoomTasksListParam) ([]RoomTaskData, error) {
 	b, _ := json.Marshal(params)
 	p, _ := api.JsonToMap(b)
 
@@ -82,7 +82,7 @@ func (c TasksResource) List(room_id int, params TasksListParam) ([]TaskData, err
 		Params:      p,
 	}
 
-	result := make([]TaskData, 0, 32)
+	result := make([]RoomTaskData, 0, 32)
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -92,7 +92,7 @@ func (c TasksResource) List(room_id int, params TasksListParam) ([]TaskData, err
 	return result, err
 }
 
-func (c TasksResource) Create(room_id int, params TaskPostParam) (TaskPostData, error) {
+func (c RoomTasksResource) Create(room_id int, params RoomTaskPostParam) (RoomTaskPostData, error) {
 
 	b, _ := json.Marshal(params)
 	p, _ := api.JsonToMap(b)
@@ -104,7 +104,7 @@ func (c TasksResource) Create(room_id int, params TaskPostParam) (TaskPostData, 
 		Params:      p,
 	}
 
-	result := TaskPostData{}
+	result := RoomTaskPostData{}
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -114,7 +114,7 @@ func (c TasksResource) Create(room_id int, params TaskPostParam) (TaskPostData, 
 	return result, err
 }
 
-func (c TasksResource) Get(room_id int, task_id int) (TaskData, error) {
+func (c RoomTasksResource) Get(room_id int, task_id int) (RoomTaskData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
@@ -122,7 +122,7 @@ func (c TasksResource) Get(room_id int, task_id int) (TaskData, error) {
 		Params:      nil,
 	}
 
-	result := TaskData{}
+	result := RoomTaskData{}
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -133,7 +133,7 @@ func (c TasksResource) Get(room_id int, task_id int) (TaskData, error) {
 
 }
 
-func (c TasksResource) Update(room_id int, task_id int, body *optional.NullableString) (TaskPostData, error) {
+func (c RoomTasksResource) Update(room_id int, task_id int, body *optional.NullableString) (RoomTaskPostData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
@@ -141,7 +141,7 @@ func (c TasksResource) Update(room_id int, task_id int, body *optional.NullableS
 		Params:      map[string]*optional.NullableString{"body": body},
 	}
 
-	result := TaskPostData{}
+	result := RoomTaskPostData{}
 
 	str, err := api.Call(spec)
 	if err == nil {

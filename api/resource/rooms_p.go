@@ -31,11 +31,11 @@ type RoomData struct {
 	IconPath       string `json:"icon_path"`
 	LastUpdateTime int    `json:"last_update_time"`
 }
-type RoomCreateData struct {
+type RoomsCreateData struct {
 	RoomID int `json:"room_id"`
 }
 
-type RoomUpdateData RoomsCreateParam
+type RoomUpdateData RoomsCreateData
 
 type RoomsCreateParam struct {
 	Description        *optional.NullableString   `json:"description"`
@@ -106,7 +106,7 @@ func (c RoomsResource) List() ([]RoomData, error) {
 	return result, err
 }
 
-func (c RoomsResource) Create(params RoomsCreateParam) (RoomCreateData, error) {
+func (c RoomsResource) Create(params RoomsCreateParam) (RoomsCreateData, error) {
 
 	b, _ := json.Marshal(params)
 	p, _ := api.JsonToMap(b)
@@ -118,7 +118,7 @@ func (c RoomsResource) Create(params RoomsCreateParam) (RoomCreateData, error) {
 		Params:      p,
 	}
 
-	result := RoomCreateData{}
+	result := RoomsCreateData{}
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -187,22 +187,22 @@ func (c RoomsResource) Delete(room_id int, action string) error {
 	return err
 }
 
-func (c RoomsResource) Files() rooms.FilesResource {
-	return rooms.NewFilesResource(c.ResourceName, c.Credential)
+func (c RoomsResource) Files() rooms.RoomFilesResource {
+	return rooms.NewRoomFilesResource(c.ResourceName, c.Credential)
 }
 
-func (c RoomsResource) Link() rooms.LinkResource {
-	return rooms.NewLinkResource(c.ResourceName, c.Credential)
+func (c RoomsResource) Link() rooms.RoomLinkResource {
+	return rooms.NewRoomLinkResource(c.ResourceName, c.Credential)
 }
 
-func (c RoomsResource) Members() rooms.MembersResource {
-	return rooms.NewMembersResource(c.ResourceName, c.Credential)
+func (c RoomsResource) Members() rooms.RoomMembersResource {
+	return rooms.NewRoomMembersResource(c.ResourceName, c.Credential)
 }
 
-func (c RoomsResource) Message() rooms.MessagesResource {
-	return rooms.NewMessagesResource(c.ResourceName, c.Credential)
+func (c RoomsResource) Message() rooms.RoomMessagesResource {
+	return rooms.NewRoomMessagesResource(c.ResourceName, c.Credential)
 }
 
-func (c RoomsResource) Tasks() rooms.TasksResource {
-	return rooms.NewTasksResource(c.ResourceName, c.Credential)
+func (c RoomsResource) Tasks() rooms.RoomTasksResource {
+	return rooms.NewRoomTasksResource(c.ResourceName, c.Credential)
 }

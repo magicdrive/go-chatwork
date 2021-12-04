@@ -50,7 +50,7 @@ func TestListRoomsMessages(t *testing.T) {
 	actual, err := target.List(room_id, force)
 	assert.Nil(t, err)
 
-	expected := make([]rooms.MessageData, 0, 32)
+	expected := make([]rooms.RoomMessageData, 0, 32)
 	err = json.Unmarshal([]byte(mock_json), &expected)
 	assert.Nil(t, err)
 
@@ -78,7 +78,7 @@ func TestPostRoomsMessage(t *testing.T) {
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
-	params := rooms.MessagePostParam{
+	params := chatwork.RoomMessagePostParam{
 		Body:       "Hello.",
 		SelfUnread: optional.BoolFalse(),
 	}
@@ -86,7 +86,7 @@ func TestPostRoomsMessage(t *testing.T) {
 	actual, err := target.Post(room_id, params)
 	assert.Nil(t, err)
 
-	expected := rooms.MessagePostData{}
+	expected := rooms.RoomMessagePostData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 
 	assert.Nil(t, err)
@@ -121,7 +121,7 @@ func TestReadRoomsMessage(t *testing.T) {
 	actual, err := target.Read(room_id, message_id)
 	assert.Nil(t, err)
 
-	expected := rooms.MessageReadStatusData{}
+	expected := rooms.RoomMessageReadStatusData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 
 	assert.Nil(t, err)
@@ -156,7 +156,7 @@ func TestUnreadRoomsMessage(t *testing.T) {
 	actual, err := target.Unread(room_id, message_id)
 	assert.Nil(t, err)
 
-	expected := rooms.MessageReadStatusData{}
+	expected := rooms.RoomMessageReadStatusData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 
 	assert.Nil(t, err)
@@ -198,7 +198,7 @@ func TestGetRoomsMessage(t *testing.T) {
 	actual, err := target.Get(room_id, message_id)
 	assert.Nil(t, err)
 
-	expected := rooms.MessageData{}
+	expected := rooms.RoomMessageData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 
 	assert.Nil(t, err)
@@ -234,7 +234,7 @@ func TestEditRoomsMessage(t *testing.T) {
 	actual, err := target.Edit(room_id, message_id, body)
 	assert.Nil(t, err)
 
-	expected := rooms.MessagePostData{}
+	expected := rooms.RoomMessagePostData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 
 	assert.Nil(t, err)
@@ -276,7 +276,7 @@ func TestDeleteRoomsMessage(t *testing.T) {
 	actual, err := target.Delete(room_id, message_id)
 	assert.Nil(t, err)
 
-	expected := rooms.MessagePostData{}
+	expected := rooms.RoomMessagePostData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 
 	assert.Nil(t, err)

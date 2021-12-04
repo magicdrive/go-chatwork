@@ -40,7 +40,7 @@ func TestGetMyStatus(t *testing.T) {
 	actual, err := target.Get()
 	assert.Nil(t, err)
 
-	expected := my.StatusData{}
+	expected := my.MyStatusData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 	assert.Nil(t, err)
 
@@ -83,15 +83,15 @@ func TestMyTasks(t *testing.T) {
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
-	params := my.TasksListParam{
+	params := chatwork.MyTasksListParam{
 		AssignedByAccountId: optional.Int(456),
-		Status:              my.TaskStatusOpen,
+		Status:              chatwork.MyTaskStatusOpen,
 	}
 
 	actual, err := target.List(params)
 	assert.Nil(t, err)
 
-	expected := make([]my.TaskData, 0, 32)
+	expected := make([]my.MyTaskData, 0, 32)
 	err = json.Unmarshal([]byte(mock_json), &expected)
 
 	assert.Nil(t, err)

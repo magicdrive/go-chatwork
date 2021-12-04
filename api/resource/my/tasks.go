@@ -9,12 +9,12 @@ import (
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 )
 
-type TasksResource struct {
+type MyTasksResource struct {
 	ResourceName string
 	Credential   string
 }
 
-type TaskData struct {
+type MyTaskData struct {
 	TaskID int `json:"task_id"`
 	Room   struct {
 		RoomID   int    `json:"room_id"`
@@ -33,18 +33,18 @@ type TaskData struct {
 	LimitType string `json:"limit_type"`
 }
 
-type TasksListParam struct {
+type MyTasksListParam struct {
 	AssignedByAccountId *optional.NullableInt `json:"assigned_by_account_id"`
 	Status              *optional.NullableInt `json:"status"`
 }
 
 var (
-	TaskStatusDone = optional.Int(1)
-	TaskStatusOpen = optional.Int(2)
+	MyTaskStatusDone = optional.Int(1)
+	MyTaskStatusOpen = optional.Int(2)
 )
 
-func NewTasks(parent string, credential string) TasksResource {
-	data := TasksResource{
+func NewMyTasks(parent string, credential string) MyTasksResource {
+	data := MyTasksResource{
 		ResourceName: parent + `/tasks`,
 		Credential:   credential,
 	}
@@ -52,7 +52,7 @@ func NewTasks(parent string, credential string) TasksResource {
 
 }
 
-func (c TasksResource) List(params TasksListParam) ([]TaskData, error) {
+func (c MyTasksResource) List(params MyTasksListParam) ([]MyTaskData, error) {
 
 	b, _ := json.Marshal(params)
 	p, _ := api.JsonToMap(b)
@@ -64,7 +64,7 @@ func (c TasksResource) List(params TasksListParam) ([]TaskData, error) {
 		Params:      p,
 	}
 
-	result := make([]TaskData, 0, 32)
+	result := make([]MyTaskData, 0, 32)
 
 	str, err := api.Call(spec)
 	if err == nil {

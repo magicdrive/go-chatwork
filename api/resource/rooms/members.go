@@ -11,12 +11,12 @@ import (
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 )
 
-type MembersResource struct {
+type RoomMembersResource struct {
 	ResourceName string
 	Credential   string
 }
 
-type MemberData struct {
+type RoomMemberData struct {
 	AccountID        int    `json:"account_id"`
 	Role             string `json:"role"`
 	Name             string `json:"name"`
@@ -27,27 +27,27 @@ type MemberData struct {
 	AvatarImageURL   string `json:"avatar_image_url"`
 }
 
-type MembersRoomAuthorityData struct {
+type RoomMembersAuthorityData struct {
 	Admin    []int `json:"admin"`
 	Member   []int `json:"member"`
 	Readonly []int `json:"readonly"`
 }
 
-type MembersUpdateParam struct {
+type RoomMembersUpdateParam struct {
 	MembersAdminIds    *param.IntArrayParam       `json:"members_admin_ids"`
 	MembersMemberIds   *optional.NullableIntArray `json:"members_member_ids"`
 	MembersReadonlyIds *optional.NullableIntArray `json:"members_readonly_ids"`
 }
 
-func NewMembersResource(parent string, credential string) MembersResource {
-	data := MembersResource{
+func NewRoomMembersResource(parent string, credential string) RoomMembersResource {
+	data := RoomMembersResource{
 		ResourceName: parent + `/%d/members`,
 		Credential:   credential,
 	}
 	return data
 }
 
-func (c MembersResource) List(room_id int, force *optional.NullableBool) ([]MemberData, error) {
+func (c RoomMembersResource) List(room_id int, force *optional.NullableBool) ([]RoomMemberData, error) {
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
@@ -58,7 +58,7 @@ func (c MembersResource) List(room_id int, force *optional.NullableBool) ([]Memb
 		},
 	}
 
-	result := make([]MemberData, 0, 32)
+	result := make([]RoomMemberData, 0, 32)
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -68,7 +68,7 @@ func (c MembersResource) List(room_id int, force *optional.NullableBool) ([]Memb
 	return result, err
 }
 
-func (c MembersResource) Update(room_id int, params MembersUpdateParam) (MembersRoomAuthorityData, error) {
+func (c RoomMembersResource) Update(room_id int, params RoomMembersUpdateParam) (RoomMembersAuthorityData, error) {
 
 	b, _ := json.Marshal(params)
 	p, _ := api.JsonToMap(b)
@@ -80,7 +80,7 @@ func (c MembersResource) Update(room_id int, params MembersUpdateParam) (Members
 		Params:      p,
 	}
 
-	result := MembersRoomAuthorityData{}
+	result := RoomMembersAuthorityData{}
 
 	str, err := api.Call(spec)
 	if err == nil {

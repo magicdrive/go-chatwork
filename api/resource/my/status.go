@@ -8,12 +8,12 @@ import (
 	"github.com/magicdrive/go-chatwork/api"
 )
 
-type StatusResource struct {
+type MyStatusResource struct {
 	ResourceName string
 	Credential   string
 }
 
-type StatusData struct {
+type MyStatusData struct {
 	UnreadRoomNum  int `json:"unread_room_num"`
 	MentionRoomNum int `json:"mention_room_num"`
 	MytaskRoomNum  int `json:"mytask_room_num"`
@@ -22,8 +22,8 @@ type StatusData struct {
 	MytaskNum      int `json:"mytask_num"`
 }
 
-func NewStatus(parent string, credential string) StatusResource {
-	data := StatusResource{
+func NewMyStatus(parent string, credential string) MyStatusResource {
+	data := MyStatusResource{
 		ResourceName: parent + `/status`,
 		Credential:   credential,
 	}
@@ -31,7 +31,7 @@ func NewStatus(parent string, credential string) StatusResource {
 
 }
 
-func (c StatusResource) Get() (StatusData, error) {
+func (c MyStatusResource) Get() (MyStatusData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
@@ -39,7 +39,7 @@ func (c StatusResource) Get() (StatusData, error) {
 		Params:      nil,
 	}
 
-	result := StatusData{}
+	result := MyStatusData{}
 
 	str, err := api.Call(spec)
 	if err == nil {

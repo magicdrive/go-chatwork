@@ -54,16 +54,16 @@ func TestListRoomsTasks(t *testing.T) {
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
-	params := rooms.TasksListParam{
+	params := chatwork.RoomTasksListParam{
 		AccountID:           optional.Int(101),
 		AssignedByAccountId: optional.Int(78),
-		Status:              rooms.TaskBodyStatusDone,
+		Status:              chatwork.RoomTaskBodyStatusDone,
 	}
 
 	actual, err := target.List(room_id, params)
 	assert.Nil(t, err)
 
-	expected := make([]rooms.TaskData, 0, 32)
+	expected := make([]rooms.RoomTaskData, 0, 32)
 	err = json.Unmarshal([]byte(mock_json), &expected)
 	assert.Nil(t, err)
 
@@ -91,17 +91,17 @@ func TestCreateRoomsTask(t *testing.T) {
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
-	params := rooms.TaskPostParam{
+	params := chatwork.RoomTaskPostParam{
 		Body:      "Buy milk",
 		Limit:     optional.Int64(1385996399),
-		LimitType: rooms.TaskLimitTypeDate,
+		LimitType: chatwork.RoomTaskLimitTypeDate,
 		ToIds:     param.IntArray(1, 3, 6),
 	}
 
 	actual, err := target.Create(room_id, params)
 	assert.Nil(t, err)
 
-	expected := rooms.TaskPostData{}
+	expected := rooms.RoomTaskPostData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 
 	assert.Nil(t, err)
@@ -149,7 +149,7 @@ func TestGetRoomsTask(t *testing.T) {
 	actual, err := target.Get(room_id, task_id)
 	assert.Nil(t, err)
 
-	expected := rooms.TaskData{}
+	expected := rooms.RoomTaskData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 
 	assert.Nil(t, err)
@@ -179,10 +179,10 @@ func TestUpdateRoomsTask(t *testing.T) {
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
-	actual, err := target.Update(room_id, task_id, rooms.TaskBodyStatusDone)
+	actual, err := target.Update(room_id, task_id, chatwork.RoomTaskBodyStatusDone)
 	assert.Nil(t, err)
 
-	expected := rooms.TaskPostData{}
+	expected := rooms.RoomTaskPostData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 
 	assert.Nil(t, err)

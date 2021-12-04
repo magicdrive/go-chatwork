@@ -92,7 +92,7 @@ func TestCreateRooms(t *testing.T) {
 	actual, err := target.Create(params)
 	assert.Nil(t, err)
 
-	expected := resource.RoomCreateData{}
+	expected := resource.RoomsCreateData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 	assert.Nil(t, err)
 

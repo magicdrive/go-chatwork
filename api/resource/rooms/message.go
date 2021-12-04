@@ -10,12 +10,12 @@ import (
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 )
 
-type MessagesResource struct {
+type RoomMessagesResource struct {
 	ResourceName string
 	Credential   string
 }
 
-type MessageData struct {
+type RoomMessageData struct {
 	MessageID string `json:"message_id"`
 	Account   struct {
 		AccountID      int    `json:"account_id"`
@@ -27,22 +27,22 @@ type MessageData struct {
 	UpdateTime int    `json:"update_time"`
 }
 
-type MessagePostParam struct {
+type RoomMessagePostParam struct {
 	Body       string                 `json:"body"`
 	SelfUnread *optional.NullableBool `json:"self_unread"`
 }
 
-type MessagePostData struct {
+type RoomMessagePostData struct {
 	MessageId string `json:"message_id"`
 }
 
-type MessageReadStatusData struct {
+type RoomMessageReadStatusData struct {
 	UnreadNum int `json:"unread_num"`
 	MetionNum int `json:"mention_num"`
 }
 
-func NewMessagesResource(parent string, credential string) MessagesResource {
-	data := MessagesResource{
+func NewRoomMessagesResource(parent string, credential string) RoomMessagesResource {
+	data := RoomMessagesResource{
 		ResourceName: parent + `/%d/messages`,
 		Credential:   credential,
 	}
@@ -50,7 +50,7 @@ func NewMessagesResource(parent string, credential string) MessagesResource {
 
 }
 
-func (c MessagesResource) List(room_id int, force *optional.NullableBool) ([]MessageData, error) {
+func (c RoomMessagesResource) List(room_id int, force *optional.NullableBool) ([]RoomMessageData, error) {
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
@@ -61,7 +61,7 @@ func (c MessagesResource) List(room_id int, force *optional.NullableBool) ([]Mes
 		},
 	}
 
-	result := make([]MessageData, 0, 32)
+	result := make([]RoomMessageData, 0, 32)
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -71,7 +71,7 @@ func (c MessagesResource) List(room_id int, force *optional.NullableBool) ([]Mes
 	return result, err
 }
 
-func (c MessagesResource) Post(room_id int, params MessagePostParam) (MessagePostData, error) {
+func (c RoomMessagesResource) Post(room_id int, params RoomMessagePostParam) (RoomMessagePostData, error) {
 
 	b, _ := json.Marshal(params)
 	p, _ := api.JsonToMap(b)
@@ -83,7 +83,7 @@ func (c MessagesResource) Post(room_id int, params MessagePostParam) (MessagePos
 		Params:      p,
 	}
 
-	result := MessagePostData{}
+	result := RoomMessagePostData{}
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -93,7 +93,7 @@ func (c MessagesResource) Post(room_id int, params MessagePostParam) (MessagePos
 	return result, err
 }
 
-func (c MessagesResource) Read(room_id int, message_id *optional.NullableString) (MessageReadStatusData, error) {
+func (c RoomMessagesResource) Read(room_id int, message_id *optional.NullableString) (RoomMessageReadStatusData, error) {
 
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
@@ -104,7 +104,7 @@ func (c MessagesResource) Read(room_id int, message_id *optional.NullableString)
 		},
 	}
 
-	result := MessageReadStatusData{}
+	result := RoomMessageReadStatusData{}
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -114,7 +114,7 @@ func (c MessagesResource) Read(room_id int, message_id *optional.NullableString)
 	return result, err
 
 }
-func (c MessagesResource) Unread(room_id int, message_id *optional.NullableString) (MessageReadStatusData, error) {
+func (c RoomMessagesResource) Unread(room_id int, message_id *optional.NullableString) (RoomMessageReadStatusData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
@@ -124,7 +124,7 @@ func (c MessagesResource) Unread(room_id int, message_id *optional.NullableStrin
 		},
 	}
 
-	result := MessageReadStatusData{}
+	result := RoomMessageReadStatusData{}
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -134,7 +134,7 @@ func (c MessagesResource) Unread(room_id int, message_id *optional.NullableStrin
 	return result, err
 }
 
-func (c MessagesResource) Get(room_id int, message_id string) (MessageData, error) {
+func (c RoomMessagesResource) Get(room_id int, message_id string) (RoomMessageData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
@@ -142,7 +142,7 @@ func (c MessagesResource) Get(room_id int, message_id string) (MessageData, erro
 		Params:      nil,
 	}
 
-	result := MessageData{}
+	result := RoomMessageData{}
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -153,7 +153,7 @@ func (c MessagesResource) Get(room_id int, message_id string) (MessageData, erro
 
 }
 
-func (c MessagesResource) Edit(room_id int, message_id string, body string) (MessagePostData, error) {
+func (c RoomMessagesResource) Edit(room_id int, message_id string, body string) (RoomMessagePostData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
@@ -161,7 +161,7 @@ func (c MessagesResource) Edit(room_id int, message_id string, body string) (Mes
 		Params:      map[string]*optional.NullableString{"body": optional.String(body)},
 	}
 
-	result := MessagePostData{}
+	result := RoomMessagePostData{}
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -171,7 +171,7 @@ func (c MessagesResource) Edit(room_id int, message_id string, body string) (Mes
 	return result, err
 }
 
-func (c MessagesResource) Delete(room_id int, message_id string) (MessagePostData, error) {
+func (c RoomMessagesResource) Delete(room_id int, message_id string) (RoomMessagePostData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodDelete,
@@ -179,7 +179,7 @@ func (c MessagesResource) Delete(room_id int, message_id string) (MessagePostDat
 		Params:      nil,
 	}
 
-	result := MessagePostData{}
+	result := RoomMessagePostData{}
 
 	str, err := api.Call(spec)
 	if err == nil {

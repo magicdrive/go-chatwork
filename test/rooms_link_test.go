@@ -42,7 +42,7 @@ func TestGetRoomsLink(t *testing.T) {
 	actual, err := target.Get(room_id)
 	assert.Nil(t, err)
 
-	expected := rooms.LinkData{}
+	expected := rooms.RoomLinkData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 	assert.Nil(t, err)
 
@@ -79,7 +79,7 @@ func TestCreateRoomsLink(t *testing.T) {
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
-	params := rooms.LinkParam{
+	params := chatwork.RoomLinkParam{
 		Code:           optional.String("unique-link-name"),
 		Description:    optional.String("This is a public room for topic A."),
 		NeedAcceptance: optional.BoolTrue(),
@@ -88,7 +88,7 @@ func TestCreateRoomsLink(t *testing.T) {
 	actual, err := target.Create(room_id, params)
 	assert.Nil(t, err)
 
-	expected := rooms.LinkData{}
+	expected := rooms.RoomLinkData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 
 	assert.Nil(t, err)
@@ -126,7 +126,7 @@ func TestEditRoomsLink(t *testing.T) {
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
-	params := rooms.LinkParam{
+	params := chatwork.RoomLinkParam{
 		Code:           optional.String("unique-link-name"),
 		Description:    optional.String("This is a public room for topic A."),
 		NeedAcceptance: optional.BoolTrue(),
@@ -135,7 +135,7 @@ func TestEditRoomsLink(t *testing.T) {
 	actual, err := target.Edit(room_id, params)
 	assert.Nil(t, err)
 
-	expected := rooms.LinkData{}
+	expected := rooms.RoomLinkData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 
 	assert.Nil(t, err)
@@ -167,7 +167,7 @@ func TestDeleteRoomsLink(t *testing.T) {
 	actual, err := target.Delete(room_id)
 	assert.Nil(t, err)
 
-	expected := rooms.LinkDeleteData{}
+	expected := rooms.RoomLinkDeleteData{}
 	err = json.Unmarshal([]byte(mock_json), &expected)
 
 	assert.Nil(t, err)

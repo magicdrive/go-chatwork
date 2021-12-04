@@ -9,37 +9,37 @@ import (
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 )
 
-type LinkResource struct {
+type RoomLinkResource struct {
 	ResourceName string
 	Credential   string
 }
 
-type LinkData struct {
+type RoomLinkData struct {
 	Public         bool   `json:"public"`
 	URL            string `json:"url"`
 	NeedAcceptance bool   `json:"need_acceptance"`
 	Description    string `json:"description"`
 }
 
-type LinkDeleteData struct {
+type RoomLinkDeleteData struct {
 	Public bool `json:"public"`
 }
 
-type LinkParam struct {
+type RoomLinkParam struct {
 	Code           *optional.NullableString `json:"code"`
 	Description    *optional.NullableString `json:"description"`
 	NeedAcceptance *optional.NullableBool   `json:"need_acceptance"`
 }
 
-func NewLinkResource(parent string, credential string) LinkResource {
-	data := LinkResource{
+func NewRoomLinkResource(parent string, credential string) RoomLinkResource {
+	data := RoomLinkResource{
 		ResourceName: parent + `/%d/link`,
 		Credential:   credential,
 	}
 	return data
 }
 
-func (c LinkResource) Get(room_id int) (LinkData, error) {
+func (c RoomLinkResource) Get(room_id int) (RoomLinkData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodGet,
@@ -47,7 +47,7 @@ func (c LinkResource) Get(room_id int) (LinkData, error) {
 		Params:      nil,
 	}
 
-	result := LinkData{}
+	result := RoomLinkData{}
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -57,7 +57,7 @@ func (c LinkResource) Get(room_id int) (LinkData, error) {
 	return result, err
 }
 
-func (c LinkResource) Create(room_id int, params LinkParam) (LinkData, error) {
+func (c RoomLinkResource) Create(room_id int, params RoomLinkParam) (RoomLinkData, error) {
 	b, _ := json.Marshal(params)
 	p, _ := api.JsonToMap(b)
 	spec := api.ApiSpec{
@@ -67,7 +67,7 @@ func (c LinkResource) Create(room_id int, params LinkParam) (LinkData, error) {
 		Params:      p,
 	}
 
-	result := LinkData{}
+	result := RoomLinkData{}
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -78,7 +78,7 @@ func (c LinkResource) Create(room_id int, params LinkParam) (LinkData, error) {
 
 }
 
-func (c LinkResource) Edit(room_id int, params LinkParam) (LinkData, error) {
+func (c RoomLinkResource) Edit(room_id int, params RoomLinkParam) (RoomLinkData, error) {
 	b, _ := json.Marshal(params)
 	p, _ := api.JsonToMap(b)
 	spec := api.ApiSpec{
@@ -88,7 +88,7 @@ func (c LinkResource) Edit(room_id int, params LinkParam) (LinkData, error) {
 		Params:      p,
 	}
 
-	result := LinkData{}
+	result := RoomLinkData{}
 
 	str, err := api.Call(spec)
 	if err == nil {
@@ -99,7 +99,7 @@ func (c LinkResource) Edit(room_id int, params LinkParam) (LinkData, error) {
 
 }
 
-func (c LinkResource) Delete(room_id int) (LinkDeleteData, error) {
+func (c RoomLinkResource) Delete(room_id int) (RoomLinkDeleteData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodDelete,
@@ -107,7 +107,7 @@ func (c LinkResource) Delete(room_id int) (LinkDeleteData, error) {
 		Params:      nil,
 	}
 
-	result := LinkDeleteData{}
+	result := RoomLinkDeleteData{}
 
 	str, err := api.Call(spec)
 	if err == nil {

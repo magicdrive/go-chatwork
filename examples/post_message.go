@@ -5,7 +5,6 @@ import (
 
 	"github.com/magicdrive/go-chatwork"
 	"github.com/magicdrive/go-chatwork/api/param/optional"
-	rooms "github.com/magicdrive/go-chatwork/api/resource/rooms"
 )
 
 func PostMessage() {
@@ -13,7 +12,7 @@ func PostMessage() {
 	client := chatwork.NewChatworkClient(`your-api-key-here`)
 
 	room_id := 1
-	params := rooms.MessagePostParam{Body: "Hi there.", SelfUnread: optional.BoolTrue()}
+	params := chatwork.RoomMessagePostParam{Body: "Hi there.", SelfUnread: optional.BoolTrue()}
 
 	if r, err := client.Rooms().Message().Post(room_id, params); err == nil {
 		fmt.Println(r.MessageId)
