@@ -5,8 +5,9 @@ import (
 	"time"
 
 	"github.com/magicdrive/go-chatwork"
+	"github.com/magicdrive/go-chatwork/api/param"
+	"github.com/magicdrive/go-chatwork/api/param/optional"
 	rooms "github.com/magicdrive/go-chatwork/api/resource/rooms"
-	"github.com/magicdrive/go-chatwork/optional"
 )
 
 func CreateTask() {
@@ -22,9 +23,9 @@ func CreateTask() {
 	room_id := 1
 	params := rooms.TaskPostParam{
 		Body:      "Do it now!",
-		Limit:     optional.Int(t.Unix()),
+		Limit:     optional.Int64(t.Unix()),
 		LimitType: rooms.TaskLimitTypeDate,
-		ToIds:     []int{task_assign_account_id_1, task_assign_account_id_2},
+		ToIds:     param.IntArray(task_assign_account_id_1, task_assign_account_id_2),
 	}
 
 	if r, err := client.Rooms().Tasks().Create(room_id, params); err == nil {

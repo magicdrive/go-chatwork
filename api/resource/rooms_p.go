@@ -6,8 +6,9 @@ import (
 
 	json "github.com/goccy/go-json"
 	"github.com/magicdrive/go-chatwork/api"
+	"github.com/magicdrive/go-chatwork/api/param"
+	"github.com/magicdrive/go-chatwork/api/param/optional"
 	rooms "github.com/magicdrive/go-chatwork/api/resource/rooms"
-	"github.com/magicdrive/go-chatwork/optional"
 )
 
 type RoomsResource struct {
@@ -37,15 +38,15 @@ type RoomCreateData struct {
 type RoomUpdateData RoomsCreateParam
 
 type RoomsCreateParam struct {
-	Description        *optional.NullableString `json:"description"`
-	IconPreset         *optional.NullableString `json:"icon_preset"`
-	Link               *optional.NullableBool   `json:"link"`
-	LinkCode           *optional.NullableString `json:"link_code"`
-	LinkNeedAcceptance *optional.NullableBool   `json:"link_need_acceptance"`
-	MembersAdminIds    []int                    `json:"members_admin_ids"`
-	MembersMemberIds   []*optional.NullableInt  `json:"members_member_ids"`
-	MembersReadonlyIds []*optional.NullableInt  `json:"members_readonly_ids"`
-	Name               string                   `json:"name"`
+	Description        *optional.NullableString   `json:"description"`
+	IconPreset         *optional.NullableString   `json:"icon_preset"`
+	Link               *optional.NullableBool     `json:"link"`
+	LinkCode           *optional.NullableString   `json:"link_code"`
+	LinkNeedAcceptance *optional.NullableBool     `json:"link_need_acceptance"`
+	MembersAdminIds    *param.IntArrayParam       `json:"members_admin_ids"`
+	MembersMemberIds   *optional.NullableIntArray `json:"members_member_ids"`
+	MembersReadonlyIds *optional.NullableIntArray `json:"members_readonly_ids"`
+	Name               string                     `json:"name"`
 }
 
 type RoomsUpdateParam struct {

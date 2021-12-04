@@ -9,8 +9,8 @@ import (
 	"github.com/jarcoal/httpmock"
 	"github.com/magicdrive/go-chatwork"
 	"github.com/magicdrive/go-chatwork/api"
+	"github.com/magicdrive/go-chatwork/api/param/optional"
 	"github.com/magicdrive/go-chatwork/api/resource/rooms"
-	"github.com/magicdrive/go-chatwork/optional"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -163,7 +163,6 @@ func TestUnreadRoomsMessage(t *testing.T) {
 
 	assert.Equal(t, expected, actual)
 }
-
 
 func TestGetRoomsMessage(t *testing.T) {
 

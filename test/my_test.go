@@ -8,8 +8,8 @@ import (
 	"github.com/jarcoal/httpmock"
 	"github.com/magicdrive/go-chatwork"
 	"github.com/magicdrive/go-chatwork/api"
+	"github.com/magicdrive/go-chatwork/api/param/optional"
 	"github.com/magicdrive/go-chatwork/api/resource/my"
-	"github.com/magicdrive/go-chatwork/optional"
 	"github.com/stretchr/testify/assert"
 )
 

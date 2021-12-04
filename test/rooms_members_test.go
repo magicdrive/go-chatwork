@@ -9,8 +9,9 @@ import (
 	"github.com/jarcoal/httpmock"
 	"github.com/magicdrive/go-chatwork"
 	"github.com/magicdrive/go-chatwork/api"
+	"github.com/magicdrive/go-chatwork/api/param"
+	"github.com/magicdrive/go-chatwork/api/param/optional"
 	"github.com/magicdrive/go-chatwork/api/resource/rooms"
-	"github.com/magicdrive/go-chatwork/optional"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -81,7 +82,7 @@ func TestUpdateRoomsMembers(t *testing.T) {
 	)
 
 	params := rooms.MembersUpdateParam{
-		MembersAdminIds:    []int{1, 2, 3},
+		MembersAdminIds:    param.IntArray(1, 2, 3),
 		MembersMemberIds:   optional.IntArray(10, 11, 12, 13),
 		MembersReadonlyIds: optional.IntArray(111, 112, 114),
 	}

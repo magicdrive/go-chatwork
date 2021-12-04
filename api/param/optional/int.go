@@ -10,29 +10,12 @@ import (
 )
 
 type NullableInt struct {
-	value  int64
+	value  int
 	asNull bool
 	valid  bool
 }
 
-func IntArray(a ...int64) []*NullableInt {
-	result := make([]*NullableInt, 0, 32)
-	for _, v := range a {
-		item := &NullableInt{
-			value:  v,
-			asNull: false,
-			valid:  true,
-		}
-		result = append(result, item)
-	}
-	return result
-}
-
-func IntEmptyArray(a ...int64) []*NullableInt {
-	return []*NullableInt{}
-}
-
-func Int(v int64) *NullableInt {
+func Int(v int) *NullableInt {
 	return &NullableInt{
 		value:  v,
 		asNull: false,
@@ -48,7 +31,7 @@ func NilInt() *NullableInt {
 	}
 }
 
-func NewNullableInt(v int64, as_null bool) *NullableInt {
+func NewNullableInt(v int, as_null bool) *NullableInt {
 	return &NullableInt{
 		value:  v,
 		asNull: as_null,
@@ -66,14 +49,14 @@ func (c *NullableInt) Invalid() *NullableInt {
 	return c
 }
 
-func (c *NullableInt) Get() int64 {
+func (c *NullableInt) Get() int {
 	if c.valid {
 		return c.value
 	}
 	panic(errors.New("NullableInt: `Get` was called without being validated.(*NullableInt.Valid())"))
 }
 
-func (c *NullableInt) Value() (int64, error) {
+func (c *NullableInt) Value() (int, error) {
 	if c.asNull {
 		return 0, errors.New("this value is null.")
 	}
@@ -85,7 +68,7 @@ func (c *NullableInt) ToNullableString() *NullableString {
 		return NilString()
 	}
 
-	s := strconv.FormatInt(c.value, 10)
+	s := strconv.Itoa(c.value)
 
 	return String(s)
 }
@@ -111,7 +94,7 @@ func (c *NullableInt) UnmarshalJSON(data []byte) error {
 			return fmt.Errorf("Couldn't unmarshal number string: %v", err)
 		}
 
-		n, err := strconv.ParseInt(str, 10, 64)
+		n, err := strconv.Atoi(str)
 		if err != nil {
 			return fmt.Errorf("A value that cannot be interpreted as a int: %v", err)
 		}
@@ -129,6 +112,6 @@ func (c *NullableInt) MarshalJSON() ([]byte, error) {
 	if c.asNull {
 		return []byte("nil"), nil
 	} else {
-		return []byte(strconv.FormatInt(c.value, 10)), nil
+		return []byte(strconv.Itoa(c.value)), nil
 	}
 }

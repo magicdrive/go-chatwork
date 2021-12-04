@@ -7,7 +7,8 @@ import (
 	json "github.com/goccy/go-json"
 
 	"github.com/magicdrive/go-chatwork/api"
-	"github.com/magicdrive/go-chatwork/optional"
+	"github.com/magicdrive/go-chatwork/api/param"
+	"github.com/magicdrive/go-chatwork/api/param/optional"
 )
 
 type TasksResource struct {
@@ -42,9 +43,9 @@ type TasksListParam struct {
 
 type TaskPostParam struct {
 	Body      string                   `json:"body"`
-	Limit     *optional.NullableInt    `json:"limit"`
+	Limit     *optional.NullableInt64  `json:"limit"`
 	LimitType *optional.NullableString `json:"limit_type"`
-	ToIds     []int                    `json:"to_ids"`
+	ToIds     *param.IntArrayParam     `json:"to_ids"`
 }
 
 type TaskPostData struct {

@@ -9,8 +9,9 @@ import (
 	"github.com/jarcoal/httpmock"
 	"github.com/magicdrive/go-chatwork"
 	"github.com/magicdrive/go-chatwork/api"
+	"github.com/magicdrive/go-chatwork/api/param"
+	"github.com/magicdrive/go-chatwork/api/param/optional"
 	"github.com/magicdrive/go-chatwork/api/resource"
-	"github.com/magicdrive/go-chatwork/optional"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -82,7 +83,7 @@ func TestCreateRooms(t *testing.T) {
 		Link:               optional.NilBool(),
 		LinkCode:           optional.NilString(),
 		LinkNeedAcceptance: optional.NilBool(),
-		MembersAdminIds:    []int{123, 542, 1001},
+		MembersAdminIds:    param.IntArray(123, 542, 1001),
 		MembersMemberIds:   optional.IntArray(21, 344),
 		MembersReadonlyIds: optional.IntArray(15, 133),
 		Name:               "Website renewal project",

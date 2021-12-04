@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/magicdrive/go-chatwork"
+	"github.com/magicdrive/go-chatwork/api/param/optional"
 	rooms "github.com/magicdrive/go-chatwork/api/resource/rooms"
-	"github.com/magicdrive/go-chatwork/optional"
 )
 
 func PostMessage() {

@@ -129,7 +129,7 @@ func (c *NullableBool) UnmarshalJSON(data []byte) error {
 
 func (c *NullableBool) MarshalJSON() ([]byte, error) {
 	if c.asNull {
-		return []byte("nil"), nil
+		return []byte("null"), nil
 	} else {
 		if c.value {
 			return []byte("1"), nil

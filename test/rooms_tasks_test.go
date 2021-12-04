@@ -9,8 +9,9 @@ import (
 	"github.com/jarcoal/httpmock"
 	"github.com/magicdrive/go-chatwork"
 	"github.com/magicdrive/go-chatwork/api"
+	"github.com/magicdrive/go-chatwork/api/param"
+	"github.com/magicdrive/go-chatwork/api/param/optional"
 	"github.com/magicdrive/go-chatwork/api/resource/rooms"
-	"github.com/magicdrive/go-chatwork/optional"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -92,9 +93,9 @@ func TestCreateRoomsTask(t *testing.T) {
 
 	params := rooms.TaskPostParam{
 		Body:      "Buy milk",
-		Limit:     optional.Int(1385996399),
+		Limit:     optional.Int64(1385996399),
 		LimitType: rooms.TaskLimitTypeDate,
-		ToIds:     []int{1, 3, 6},
+		ToIds:     param.IntArray(1, 3, 6),
 	}
 
 	actual, err := target.Create(room_id, params)

@@ -6,7 +6,7 @@ import (
 	json "github.com/goccy/go-json"
 
 	"github.com/magicdrive/go-chatwork/api"
-	"github.com/magicdrive/go-chatwork/optional"
+	"github.com/magicdrive/go-chatwork/api/param/optional"
 )
 
 type TasksResource struct {
