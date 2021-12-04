@@ -70,7 +70,7 @@ func NewTasksResource(parent string, credential string) TasksResource {
 
 }
 
-func (c TasksResource) List(room_id string, params TasksListParam) ([]TaskData, error) {
+func (c TasksResource) List(room_id int, params TasksListParam) ([]TaskData, error) {
 	b, _ := json.Marshal(params)
 	p, _ := api.JsonToMap(b)
 
@@ -132,12 +132,12 @@ func (c TasksResource) Get(room_id int, task_id int) (TaskData, error) {
 
 }
 
-func (c TasksResource) Edit(room_id int, task_id int, body string) (TaskPostData, error) {
+func (c TasksResource) Update(room_id int, task_id int, body *optional.NullableString) (TaskPostData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/%d/status", room_id, task_id),
-		Params:      map[string]*optional.NullableString{"body": optional.String(body)},
+		Params:      map[string]*optional.NullableString{"body": body},
 	}
 
 	result := TaskPostData{}
