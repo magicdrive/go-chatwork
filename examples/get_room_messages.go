@@ -20,7 +20,7 @@ func GetRoomMessage() {
 	}
 
 	for _, item := range mlist {
-		fmt.Printf(`Account: "%v"\nBody: "%v"\n\n}`, item.Account.Name, item.Body)
+		fmt.Printf("Account: '%v'\nBody: '%v'\n\n}", item.Account.Name, item.Body)
 	}
 
 }
