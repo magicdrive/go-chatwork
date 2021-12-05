@@ -38,7 +38,7 @@ func main() {
 
 ```
 
-## Configuration With Detailed##
+## Configuration With Detailed ##
 
 ```go
 import (
