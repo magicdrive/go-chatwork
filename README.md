@@ -3,7 +3,7 @@
 [![GoDoc](https://godoc.org/github.com/magicdrive/go-chatwork?status.svg)](https://godoc.org/github.com/magicdrive/go-chatwork)
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/magicdrive/go-chatwork/blob/main/LICENSE)
 
-Chatwork API Client for Golang
+Chatwork API Client for Golang. (API endpoint full supported.)
 
 ## Introduction
 The Chatwork API Client for Go makes it easy to develop bots using Chatwork API.
