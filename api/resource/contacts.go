@@ -9,7 +9,7 @@ import (
 
 type ContactsResource struct {
 	ResourceName string
-	Credential   string
+	Client       *api.ChatworkApiClient
 }
 
 type ContactData struct {
@@ -23,17 +23,17 @@ type ContactData struct {
 	AvatarImageUrl   string `json:"avatar_image_url"`
 }
 
-func NewContactsResource(credential string) ContactsResource {
+func NewContactsResource(client *api.ChatworkApiClient) ContactsResource {
 	data := ContactsResource{
 		ResourceName: `/contacts`,
-		Credential:   credential,
+		Client:       client,
 	}
 	return data
 }
 
 func (c ContactsResource) List() ([]ContactData, error) {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: c.ResourceName,
 		Params:      nil,
@@ -41,7 +41,7 @@ func (c ContactsResource) List() ([]ContactData, error) {
 
 	result := make([]ContactData, 0, 32)
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}

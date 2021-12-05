@@ -8,7 +8,6 @@ import (
 
 	"github.com/jarcoal/httpmock"
 	"github.com/magicdrive/go-chatwork"
-	"github.com/magicdrive/go-chatwork/api"
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 	"github.com/magicdrive/go-chatwork/api/resource/rooms"
 	"github.com/stretchr/testify/assert"
@@ -41,7 +40,7 @@ func TestListRoomsMessages(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodGet,
-		fmt.Sprintf("%s%s", api.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
+		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
@@ -74,7 +73,7 @@ func TestPostRoomsMessage(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodPost,
-		fmt.Sprintf("%s%s", api.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
+		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
@@ -114,7 +113,7 @@ func TestReadRoomsMessage(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodPut,
-		fmt.Sprintf("%s%s", api.ApiEndpoint, fmt.Sprintf(target.ResourceName+`/read`, room_id)),
+		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName+`/read`, room_id)),
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
@@ -149,7 +148,7 @@ func TestUnreadRoomsMessage(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodPut,
-		fmt.Sprintf("%s%s", api.ApiEndpoint, fmt.Sprintf(target.ResourceName+`/unread`, room_id)),
+		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName+`/unread`, room_id)),
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
@@ -191,7 +190,7 @@ func TestGetRoomsMessage(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodGet,
-		fmt.Sprintf("%s%s", api.ApiEndpoint, fmt.Sprintf(target.ResourceName+"/%s", room_id, message_id)),
+		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName+"/%s", room_id, message_id)),
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
@@ -225,7 +224,7 @@ func TestEditRoomsMessage(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodPut,
-		fmt.Sprintf("%s%s", api.ApiEndpoint, fmt.Sprintf(target.ResourceName+"/%s", room_id, message_id)),
+		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName+"/%s", room_id, message_id)),
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
@@ -269,7 +268,7 @@ func TestDeleteRoomsMessage(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodDelete,
-		fmt.Sprintf("%s%s", api.ApiEndpoint, fmt.Sprintf(target.ResourceName+"/%s", room_id, message_id)),
+		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName+"/%s", room_id, message_id)),
 		httpmock.NewStringResponder(200, mock_json),
 	)
 

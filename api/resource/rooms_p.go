@@ -13,7 +13,7 @@ import (
 
 type RoomsResource struct {
 	ResourceName string
-	Credential   string
+	Client       *api.ChatworkApiClient
 }
 
 type RoomData struct {
@@ -80,17 +80,17 @@ const (
 	RoomDelete = "delete"
 )
 
-func NewRoomsResource(credential string) RoomsResource {
+func NewRoomsResource(client *api.ChatworkApiClient) RoomsResource {
 	data := RoomsResource{
 		ResourceName: `/rooms`,
-		Credential:   credential,
+		Client:       client,
 	}
 	return data
 }
 
 func (c RoomsResource) List() ([]RoomData, error) {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: c.ResourceName,
 		Params:      nil,
@@ -98,7 +98,7 @@ func (c RoomsResource) List() ([]RoomData, error) {
 
 	result := make([]RoomData, 0, 32)
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -112,7 +112,7 @@ func (c RoomsResource) Create(params RoomsCreateParam) (RoomsCreateData, error) 
 	p, _ := api.JsonToMap(b)
 
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodPost,
 		ResouceName: c.ResourceName,
 		Params:      p,
@@ -120,7 +120,7 @@ func (c RoomsResource) Create(params RoomsCreateParam) (RoomsCreateData, error) 
 
 	result := RoomsCreateData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -131,7 +131,7 @@ func (c RoomsResource) Create(params RoomsCreateParam) (RoomsCreateData, error) 
 func (c RoomsResource) Get(room_id int) (RoomData, error) {
 
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, room_id),
 		Params:      nil,
@@ -139,7 +139,7 @@ func (c RoomsResource) Get(room_id int) (RoomData, error) {
 
 	result := RoomData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -154,7 +154,7 @@ func (c RoomsResource) Update(room_id int, params RoomsUpdateParam) (RoomUpdateD
 	p, _ := api.JsonToMap(b)
 
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, room_id),
 		Params:      p,
@@ -162,7 +162,7 @@ func (c RoomsResource) Update(room_id int, params RoomsUpdateParam) (RoomUpdateD
 
 	result := RoomUpdateData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -174,7 +174,7 @@ func (c RoomsResource) Update(room_id int, params RoomsUpdateParam) (RoomUpdateD
 func (c RoomsResource) Delete(room_id int, action string) error {
 
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodDelete,
 		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, room_id),
 		Params: map[string]*optional.NullableString{
@@ -182,27 +182,27 @@ func (c RoomsResource) Delete(room_id int, action string) error {
 		},
 	}
 
-	_, err := api.Call(spec)
+	_, err := c.Client.Call(spec)
 
 	return err
 }
 
 func (c RoomsResource) Files() rooms.RoomFilesResource {
-	return rooms.NewRoomFilesResource(c.ResourceName, c.Credential)
+	return rooms.NewRoomFilesResource(c.ResourceName, c.Client)
 }
 
 func (c RoomsResource) Link() rooms.RoomLinkResource {
-	return rooms.NewRoomLinkResource(c.ResourceName, c.Credential)
+	return rooms.NewRoomLinkResource(c.ResourceName, c.Client)
 }
 
 func (c RoomsResource) Members() rooms.RoomMembersResource {
-	return rooms.NewRoomMembersResource(c.ResourceName, c.Credential)
+	return rooms.NewRoomMembersResource(c.ResourceName, c.Client)
 }
 
 func (c RoomsResource) Message() rooms.RoomMessagesResource {
-	return rooms.NewRoomMessagesResource(c.ResourceName, c.Credential)
+	return rooms.NewRoomMessagesResource(c.ResourceName, c.Client)
 }
 
 func (c RoomsResource) Tasks() rooms.RoomTasksResource {
-	return rooms.NewRoomTasksResource(c.ResourceName, c.Credential)
+	return rooms.NewRoomTasksResource(c.ResourceName, c.Client)
 }

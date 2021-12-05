@@ -9,7 +9,6 @@ import (
 
 	"github.com/jarcoal/httpmock"
 	"github.com/magicdrive/go-chatwork"
-	"github.com/magicdrive/go-chatwork/api"
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 	"github.com/magicdrive/go-chatwork/api/resource/rooms"
 	"github.com/stretchr/testify/assert"
@@ -38,7 +37,7 @@ func TestGetRoomsFileUpload(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodPost,
-		fmt.Sprintf("%s%s", api.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
+		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
@@ -80,7 +79,7 @@ func TestRoomsFileGet(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodGet,
-		fmt.Sprintf("%s%s", api.ApiEndpoint, fmt.Sprintf(target.ResourceName+`/%d`, room_id, file_id)),
+		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName+`/%d`, room_id, file_id)),
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
@@ -124,7 +123,7 @@ func TestRoomsFileList(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodGet,
-		fmt.Sprintf(fmt.Sprintf("%s%s", api.ApiEndpoint, target.ResourceName), room_id),
+		fmt.Sprintf(fmt.Sprintf("%s%s", client.Client.AltChatworkApiHost, target.ResourceName), room_id),
 		httpmock.NewStringResponder(200, mock_json),
 	)
 

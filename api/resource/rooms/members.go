@@ -13,7 +13,7 @@ import (
 
 type RoomMembersResource struct {
 	ResourceName string
-	Credential   string
+	Client       *api.ChatworkApiClient
 }
 
 type RoomMemberData struct {
@@ -39,10 +39,10 @@ type RoomMembersUpdateParam struct {
 	MembersReadonlyIds *optional.NullableIntArray `json:"members_readonly_ids"`
 }
 
-func NewRoomMembersResource(parent string, credential string) RoomMembersResource {
+func NewRoomMembersResource(parent string, client *api.ChatworkApiClient) RoomMembersResource {
 	data := RoomMembersResource{
 		ResourceName: parent + `/%d/members`,
-		Credential:   credential,
+		Client:   client,
 	}
 	return data
 }
@@ -50,7 +50,7 @@ func NewRoomMembersResource(parent string, credential string) RoomMembersResourc
 func (c RoomMembersResource) List(room_id int, force *optional.NullableBool) ([]RoomMemberData, error) {
 
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
 		Params: map[string]*optional.NullableString{
@@ -60,7 +60,7 @@ func (c RoomMembersResource) List(room_id int, force *optional.NullableBool) ([]
 
 	result := make([]RoomMemberData, 0, 32)
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -74,7 +74,7 @@ func (c RoomMembersResource) Update(room_id int, params RoomMembersUpdateParam) 
 	p, _ := api.JsonToMap(b)
 
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodPost,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
 		Params:      p,
@@ -82,7 +82,7 @@ func (c RoomMembersResource) Update(room_id int, params RoomMembersUpdateParam) 
 
 	result := RoomMembersAuthorityData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}

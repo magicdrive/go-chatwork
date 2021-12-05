@@ -10,7 +10,7 @@ import (
 
 type IncomingRequestsResource struct {
 	ResourceName string
-	Credential   string
+	Client       *api.ChatworkApiClient
 }
 
 type IncomingRequestData struct {
@@ -24,17 +24,17 @@ type IncomingRequestData struct {
 	AvatarImageURL   string `json:"avatar_image_url"`
 }
 
-func NewIncomingRequestsResource(credential string) IncomingRequestsResource {
+func NewIncomingRequestsResource(client *api.ChatworkApiClient) IncomingRequestsResource {
 	data := IncomingRequestsResource{
 		ResourceName: `/incoming_requests`,
-		Credential:   credential,
+		Client:       client,
 	}
 	return data
 }
 
 func (c IncomingRequestsResource) List() ([]IncomingRequestData, error) {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: c.ResourceName,
 		Params:      nil,
@@ -42,7 +42,7 @@ func (c IncomingRequestsResource) List() ([]IncomingRequestData, error) {
 
 	result := make([]IncomingRequestData, 0, 32)
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -52,7 +52,7 @@ func (c IncomingRequestsResource) List() ([]IncomingRequestData, error) {
 
 func (c IncomingRequestsResource) Accept(incoming_request_id int) (IncomingRequestData, error) {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, incoming_request_id),
 		Params:      nil,
@@ -60,7 +60,7 @@ func (c IncomingRequestsResource) Accept(incoming_request_id int) (IncomingReque
 
 	result := IncomingRequestData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -70,13 +70,13 @@ func (c IncomingRequestsResource) Accept(incoming_request_id int) (IncomingReque
 
 func (c IncomingRequestsResource) Delete(incoming_request_id int) error {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodDelete,
 		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, incoming_request_id),
 		Params:      nil,
 	}
 
-	_, err := api.Call(spec)
+	_, err := c.Client.Call(spec)
 
 	return err
 }

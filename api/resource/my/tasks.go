@@ -11,7 +11,7 @@ import (
 
 type MyTasksResource struct {
 	ResourceName string
-	Credential   string
+	Client       *api.ChatworkApiClient
 }
 
 type MyTaskData struct {
@@ -43,10 +43,10 @@ var (
 	MyTaskStatusOpen = optional.Int(2)
 )
 
-func NewMyTasks(parent string, credential string) MyTasksResource {
+func NewMyTasks(parent string, client *api.ChatworkApiClient) MyTasksResource {
 	data := MyTasksResource{
 		ResourceName: parent + `/tasks`,
-		Credential:   credential,
+		Client:       client,
 	}
 	return data
 
@@ -58,7 +58,7 @@ func (c MyTasksResource) List(params MyTasksListParam) ([]MyTaskData, error) {
 	p, _ := api.JsonToMap(b)
 
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: c.ResourceName,
 		Params:      p,
@@ -66,7 +66,7 @@ func (c MyTasksResource) List(params MyTasksListParam) ([]MyTaskData, error) {
 
 	result := make([]MyTaskData, 0, 32)
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}

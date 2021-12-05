@@ -8,7 +8,6 @@ import (
 
 	"github.com/jarcoal/httpmock"
 	"github.com/magicdrive/go-chatwork"
-	"github.com/magicdrive/go-chatwork/api"
 	"github.com/magicdrive/go-chatwork/api/param"
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 	"github.com/magicdrive/go-chatwork/api/resource/rooms"
@@ -42,7 +41,7 @@ func TestListRoomsMembers(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodGet,
-		fmt.Sprintf("%s%s", api.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
+		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
@@ -77,7 +76,7 @@ func TestUpdateRoomsMembers(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodPost,
-		fmt.Sprintf("%s%s", api.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
+		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
 		httpmock.NewStringResponder(200, mock_json),
 	)
 

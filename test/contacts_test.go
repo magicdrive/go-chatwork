@@ -8,7 +8,6 @@ import (
 
 	"github.com/jarcoal/httpmock"
 	"github.com/magicdrive/go-chatwork"
-	"github.com/magicdrive/go-chatwork/api"
 	"github.com/magicdrive/go-chatwork/api/resource"
 	"github.com/stretchr/testify/assert"
 )
@@ -37,7 +36,7 @@ func TestGetContacts(t *testing.T) {
 	]
 	`
 
-	httpmock.RegisterResponder(http.MethodGet, fmt.Sprintf("%s%s", api.ApiEndpoint, target.ResourceName),
+	httpmock.RegisterResponder(http.MethodGet, fmt.Sprintf("%s%s", client.Client.ApiEndpoint, target.ResourceName),
 		httpmock.NewStringResponder(http.StatusOK, mock_json),
 	)
 

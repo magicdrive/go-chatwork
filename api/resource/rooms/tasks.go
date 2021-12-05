@@ -13,7 +13,7 @@ import (
 
 type RoomTasksResource struct {
 	ResourceName string
-	Credential   string
+	Client       *api.ChatworkApiClient
 }
 
 type RoomTaskData struct {
@@ -62,10 +62,10 @@ var (
 	RoomTaskBodyStatusDone = optional.String("done")
 )
 
-func NewRoomTasksResource(parent string, credential string) RoomTasksResource {
+func NewRoomTasksResource(parent string, client *api.ChatworkApiClient) RoomTasksResource {
 	data := RoomTasksResource{
 		ResourceName: parent + `/%d/tasks`,
-		Credential:   credential,
+		Client:       client,
 	}
 	return data
 
@@ -76,7 +76,7 @@ func (c RoomTasksResource) List(room_id int, params RoomTasksListParam) ([]RoomT
 	p, _ := api.JsonToMap(b)
 
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
 		Params:      p,
@@ -84,7 +84,7 @@ func (c RoomTasksResource) List(room_id int, params RoomTasksListParam) ([]RoomT
 
 	result := make([]RoomTaskData, 0, 32)
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -98,7 +98,7 @@ func (c RoomTasksResource) Create(room_id int, params RoomTaskPostParam) (RoomTa
 	p, _ := api.JsonToMap(b)
 
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodPost,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
 		Params:      p,
@@ -106,7 +106,7 @@ func (c RoomTasksResource) Create(room_id int, params RoomTaskPostParam) (RoomTa
 
 	result := RoomTaskPostData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -116,7 +116,7 @@ func (c RoomTasksResource) Create(room_id int, params RoomTaskPostParam) (RoomTa
 
 func (c RoomTasksResource) Get(room_id int, task_id int) (RoomTaskData, error) {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/%d", room_id, task_id),
 		Params:      nil,
@@ -124,7 +124,7 @@ func (c RoomTasksResource) Get(room_id int, task_id int) (RoomTaskData, error) {
 
 	result := RoomTaskData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -135,7 +135,7 @@ func (c RoomTasksResource) Get(room_id int, task_id int) (RoomTaskData, error) {
 
 func (c RoomTasksResource) Update(room_id int, task_id int, body *optional.NullableString) (RoomTaskPostData, error) {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/%d/status", room_id, task_id),
 		Params:      map[string]*optional.NullableString{"body": body},
@@ -143,7 +143,7 @@ func (c RoomTasksResource) Update(room_id int, task_id int, body *optional.Nulla
 
 	result := RoomTaskPostData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}

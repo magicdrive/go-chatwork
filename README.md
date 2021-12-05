@@ -38,6 +38,23 @@ func main() {
 
 ```
 
+## Configuration With Detailed##
+
+```go
+import (
+	"net/http"
+    "github.com/magicdrive/go-chatwork"
+)
+
+func main() {
+	http_client := &http.Client{}
+	alt_host := "audit-chatwork-api.yourcompany.com"
+	client := chatwork.NewChatworkClientWithDetailed(`your-api-key-here`, client, alt_host)
+	...
+}
+
+```
+
 ## Post Message ##
 
 ```go

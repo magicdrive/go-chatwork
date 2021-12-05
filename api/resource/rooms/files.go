@@ -14,7 +14,7 @@ import (
 
 type RoomFilesResource struct {
 	ResourceName string
-	Credential   string
+	Client       *api.ChatworkApiClient
 }
 
 type RoomFileData struct {
@@ -34,17 +34,17 @@ type RoomFileUploadData struct {
 	Public *optional.NullableInt `json:"public"`
 }
 
-func NewRoomFilesResource(parent string, credential string) RoomFilesResource {
+func NewRoomFilesResource(parent string, client *api.ChatworkApiClient) RoomFilesResource {
 	data := RoomFilesResource{
 		ResourceName: parent + `/%d/files`,
-		Credential:   credential,
+		Client:       client,
 	}
 	return data
 }
 
 func (c RoomFilesResource) List(room_id int, account_id *optional.NullableInt) ([]RoomFileData, error) {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
 		Params: map[string]*optional.NullableString{
@@ -54,7 +54,7 @@ func (c RoomFilesResource) List(room_id int, account_id *optional.NullableInt) (
 
 	result := make([]RoomFileData, 0, 32)
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -77,7 +77,7 @@ func (c RoomFilesResource) Upload(room_id int, filepath string, message *optiona
 	}
 
 	spec := api.ApiSpecMultipart{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodPost,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
 		Params:      params,
@@ -85,7 +85,7 @@ func (c RoomFilesResource) Upload(room_id int, filepath string, message *optiona
 
 	result := RoomFileUploadData{}
 
-	str, err := api.CallMultipart(spec)
+	str, err := c.Client.CallMultipart(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), result)
 	}
@@ -95,7 +95,7 @@ func (c RoomFilesResource) Upload(room_id int, filepath string, message *optiona
 
 func (c RoomFilesResource) Get(room_id int, file_id int, create_download_flag *optional.NullableBool) (RoomFileData, error) {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf(c.ResourceName+`/%d`, room_id, file_id),
 		Params: map[string]*optional.NullableString{
@@ -105,7 +105,7 @@ func (c RoomFilesResource) Get(room_id int, file_id int, create_download_flag *o
 
 	result := RoomFileData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}

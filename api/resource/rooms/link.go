@@ -11,7 +11,7 @@ import (
 
 type RoomLinkResource struct {
 	ResourceName string
-	Credential   string
+	Client   *api.ChatworkApiClient
 }
 
 type RoomLinkData struct {
@@ -31,17 +31,17 @@ type RoomLinkParam struct {
 	NeedAcceptance *optional.NullableBool   `json:"need_acceptance"`
 }
 
-func NewRoomLinkResource(parent string, credential string) RoomLinkResource {
+func NewRoomLinkResource(parent string, client *api.ChatworkApiClient) RoomLinkResource {
 	data := RoomLinkResource{
 		ResourceName: parent + `/%d/link`,
-		Credential:   credential,
+		Client:   client,
 	}
 	return data
 }
 
 func (c RoomLinkResource) Get(room_id int) (RoomLinkData, error) {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
 		Params:      nil,
@@ -49,7 +49,7 @@ func (c RoomLinkResource) Get(room_id int) (RoomLinkData, error) {
 
 	result := RoomLinkData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -61,7 +61,7 @@ func (c RoomLinkResource) Create(room_id int, params RoomLinkParam) (RoomLinkDat
 	b, _ := json.Marshal(params)
 	p, _ := api.JsonToMap(b)
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodPost,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
 		Params:      p,
@@ -69,7 +69,7 @@ func (c RoomLinkResource) Create(room_id int, params RoomLinkParam) (RoomLinkDat
 
 	result := RoomLinkData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -82,7 +82,7 @@ func (c RoomLinkResource) Edit(room_id int, params RoomLinkParam) (RoomLinkData,
 	b, _ := json.Marshal(params)
 	p, _ := api.JsonToMap(b)
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
 		Params:      p,
@@ -90,7 +90,7 @@ func (c RoomLinkResource) Edit(room_id int, params RoomLinkParam) (RoomLinkData,
 
 	result := RoomLinkData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -101,7 +101,7 @@ func (c RoomLinkResource) Edit(room_id int, params RoomLinkParam) (RoomLinkData,
 
 func (c RoomLinkResource) Delete(room_id int) (RoomLinkDeleteData, error) {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodDelete,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
 		Params:      nil,
@@ -109,7 +109,7 @@ func (c RoomLinkResource) Delete(room_id int) (RoomLinkDeleteData, error) {
 
 	result := RoomLinkDeleteData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}

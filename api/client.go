@@ -11,13 +11,12 @@ import (
 	"os"
 
 	json "github.com/goccy/go-json"
+
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 )
 
 const ApiHost = "https://api.chatwork.com"
 const ApiVersion = "v2"
-
-var ApiEndpoint = fmt.Sprintf("%s/%s", ApiHost, ApiVersion)
 
 type ApiSpec struct {
 	Credential  string
@@ -33,15 +32,43 @@ type ApiSpecMultipart struct {
 	Params      map[string]io.Reader
 }
 
-func CallMultipart(data ApiSpecMultipart) ([]byte, error) {
+type ChatworkApiClient struct {
+	Credential         string
+	HttpClient         *http.Client
+	AltChatworkApiHost string
+	ApiEndpoint        string
+}
 
-	req, err := HttpRequestMultipart(data)
+func NewChatworkApiClient(credential string, client *http.Client, alt_chatwork_api_host string) *ChatworkApiClient {
+	var endpoint string
+	if alt_chatwork_api_host == "" {
+		endpoint = fmt.Sprintf("%s/%s", ApiHost, ApiVersion)
+	} else {
+		endpoint = fmt.Sprintf("%s/%s", alt_chatwork_api_host, ApiVersion)
+	}
+	return &ChatworkApiClient{
+		Credential:         credential,
+		HttpClient:         client,
+		AltChatworkApiHost: alt_chatwork_api_host,
+		ApiEndpoint:        endpoint,
+	}
+}
+
+func (c *ChatworkApiClient) CallMultipart(data ApiSpecMultipart) ([]byte, error) {
+
+	req, err := c.HttpRequestMultipart(data)
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Set("X-ChatworkToken", data.Credential)
 
-	client := new(http.Client)
+	var client *http.Client
+
+	if c.HttpClient == nil {
+		client = new(http.Client)
+	} else {
+		client = c.HttpClient
+	}
 
 	if resp, err := client.Do(req); err != nil {
 		return []byte{}, err
@@ -58,9 +85,9 @@ func CallMultipart(data ApiSpecMultipart) ([]byte, error) {
 
 }
 
-func Call(data ApiSpec) ([]byte, error) {
+func (c *ChatworkApiClient) Call(data ApiSpec) ([]byte, error) {
 
-	req := HttpRequest(data)
+	req := c.HttpRequest(data)
 	req.Header.Set("X-ChatworkToken", data.Credential)
 
 	client := new(http.Client)
@@ -79,9 +106,9 @@ func Call(data ApiSpec) ([]byte, error) {
 	}
 }
 
-func HttpRequest(data ApiSpec) *http.Request {
+func (c *ChatworkApiClient) HttpRequest(data ApiSpec) *http.Request {
 
-	endpoint := fmt.Sprintf("%s/%s%s", ApiHost, ApiVersion, data.ResouceName)
+	endpoint := fmt.Sprintf("%s%s", c.ApiEndpoint, data.ResouceName)
 
 	if data.Method == http.MethodGet {
 
@@ -125,25 +152,9 @@ func HttpRequest(data ApiSpec) *http.Request {
 	}
 }
 
-func JsonToMap(data []byte) (map[string]*optional.NullableString, error) {
-	result := make(map[string]*optional.NullableString)
-	unmarshaled := make(map[string]*optional.NullableString)
+func (c *ChatworkApiClient) HttpRequestMultipart(data ApiSpecMultipart) (*http.Request, error) {
 
-	if err := json.Unmarshal([]byte(data), &unmarshaled); err != nil {
-		return nil, err
-	}
-
-	for key := range unmarshaled {
-		if unmarshaled[key] != nil {
-			result[key] = unmarshaled[key]
-		}
-	}
-	return result, nil
-}
-
-func HttpRequestMultipart(data ApiSpecMultipart) (*http.Request, error) {
-
-	endpoint := fmt.Sprintf("%s%s", ApiEndpoint, data.ResouceName)
+	endpoint := fmt.Sprintf("%s%s", c.ApiEndpoint, data.ResouceName)
 	values := data.Params
 
 	var b bytes.Buffer
@@ -179,4 +190,20 @@ func HttpRequestMultipart(data ApiSpecMultipart) (*http.Request, error) {
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 
 	return req, err
+}
+
+func JsonToMap(data []byte) (map[string]*optional.NullableString, error) {
+	result := make(map[string]*optional.NullableString)
+	unmarshaled := make(map[string]*optional.NullableString)
+
+	if err := json.Unmarshal([]byte(data), &unmarshaled); err != nil {
+		return nil, err
+	}
+
+	for key := range unmarshaled {
+		if unmarshaled[key] != nil {
+			result[key] = unmarshaled[key]
+		}
+	}
+	return result, nil
 }

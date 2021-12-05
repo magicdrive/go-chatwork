@@ -7,7 +7,6 @@ import (
 
 	"github.com/jarcoal/httpmock"
 	"github.com/magicdrive/go-chatwork"
-	"github.com/magicdrive/go-chatwork/api"
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 	"github.com/magicdrive/go-chatwork/api/resource/my"
 	"github.com/stretchr/testify/assert"
@@ -33,7 +32,7 @@ func TestGetMyStatus(t *testing.T) {
 	}
 	`
 
-	httpmock.RegisterResponder("GET", fmt.Sprintf("%s%s", api.ApiEndpoint, target.ResourceName),
+	httpmock.RegisterResponder("GET", fmt.Sprintf("%s%s", client.Client.ApiEndpoint, target.ResourceName),
 		httpmock.NewStringResponder(200, mock_json),
 	)
 
@@ -79,7 +78,7 @@ func TestMyTasks(t *testing.T) {
 	]
 	`
 
-	httpmock.RegisterResponder("GET", fmt.Sprintf("%s%s", api.ApiEndpoint, target.ResourceName),
+	httpmock.RegisterResponder("GET", fmt.Sprintf("%s%s", client.Client.ApiEndpoint, target.ResourceName),
 		httpmock.NewStringResponder(200, mock_json),
 	)
 

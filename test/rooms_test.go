@@ -8,7 +8,6 @@ import (
 
 	"github.com/jarcoal/httpmock"
 	"github.com/magicdrive/go-chatwork"
-	"github.com/magicdrive/go-chatwork/api"
 	"github.com/magicdrive/go-chatwork/api/param"
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 	"github.com/magicdrive/go-chatwork/api/resource"
@@ -44,7 +43,7 @@ func TestGetRoomList(t *testing.T) {
 	]
 	`
 
-	httpmock.RegisterResponder(http.MethodGet, fmt.Sprintf("%s%s", api.ApiEndpoint, target.ResourceName),
+	httpmock.RegisterResponder(http.MethodGet, fmt.Sprintf("%s%s", client.Client.ApiEndpoint, target.ResourceName),
 		httpmock.NewStringResponder(http.StatusOK, mock_json),
 	)
 
@@ -73,7 +72,7 @@ func TestCreateRooms(t *testing.T) {
 	}
 	`
 
-	httpmock.RegisterResponder(http.MethodPost, fmt.Sprintf("%s%s", api.ApiEndpoint, target.ResourceName),
+	httpmock.RegisterResponder(http.MethodPost, fmt.Sprintf("%s%s", client.Client.ApiEndpoint, target.ResourceName),
 		httpmock.NewStringResponder(http.StatusOK, mock_json),
 	)
 
@@ -129,7 +128,7 @@ func TestGetRoom(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodGet,
-		fmt.Sprintf("%s%s/%d", api.ApiEndpoint, target.ResourceName, room_id),
+		fmt.Sprintf("%s%s/%d", client.Client.ApiEndpoint, target.ResourceName, room_id),
 		httpmock.NewStringResponder(http.StatusOK, mock_json),
 	)
 
@@ -161,7 +160,7 @@ func TestUpdateRoom(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodPut,
-		fmt.Sprintf("%s%s/%d", api.ApiEndpoint, target.ResourceName, room_id),
+		fmt.Sprintf("%s%s/%d", client.Client.ApiEndpoint, target.ResourceName, room_id),
 		httpmock.NewStringResponder(http.StatusOK, mock_json),
 	)
 
@@ -199,7 +198,7 @@ func TestDeleteRoom(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodDelete,
-		fmt.Sprintf("%s%s/%d", api.ApiEndpoint, target.ResourceName, room_id),
+		fmt.Sprintf("%s%s/%d", client.Client.ApiEndpoint, target.ResourceName, room_id),
 		httpmock.NewStringResponder(http.StatusOK, mock_json),
 	)
 

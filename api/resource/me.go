@@ -9,7 +9,7 @@ import (
 
 type MeResource struct {
 	ResourceName string
-	Credential   string
+	Client   *api.ChatworkApiClient
 }
 
 type MeData struct {
@@ -34,17 +34,17 @@ type MeData struct {
 	LoginMail        string `json:"login_mail"`
 }
 
-func NewMeResource(credential string) MeResource {
+func NewMeResource(client *api.ChatworkApiClient) MeResource {
 	data := MeResource{
 		ResourceName: `/me`,
-		Credential:   credential,
+		Client:   client,
 	}
 	return data
 }
 
 func (c MeResource) Get() (MeData, error) {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: c.ResourceName,
 		Params:      nil,
@@ -52,7 +52,7 @@ func (c MeResource) Get() (MeData, error) {
 
 	result := MeData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}

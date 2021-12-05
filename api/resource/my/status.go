@@ -10,7 +10,7 @@ import (
 
 type MyStatusResource struct {
 	ResourceName string
-	Credential   string
+	Client       *api.ChatworkApiClient
 }
 
 type MyStatusData struct {
@@ -22,10 +22,10 @@ type MyStatusData struct {
 	MytaskNum      int `json:"mytask_num"`
 }
 
-func NewMyStatus(parent string, credential string) MyStatusResource {
+func NewMyStatus(parent string, client *api.ChatworkApiClient) MyStatusResource {
 	data := MyStatusResource{
 		ResourceName: parent + `/status`,
-		Credential:   credential,
+		Client:       client,
 	}
 	return data
 
@@ -33,7 +33,7 @@ func NewMyStatus(parent string, credential string) MyStatusResource {
 
 func (c MyStatusResource) Get() (MyStatusData, error) {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: c.ResourceName,
 		Params:      nil,
@@ -41,7 +41,7 @@ func (c MyStatusResource) Get() (MyStatusData, error) {
 
 	result := MyStatusData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}

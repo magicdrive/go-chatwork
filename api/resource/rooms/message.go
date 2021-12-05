@@ -12,7 +12,7 @@ import (
 
 type RoomMessagesResource struct {
 	ResourceName string
-	Credential   string
+	Client       *api.ChatworkApiClient
 }
 
 type RoomMessageData struct {
@@ -41,10 +41,10 @@ type RoomMessageReadStatusData struct {
 	MetionNum int `json:"mention_num"`
 }
 
-func NewRoomMessagesResource(parent string, credential string) RoomMessagesResource {
+func NewRoomMessagesResource(parent string, client *api.ChatworkApiClient) RoomMessagesResource {
 	data := RoomMessagesResource{
 		ResourceName: parent + `/%d/messages`,
-		Credential:   credential,
+		Client:   client,
 	}
 	return data
 
@@ -53,7 +53,7 @@ func NewRoomMessagesResource(parent string, credential string) RoomMessagesResou
 func (c RoomMessagesResource) List(room_id int, force *optional.NullableBool) ([]RoomMessageData, error) {
 
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
 		Params: map[string]*optional.NullableString{
@@ -63,7 +63,7 @@ func (c RoomMessagesResource) List(room_id int, force *optional.NullableBool) ([
 
 	result := make([]RoomMessageData, 0, 32)
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -77,7 +77,7 @@ func (c RoomMessagesResource) Post(room_id int, params RoomMessagePostParam) (Ro
 	p, _ := api.JsonToMap(b)
 
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodPost,
 		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
 		Params:      p,
@@ -85,7 +85,7 @@ func (c RoomMessagesResource) Post(room_id int, params RoomMessagePostParam) (Ro
 
 	result := RoomMessagePostData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -96,7 +96,7 @@ func (c RoomMessagesResource) Post(room_id int, params RoomMessagePostParam) (Ro
 func (c RoomMessagesResource) Read(room_id int, message_id *optional.NullableString) (RoomMessageReadStatusData, error) {
 
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/read", room_id),
 		Params: map[string]*optional.NullableString{
@@ -106,7 +106,7 @@ func (c RoomMessagesResource) Read(room_id int, message_id *optional.NullableStr
 
 	result := RoomMessageReadStatusData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -116,7 +116,7 @@ func (c RoomMessagesResource) Read(room_id int, message_id *optional.NullableStr
 }
 func (c RoomMessagesResource) Unread(room_id int, message_id *optional.NullableString) (RoomMessageReadStatusData, error) {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/unread", room_id),
 		Params: map[string]*optional.NullableString{
@@ -126,7 +126,7 @@ func (c RoomMessagesResource) Unread(room_id int, message_id *optional.NullableS
 
 	result := RoomMessageReadStatusData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -136,7 +136,7 @@ func (c RoomMessagesResource) Unread(room_id int, message_id *optional.NullableS
 
 func (c RoomMessagesResource) Get(room_id int, message_id string) (RoomMessageData, error) {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/%s", room_id, message_id),
 		Params:      nil,
@@ -144,7 +144,7 @@ func (c RoomMessagesResource) Get(room_id int, message_id string) (RoomMessageDa
 
 	result := RoomMessageData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -155,7 +155,7 @@ func (c RoomMessagesResource) Get(room_id int, message_id string) (RoomMessageDa
 
 func (c RoomMessagesResource) Edit(room_id int, message_id string, body string) (RoomMessagePostData, error) {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodPut,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/%s", room_id, message_id),
 		Params:      map[string]*optional.NullableString{"body": optional.String(body)},
@@ -163,7 +163,7 @@ func (c RoomMessagesResource) Edit(room_id int, message_id string, body string) 
 
 	result := RoomMessagePostData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
@@ -173,7 +173,7 @@ func (c RoomMessagesResource) Edit(room_id int, message_id string, body string) 
 
 func (c RoomMessagesResource) Delete(room_id int, message_id string) (RoomMessagePostData, error) {
 	spec := api.ApiSpec{
-		Credential:  c.Credential,
+		Credential:  c.Client.Credential,
 		Method:      http.MethodDelete,
 		ResouceName: fmt.Sprintf(c.ResourceName+"/%s", room_id, message_id),
 		Params:      nil,
@@ -181,7 +181,7 @@ func (c RoomMessagesResource) Delete(room_id int, message_id string) (RoomMessag
 
 	result := RoomMessagePostData{}
 
-	str, err := api.Call(spec)
+	str, err := c.Client.Call(spec)
 	if err == nil {
 		json.Unmarshal([]byte(str), &result)
 	}
