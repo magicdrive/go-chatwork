@@ -1,4 +1,8 @@
 # go-chatwork
+
+[![GoDoc](https://godoc.org/github.com/magicdrive/go-chatwork?status.svg)](https://godoc.org/github.com/magicdrive/go-chatwork)
+[![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/magicdrive/go-chatwork/LICENSE)
+
 Chatwork API Client for Golang
 
 ## Introduction
