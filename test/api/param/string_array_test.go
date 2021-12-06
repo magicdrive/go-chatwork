@@ -13,7 +13,19 @@ type StringArrayTest struct {
 	Names *param.StringArrayParam
 }
 
-func TestParamterStringPresentMarshal(t *testing.T) {
+func TestStringArray(t *testing.T) {
+	a := []string{"a", "b", "c"}
+
+	expected := &param.StringArrayParam{
+		Values: a,
+	}
+
+	actual := param.StringArray(a...)
+
+	assert.Equal(t, expected, actual)
+}
+
+func TestStringArrayParamMarshalJSON(t *testing.T) {
 
 	p := &StringArrayTest{Names: param.StringArray("foo", "bar")}
 
@@ -27,4 +39,3 @@ func TestParamterStringPresentMarshal(t *testing.T) {
 
 	assert.Equal(t, expected, actual)
 }
-

@@ -5,7 +5,9 @@ import (
 	"strings"
 )
 
-type IntArrayParam struct{ Values []int }
+type IntArrayParam struct {
+	Values []int
+}
 
 func IntArray(a ...int) *IntArrayParam {
 	result := &IntArrayParam{

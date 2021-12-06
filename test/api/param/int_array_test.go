@@ -13,7 +13,19 @@ type IntArrayTest struct {
 	Ids *param.IntArrayParam
 }
 
-func TestParamterIntArrayPresentMarshal(t *testing.T) {
+func TestIntArray(t *testing.T) {
+	a := []int{1, 2, 3}
+
+	expected := &param.IntArrayParam{
+		Values: a,
+	}
+
+	actual := param.IntArray(a...)
+
+	assert.Equal(t, expected, actual)
+}
+
+func TestIntArrayParamMarshalJSON(t *testing.T) {
 
 	p := &IntArrayTest{Ids: param.IntArray(1, 2, 3)}
 
