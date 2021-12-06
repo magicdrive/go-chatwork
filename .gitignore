@@ -1,6 +1,7 @@
 ### Project
 /vendor
 /coverage.txt
+/profile.out
 
 ### Vim
 # Swap
