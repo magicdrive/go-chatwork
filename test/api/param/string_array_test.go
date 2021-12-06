@@ -1,4 +1,4 @@
-package test
+package param
 
 import (
 	"testing"
@@ -9,13 +9,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type IntArrayTest struct {
-	Ids *param.IntArrayParam
+type StringArrayTest struct {
+	Names *param.StringArrayParam
 }
 
-func TestParamterIntArrayPresentMarshal(t *testing.T) {
+func TestParamterStringPresentMarshal(t *testing.T) {
 
-	p := &IntArrayTest{Ids: param.IntArray(1, 2, 3)}
+	p := &StringArrayTest{Names: param.StringArray("foo", "bar")}
 
 	b, err := json.Marshal(p)
 
@@ -23,7 +23,8 @@ func TestParamterIntArrayPresentMarshal(t *testing.T) {
 
 	actual := string(b)
 
-	expected := `{"Ids":"1,2,3"}`
+	expected := `{"Names":"foo,bar"}`
 
 	assert.Equal(t, expected, actual)
 }
+

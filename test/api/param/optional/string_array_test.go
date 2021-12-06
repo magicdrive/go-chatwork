@@ -1,4 +1,4 @@
-package test
+package optional
 
 import (
 	"testing"

@@ -1,4 +1,4 @@
-package test
+package resource
 
 import (
 	"encoding/json"

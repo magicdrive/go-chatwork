@@ -1,4 +1,4 @@
-package test
+package optional
 
 import (
 	"testing"
@@ -9,14 +9,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type IntTest struct {
-	Id    *optional.NullableInt
-	Count *optional.NullableInt
+type Int64Test struct {
+	Id    *optional.NullableInt64
+	Count *optional.NullableInt64
 }
 
-func TestOptionalParamterIntPresentMarshal(t *testing.T) {
+func TestOptionalParamterInt64PresentMarshal(t *testing.T) {
 
-	p := &IntTest{Id: optional.Int(11111), Count: optional.Int(2222)}
+	p := &Int64Test{Id: optional.Int64(11111), Count: optional.Int64(2222)}
 
 	b, err := json.Marshal(p)
 
@@ -29,9 +29,9 @@ func TestOptionalParamterIntPresentMarshal(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestOptionalParamterIntEmptyMarshal(t *testing.T) {
+func TestOptionalParamterInt64EmptyMarshal(t *testing.T) {
 
-	p := &IntTest{Id: optional.NilInt(), Count: optional.NilInt()}
+	p := &Int64Test{Id: optional.NilInt64(), Count: optional.NilInt64()}
 
 	b, err := json.Marshal(p)
 
