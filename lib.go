@@ -45,8 +45,8 @@ func (c ChatworkClient) Rooms() resource.RoomsResource {
 	return resource.NewRoomsResource(c.Client)
 }
 
-type RoomUpdatePram = resource.RoomsUpdateParam
-type RoomCreateData = resource.RoomsCreateParam
+type RoomUpdateParam = resource.RoomsUpdateParam
+type RoomCreateParam = resource.RoomsCreateParam
 
 var (
 	IconPresetGroup    = resource.IconPresetGroup

@@ -10,7 +10,7 @@
 Chatwork API Client for Golang. (API endpoint full supported.)
 
 ## Introduction
-The Chatwork API Client for Go makes it easy to develop bots using Chatwork API.
+The Chatwork API Client for Golang makes it easy to develop bots using Chatwork API.
 
 ## Documentation
 
@@ -46,11 +46,12 @@ func main() {
 
 ```
 
-## Configuration With Detailed ##
+## Configuration with detailed ##
 
 ```go
 import (
     "net/http"
+
     "github.com/magicdrive/go-chatwork"
 )
 
