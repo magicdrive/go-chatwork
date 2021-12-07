@@ -14,7 +14,7 @@ type StringTest struct {
 	WordSuf *optional.NullableString
 }
 
-func TestStringMarshalJSON(t *testing.T) {
+func TestNullableStringMarshalJSON(t *testing.T) {
 
 	p := &StringTest{WordPre: optional.String("Hello"), WordSuf: optional.String("World")}
 
@@ -29,7 +29,7 @@ func TestStringMarshalJSON(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestStringMarshalJSONEmpty(t *testing.T) {
+func TestNullableStringMarshalJSONEmpty(t *testing.T) {
 
 	p := &StringTest{WordPre: optional.NilString(), WordSuf: optional.NilString()}
 
