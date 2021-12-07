@@ -12,11 +12,13 @@ import (
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 )
 
+// RoomFilesResource chatwork api rooms/files resouce
 type RoomFilesResource struct {
 	ResourceName string
 	Client       *api.ChatworkApiClient
 }
 
+// RoomFileData chatwork api resp rooms/file data
 type RoomFileData struct {
 	FileID  int `json:"file_id"`
 	Account struct {
@@ -30,10 +32,12 @@ type RoomFileData struct {
 	UploadTime int    `json:"upload_time"`
 }
 
+// RoomFileUploadData chatwork api resp rooms/file upload data.
 type RoomFileUploadData struct {
 	Public *optional.NullableInt `json:"public"`
 }
 
+// NewRoomFilesResource new chatwork api rooms/files resouce.
 func NewRoomFilesResource(parent string, client *api.ChatworkApiClient) RoomFilesResource {
 	data := RoomFilesResource{
 		ResourceName: parent + `/%d/files`,
@@ -42,6 +46,7 @@ func NewRoomFilesResource(parent string, client *api.ChatworkApiClient) RoomFile
 	return data
 }
 
+// List chatwork api get rooms/files list.
 func (c RoomFilesResource) List(room_id int, account_id *optional.NullableInt) ([]RoomFileData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Client.Credential,
@@ -62,6 +67,7 @@ func (c RoomFilesResource) List(room_id int, account_id *optional.NullableInt) (
 	return result, err
 }
 
+// Upload chatwork api upload rooms/files.
 func (c RoomFilesResource) Upload(room_id int, filepath string, message *optional.NullableString) (RoomFileUploadData, error) {
 
 	file_entity, err := os.Open(filepath)
@@ -93,6 +99,7 @@ func (c RoomFilesResource) Upload(room_id int, filepath string, message *optiona
 	return result, err
 }
 
+// Upload chatwork api get rooms/file.
 func (c RoomFilesResource) Get(room_id int, file_id int, create_download_flag *optional.NullableBool) (RoomFileData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Client.Credential,

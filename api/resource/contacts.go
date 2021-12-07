@@ -7,11 +7,13 @@ import (
 	"github.com/magicdrive/go-chatwork/api"
 )
 
+// ContactsResource chatwork api contacts resource.
 type ContactsResource struct {
 	ResourceName string
 	Client       *api.ChatworkApiClient
 }
 
+// ContactsData chatwork api resp contact data.
 type ContactData struct {
 	AccountId        int    `json:"account_id"`
 	RoomId           int    `json:"room_id"`
@@ -23,6 +25,7 @@ type ContactData struct {
 	AvatarImageUrl   string `json:"avatar_image_url"`
 }
 
+// NewContactsResource new chatwork api contacts resource.
 func NewContactsResource(client *api.ChatworkApiClient) ContactsResource {
 	data := ContactsResource{
 		ResourceName: `/contacts`,
@@ -31,6 +34,7 @@ func NewContactsResource(client *api.ChatworkApiClient) ContactsResource {
 	return data
 }
 
+// List chatwork api resp contact data.
 func (c ContactsResource) List() ([]ContactData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Client.Credential,

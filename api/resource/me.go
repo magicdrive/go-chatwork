@@ -7,11 +7,13 @@ import (
 	"github.com/magicdrive/go-chatwork/api"
 )
 
+// MeResource chatwork api me resource.
 type MeResource struct {
 	ResourceName string
 	Client   *api.ChatworkApiClient
 }
 
+// MeResource chatwork api me resp data.
 type MeData struct {
 	AccountID        int    `json:"account_id"`
 	RoomID           int    `json:"room_id"`
@@ -34,6 +36,7 @@ type MeData struct {
 	LoginMail        string `json:"login_mail"`
 }
 
+// NewMeResource new chatwork api me resource.
 func NewMeResource(client *api.ChatworkApiClient) MeResource {
 	data := MeResource{
 		ResourceName: `/me`,
@@ -42,6 +45,7 @@ func NewMeResource(client *api.ChatworkApiClient) MeResource {
 	return data
 }
 
+// Get new chatwork api get me data.
 func (c MeResource) Get() (MeData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Client.Credential,

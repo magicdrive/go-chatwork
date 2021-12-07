@@ -10,11 +10,13 @@ import (
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 )
 
+// RoomLinkResource chatwork api rooms/message resouce.
 type RoomMessagesResource struct {
 	ResourceName string
 	Client       *api.ChatworkApiClient
 }
 
+// RoomMessageData chatwork api rooms/message resp data.
 type RoomMessageData struct {
 	MessageID string `json:"message_id"`
 	Account   struct {
@@ -27,20 +29,24 @@ type RoomMessageData struct {
 	UpdateTime int    `json:"update_time"`
 }
 
+// RoomMessagePostParam chatwork api rooms/message post param.
 type RoomMessagePostParam struct {
 	Body       string                 `json:"body"`
 	SelfUnread *optional.NullableBool `json:"self_unread"`
 }
 
+// RoomMessagePostData chatwork api resp rooms/message post data.
 type RoomMessagePostData struct {
 	MessageId string `json:"message_id"`
 }
 
+// RoomMessageReadStatusData chatwork api resp rooms/message read status data.
 type RoomMessageReadStatusData struct {
 	UnreadNum int `json:"unread_num"`
 	MetionNum int `json:"mention_num"`
 }
 
+// NewRoomMessagesResource new chatwork api rooms/messages resouce.
 func NewRoomMessagesResource(parent string, client *api.ChatworkApiClient) RoomMessagesResource {
 	data := RoomMessagesResource{
 		ResourceName: parent + `/%d/messages`,
@@ -50,6 +56,7 @@ func NewRoomMessagesResource(parent string, client *api.ChatworkApiClient) RoomM
 
 }
 
+// List chatwork api get rooms/messages list.
 func (c RoomMessagesResource) List(room_id int, force *optional.NullableBool) ([]RoomMessageData, error) {
 
 	spec := api.ApiSpec{
@@ -71,6 +78,7 @@ func (c RoomMessagesResource) List(room_id int, force *optional.NullableBool) ([
 	return result, err
 }
 
+// Post chatwork api post rooms/message.
 func (c RoomMessagesResource) Post(room_id int, params RoomMessagePostParam) (RoomMessagePostData, error) {
 
 	b, _ := json.Marshal(params)
@@ -93,6 +101,7 @@ func (c RoomMessagesResource) Post(room_id int, params RoomMessagePostParam) (Ro
 	return result, err
 }
 
+// Read chatwork api mark as read to rooms/message.
 func (c RoomMessagesResource) Read(room_id int, message_id *optional.NullableString) (RoomMessageReadStatusData, error) {
 
 	spec := api.ApiSpec{
@@ -114,6 +123,8 @@ func (c RoomMessagesResource) Read(room_id int, message_id *optional.NullableStr
 	return result, err
 
 }
+
+// Unread chatwork api mark as unread to rooms/message.
 func (c RoomMessagesResource) Unread(room_id int, message_id *optional.NullableString) (RoomMessageReadStatusData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Client.Credential,
@@ -134,6 +145,7 @@ func (c RoomMessagesResource) Unread(room_id int, message_id *optional.NullableS
 	return result, err
 }
 
+// Get chatwork api get rooms/message.
 func (c RoomMessagesResource) Get(room_id int, message_id string) (RoomMessageData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Client.Credential,
@@ -153,6 +165,7 @@ func (c RoomMessagesResource) Get(room_id int, message_id string) (RoomMessageDa
 
 }
 
+// Edit chatwork api edit rooms/message.
 func (c RoomMessagesResource) Edit(room_id int, message_id string, body string) (RoomMessagePostData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Client.Credential,
@@ -171,6 +184,7 @@ func (c RoomMessagesResource) Edit(room_id int, message_id string, body string) 
 	return result, err
 }
 
+// Delete chatwork api delete rooms/message.
 func (c RoomMessagesResource) Delete(room_id int, message_id string) (RoomMessagePostData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Client.Credential,

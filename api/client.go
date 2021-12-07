@@ -15,9 +15,13 @@ import (
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 )
 
-const ApiHost = "https://api.chatwork.com"
+// ApiDefaultHost chatwork api default host.
+const ApiDefaultHost = "https://api.chatwork.com"
+
+// ApiVersion chatwork api version string.
 const ApiVersion = "v2"
 
+// ApiSpec chatwork api spec difinition type.
 type ApiSpec struct {
 	Credential  string
 	Method      string
@@ -25,6 +29,7 @@ type ApiSpec struct {
 	Params      map[string]*optional.NullableString
 }
 
+// ApiSpecMultipart chatwork api spec difinition type for multipart.
 type ApiSpecMultipart struct {
 	Credential  string
 	Method      string
@@ -32,6 +37,7 @@ type ApiSpecMultipart struct {
 	Params      map[string]io.Reader
 }
 
+// ChatworkApiClient chatwork api client type.
 type ChatworkApiClient struct {
 	Credential         string
 	HttpClient         *http.Client
@@ -39,10 +45,11 @@ type ChatworkApiClient struct {
 	ApiEndpoint        string
 }
 
+// NewChatworkApiClient new chatwork api client.
 func NewChatworkApiClient(credential string, client *http.Client, alt_chatwork_api_host string) *ChatworkApiClient {
 	var endpoint string
 	if alt_chatwork_api_host == "" {
-		endpoint = fmt.Sprintf("%s/%s", ApiHost, ApiVersion)
+		endpoint = fmt.Sprintf("%s/%s", ApiDefaultHost, ApiVersion)
 	} else {
 		endpoint = fmt.Sprintf("%s/%s", alt_chatwork_api_host, ApiVersion)
 	}
@@ -54,6 +61,7 @@ func NewChatworkApiClient(credential string, client *http.Client, alt_chatwork_a
 	}
 }
 
+// CallMultipart call chatwork api with multipart.
 func (c *ChatworkApiClient) CallMultipart(data ApiSpecMultipart) ([]byte, error) {
 
 	req, err := c.HttpRequestMultipart(data)
@@ -85,6 +93,7 @@ func (c *ChatworkApiClient) CallMultipart(data ApiSpecMultipart) ([]byte, error)
 
 }
 
+// Call call chatwork api.
 func (c *ChatworkApiClient) Call(data ApiSpec) ([]byte, error) {
 
 	req := c.HttpRequest(data)
@@ -106,6 +115,7 @@ func (c *ChatworkApiClient) Call(data ApiSpec) ([]byte, error) {
 	}
 }
 
+// HttpRequest build chatwork api httprequest.
 func (c *ChatworkApiClient) HttpRequest(data ApiSpec) *http.Request {
 
 	endpoint := fmt.Sprintf("%s%s", c.ApiEndpoint, data.ResouceName)
@@ -152,6 +162,7 @@ func (c *ChatworkApiClient) HttpRequest(data ApiSpec) *http.Request {
 	}
 }
 
+// HttpRequest build chatwork api httprequest with multipart.
 func (c *ChatworkApiClient) HttpRequestMultipart(data ApiSpecMultipart) (*http.Request, error) {
 
 	endpoint := fmt.Sprintf("%s%s", c.ApiEndpoint, data.ResouceName)
@@ -192,6 +203,7 @@ func (c *ChatworkApiClient) HttpRequestMultipart(data ApiSpecMultipart) (*http.R
 	return req, err
 }
 
+// JsonToMap convert Json string bytes to map[stirng]*optional.NullableString.
 func JsonToMap(data []byte) (map[string]*optional.NullableString, error) {
 	result := make(map[string]*optional.NullableString)
 	unmarshaled := make(map[string]*optional.NullableString)

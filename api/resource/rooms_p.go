@@ -11,11 +11,13 @@ import (
 	rooms "github.com/magicdrive/go-chatwork/api/resource/rooms"
 )
 
+// RoomsResource chatwork api rooms resource
 type RoomsResource struct {
 	ResourceName string
 	Client       *api.ChatworkApiClient
 }
 
+// RoomsData chatwork api room resp data.
 type RoomData struct {
 	RoomID         int    `json:"room_id"`
 	Name           string `json:"name"`
@@ -31,12 +33,16 @@ type RoomData struct {
 	IconPath       string `json:"icon_path"`
 	LastUpdateTime int    `json:"last_update_time"`
 }
+
+// RoomsCreateData chatwork api rooms create resp data.
 type RoomsCreateData struct {
 	RoomID int `json:"room_id"`
 }
 
+// RoomsUpdateData chatwork api rooms update resp data.
 type RoomUpdateData RoomsCreateData
 
+// RoomsCreateParam chatwork api rooms create request param.
 type RoomsCreateParam struct {
 	Description        *optional.NullableString   `json:"description"`
 	IconPreset         *optional.NullableString   `json:"icon_preset"`
@@ -49,6 +55,7 @@ type RoomsCreateParam struct {
 	Name               string                     `json:"name"`
 }
 
+// RoomsUpdateParam chatwork api rooms update request param.
 type RoomsUpdateParam struct {
 	Description *optional.NullableString `json:"description"`
 	IconPreset  *optional.NullableString `json:"icon_preset"`
@@ -80,6 +87,7 @@ const (
 	RoomDelete = "delete"
 )
 
+// NewRoomsResource new chatwork api rooms resource.
 func NewRoomsResource(client *api.ChatworkApiClient) RoomsResource {
 	data := RoomsResource{
 		ResourceName: `/rooms`,
@@ -88,6 +96,7 @@ func NewRoomsResource(client *api.ChatworkApiClient) RoomsResource {
 	return data
 }
 
+// List chatwork api get rooms list.
 func (c RoomsResource) List() ([]RoomData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Client.Credential,
@@ -106,6 +115,7 @@ func (c RoomsResource) List() ([]RoomData, error) {
 	return result, err
 }
 
+// Create chatwork api create room.
 func (c RoomsResource) Create(params RoomsCreateParam) (RoomsCreateData, error) {
 
 	b, _ := json.Marshal(params)
@@ -128,6 +138,7 @@ func (c RoomsResource) Create(params RoomsCreateParam) (RoomsCreateData, error) 
 	return result, err
 }
 
+// Create chatwork api get room data.
 func (c RoomsResource) Get(room_id int) (RoomData, error) {
 
 	spec := api.ApiSpec{
@@ -148,6 +159,7 @@ func (c RoomsResource) Get(room_id int) (RoomData, error) {
 
 }
 
+// Create chatwork api update room data.
 func (c RoomsResource) Update(room_id int, params RoomsUpdateParam) (RoomUpdateData, error) {
 
 	b, _ := json.Marshal(params)
@@ -171,6 +183,7 @@ func (c RoomsResource) Update(room_id int, params RoomsUpdateParam) (RoomUpdateD
 
 }
 
+// Create chatwork api delete room.
 func (c RoomsResource) Delete(room_id int, action string) error {
 
 	spec := api.ApiSpec{
@@ -187,22 +200,27 @@ func (c RoomsResource) Delete(room_id int, action string) error {
 	return err
 }
 
+// Files chatwork api rooms/files resource.
 func (c RoomsResource) Files() rooms.RoomFilesResource {
 	return rooms.NewRoomFilesResource(c.ResourceName, c.Client)
 }
 
+// Link chatwork api rooms/link resource.
 func (c RoomsResource) Link() rooms.RoomLinkResource {
 	return rooms.NewRoomLinkResource(c.ResourceName, c.Client)
 }
 
+// Members chatwork api rooms/members resource.
 func (c RoomsResource) Members() rooms.RoomMembersResource {
 	return rooms.NewRoomMembersResource(c.ResourceName, c.Client)
 }
 
+// Message chatwork api rooms/message resource.
 func (c RoomsResource) Message() rooms.RoomMessagesResource {
 	return rooms.NewRoomMessagesResource(c.ResourceName, c.Client)
 }
 
+// Tasks chatwork api rooms/tasks resource.
 func (c RoomsResource) Tasks() rooms.RoomTasksResource {
 	return rooms.NewRoomTasksResource(c.ResourceName, c.Client)
 }
