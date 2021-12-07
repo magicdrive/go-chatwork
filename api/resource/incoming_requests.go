@@ -8,11 +8,13 @@ import (
 	"github.com/magicdrive/go-chatwork/api"
 )
 
+// IncomingRequestsResource chatwork api incoming_requests resource.
 type IncomingRequestsResource struct {
 	ResourceName string
 	Client       *api.ChatworkApiClient
 }
 
+// IncomingRequestData chatwork api resp incoming_request data.
 type IncomingRequestData struct {
 	AccountID        int    `json:"account_id"`
 	RoomID           int    `json:"room_id"`
@@ -24,6 +26,7 @@ type IncomingRequestData struct {
 	AvatarImageURL   string `json:"avatar_image_url"`
 }
 
+// NewIncomingRequestsResource chatwork api new incoming_request resource.
 func NewIncomingRequestsResource(client *api.ChatworkApiClient) IncomingRequestsResource {
 	data := IncomingRequestsResource{
 		ResourceName: `/incoming_requests`,
@@ -32,6 +35,7 @@ func NewIncomingRequestsResource(client *api.ChatworkApiClient) IncomingRequests
 	return data
 }
 
+// List chatwork api get incoming_request list.
 func (c IncomingRequestsResource) List() ([]IncomingRequestData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Client.Credential,
@@ -50,6 +54,7 @@ func (c IncomingRequestsResource) List() ([]IncomingRequestData, error) {
 	return result, err
 }
 
+// Accept chatwork api accept incoming_request.
 func (c IncomingRequestsResource) Accept(incoming_request_id int) (IncomingRequestData, error) {
 	spec := api.ApiSpec{
 		Credential:  c.Client.Credential,
@@ -68,6 +73,7 @@ func (c IncomingRequestsResource) Accept(incoming_request_id int) (IncomingReque
 	return result, err
 }
 
+// Delete chatwork api delete incoming_request.
 func (c IncomingRequestsResource) Delete(incoming_request_id int) error {
 	spec := api.ApiSpec{
 		Credential:  c.Client.Credential,
