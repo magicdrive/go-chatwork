@@ -9,11 +9,13 @@ import (
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 )
 
+// MyTasksResource chatwork api my/tasks resource.
 type MyTasksResource struct {
 	ResourceName string
 	Client       *api.ChatworkApiClient
 }
 
+// MyTaskData chatwork api resp my/task data.
 type MyTaskData struct {
 	TaskID int `json:"task_id"`
 	Room   struct {
@@ -33,6 +35,7 @@ type MyTaskData struct {
 	LimitType string `json:"limit_type"`
 }
 
+// MyTasksListParam chatwork api get my/task list request param.
 type MyTasksListParam struct {
 	AssignedByAccountId *optional.NullableInt `json:"assigned_by_account_id"`
 	Status              *optional.NullableInt `json:"status"`
@@ -43,6 +46,7 @@ var (
 	MyTaskStatusOpen = optional.Int(2)
 )
 
+// NewMyTasks new chatwork api my/task resource.
 func NewMyTasks(parent string, client *api.ChatworkApiClient) MyTasksResource {
 	data := MyTasksResource{
 		ResourceName: parent + `/tasks`,
@@ -52,6 +56,7 @@ func NewMyTasks(parent string, client *api.ChatworkApiClient) MyTasksResource {
 
 }
 
+// List chatwork api get my/tasks list.
 func (c MyTasksResource) List(params MyTasksListParam) ([]MyTaskData, error) {
 
 	b, _ := json.Marshal(params)
