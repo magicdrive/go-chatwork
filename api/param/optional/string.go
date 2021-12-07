@@ -5,12 +5,14 @@ import (
 	"fmt"
 )
 
+// NullableString chatwork api optional string param (with nullablity)
 type NullableString struct {
 	value  string
 	asNull bool
 	valid  bool
 }
 
+// String new chatwork api optional string
 func String(v string) *NullableString {
 	return &NullableString{
 		value:  v,
@@ -19,6 +21,7 @@ func String(v string) *NullableString {
 	}
 }
 
+// NilString new chatwork api optional nil string
 func NilString() *NullableString {
 	return &NullableString{
 		value:  "",
@@ -27,6 +30,7 @@ func NilString() *NullableString {
 	}
 }
 
+// NewNullableString new chatwork api optional string with detailed
 func NewNullableString(v string, as_null bool) *NullableString {
 	return &NullableString{
 		value:  v,
@@ -35,16 +39,19 @@ func NewNullableString(v string, as_null bool) *NullableString {
 	}
 }
 
+// Valid mark validated, to this struct.
 func (c *NullableString) Valid() *NullableString {
 	c.valid = true
 	return c
 }
 
+// Invalid mark invalid, to this struct.
 func (c *NullableString) Invalid() *NullableString {
 	c.valid = false
 	return c
 }
 
+// Get get validated value in this struct.
 func (c *NullableString) Get() string {
 	if c.valid {
 		return c.value
@@ -52,25 +59,28 @@ func (c *NullableString) Get() string {
 	panic(errors.New("NullableString: `Get` was called without being validated.(*NullableString.Valid())"))
 }
 
+// Value get value in this struct.
 func (c *NullableString) Value() (string, error) {
 	if c.asNull {
-		return "", errors.New("NullableString: This value is null.")
+		return "", errors.New(`*NullableString: This value is null.`)
 	}
 	return c.value, nil
 }
 
+// IsNull return asNull status
 func (c *NullableString) IsNull() bool {
 	return c.asNull
 }
 
+// IsPresent return reverted asNull status
 func (c *NullableString) IsPresent() bool {
 	return !c.asNull
 }
 
+// MarshalJSON NullableString json marshaler interface.
 func (c *NullableString) MarshalJSON() ([]byte, error) {
 	if c.asNull {
 		return []byte("null"), nil
-	} else {
-		return []byte(fmt.Sprintf(`"%v"`, c.value)), nil
 	}
+	return []byte(fmt.Sprintf(`"%v"`, c.value)), nil
 }
