@@ -62,16 +62,16 @@ func TestPutIncomingRequests(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	mockBody := `
-    {
-      "account_id": 123,
-      "room_id": 322,
-      "name": "John Smith",
-      "chatwork_id": "tarochatworkid",
-      "organization_id": 101,
-      "organization_name": "Hello Company",
-      "department": "Marketing",
-      "avatar_image_url": "https://example.com/abc.png"
-    }
+	{
+	  "account_id": 123,
+	  "room_id": 322,
+	  "name": "John Smith",
+	  "chatwork_id": "tarochatworkid",
+	  "organization_id": 101,
+	  "organization_name": "Hello Company",
+	  "department": "Marketing",
+	  "avatar_image_url": "https://example.com/abc.png"
+	}
 	`
 
 	httpmock.RegisterResponder(http.MethodPut, fmt.Sprintf("%s%s/%d",
@@ -102,16 +102,16 @@ func TestDeleteIncomingRequests(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	mockBody := `
-    {
-      "account_id": 123,
-      "room_id": 322,
-      "name": "John Smith",
-      "chatwork_id": "tarochatworkid",
-      "organization_id": 101,
-      "organization_name": "Hello Company",
-      "department": "Marketing",
-      "avatar_image_url": "https://example.com/abc.png"
-    }
+	{
+	  "account_id": 123,
+	  "room_id": 322,
+	  "name": "John Smith",
+	  "chatwork_id": "tarochatworkid",
+	  "organization_id": 101,
+	  "organization_name": "Hello Company",
+	  "department": "Marketing",
+	  "avatar_image_url": "https://example.com/abc.png"
+	}
 	`
 
 	httpmock.RegisterResponder(http.MethodDelete, fmt.Sprintf("%s%s/%d",
