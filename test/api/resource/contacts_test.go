@@ -1,4 +1,4 @@
-package resource
+package resource_test
 
 import (
 	"encoding/json"
@@ -21,7 +21,7 @@ func TestGetContacts(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	[
 	  {
 		"account_id": 123,
@@ -36,15 +36,15 @@ func TestGetContacts(t *testing.T) {
 	]
 	`
 
-	httpmock.RegisterResponder(http.MethodGet, fmt.Sprintf("%s%s", client.Client.ApiEndpoint, target.ResourceName),
-		httpmock.NewStringResponder(http.StatusOK, mock_json),
+	httpmock.RegisterResponder(http.MethodGet, fmt.Sprintf("%s%s", client.Client.APIEndpoint, target.ResourceName),
+		httpmock.NewStringResponder(http.StatusOK, mockBody),
 	)
 
 	actual, err := target.List()
 	assert.Nil(t, err)
 
 	expected := make([]resource.ContactData, 0, 32)
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 	assert.Nil(t, err)
 
 	assert.Equal(t, expected, actual)

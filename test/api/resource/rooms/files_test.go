@@ -1,4 +1,4 @@
-package rooms
+package rooms_test
 
 import (
 	"encoding/json"
@@ -18,34 +18,34 @@ func TestGetRoomsFileUpload(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
 
-	room_id := 1
+	roomID := 1
 
 	message := optional.String("Hello.")
 
 	dir, _ := os.Getwd()
-	file_path := dir + "/testdata/upload_file_test.txt"
+	filePath := dir + "/testdata/upload_file_test.txt"
 
 	target := client.Rooms().Files()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "file_id": 1234
 	}
 	`
 
 	httpmock.RegisterResponder(http.MethodPost,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName, roomID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
-	actual, err := target.Upload(room_id, file_path, message)
+	actual, err := target.Upload(roomID, filePath, message)
 	assert.Nil(t, err)
 
 	expected := rooms.RoomFileUploadData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 	assert.Nil(t, err)
 
 	assert.Equal(t, expected, actual)
@@ -54,16 +54,16 @@ func TestGetRoomsFileUpload(t *testing.T) {
 func TestRoomsFileGet(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
-	room_id := 1
-	file_id := 1
-	create_download_flag := optional.NilBool()
+	roomID := 1
+	fileID := 1
+	createDownloadFlag := optional.NilBool()
 
 	target := client.Rooms().Files()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "file_id":3,
 	  "account": {
@@ -79,15 +79,15 @@ func TestRoomsFileGet(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodGet,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName+`/%d`, room_id, file_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName+`/%d`, roomID, fileID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
-	actual, err := target.Get(room_id, file_id, create_download_flag)
+	actual, err := target.Get(roomID, fileID, createDownloadFlag)
 	assert.Nil(t, err)
 
 	expected := rooms.RoomFileData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 
 	assert.Nil(t, err)
 
@@ -97,15 +97,15 @@ func TestRoomsFileGet(t *testing.T) {
 func TestRoomsFileList(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
-	room_id := 1
-	account_id := optional.Int(1)
+	roomID := 1
+	accountID := optional.Int(1)
 
 	target := client.Rooms().Files()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	[
 	  {
 		"file_id": 3,
@@ -123,15 +123,15 @@ func TestRoomsFileList(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodGet,
-		fmt.Sprintf(fmt.Sprintf("%s%s", client.Client.AltChatworkApiHost, target.ResourceName), room_id),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf(fmt.Sprintf("%s%s", client.Client.APIEndpoint, target.ResourceName), roomID),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
-	actual, err := target.List(room_id, account_id)
+	actual, err := target.List(roomID, accountID)
 	assert.Nil(t, err)
 
 	expected := make([]rooms.RoomFileData, 0, 32)
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 
 	assert.Nil(t, err)
 

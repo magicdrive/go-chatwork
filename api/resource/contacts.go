@@ -10,23 +10,23 @@ import (
 // ContactsResource chatwork api contacts resource.
 type ContactsResource struct {
 	ResourceName string
-	Client       *api.ChatworkApiClient
+	Client       *api.ChatworkAPIClient
 }
 
-// ContactsData chatwork api resp contact data.
+// ContactData chatwork api resp contact data.
 type ContactData struct {
-	AccountId        int    `json:"account_id"`
-	RoomId           int    `json:"room_id"`
+	AccountID        int    `json:"account_id"`
+	RoomID           int    `json:"room_id"`
 	Name             string `json:"name"`
-	ChatworkId       string `json:"chatwork_id"`
-	OrganizationId   int    `json:"organizationId"`
+	ChatworkID       string `json:"chatwork_id"`
+	OrganizationID   int    `json:"organization_id"`
 	OrganizationName string `json:"organization_name"`
 	Department       string `json:"department"`
-	AvatarImageUrl   string `json:"avatar_image_url"`
+	AvatarImageURL   string `json:"avatar_image_url"`
 }
 
 // NewContactsResource new chatwork api contacts resource.
-func NewContactsResource(client *api.ChatworkApiClient) ContactsResource {
+func NewContactsResource(client *api.ChatworkAPIClient) ContactsResource {
 	data := ContactsResource{
 		ResourceName: `/contacts`,
 		Client:       client,
@@ -36,7 +36,7 @@ func NewContactsResource(client *api.ChatworkApiClient) ContactsResource {
 
 // List chatwork api resp contact data.
 func (c ContactsResource) List() ([]ContactData, error) {
-	spec := api.ApiSpec{
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: c.ResourceName,

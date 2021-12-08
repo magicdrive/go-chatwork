@@ -1,4 +1,4 @@
-package rooms
+package rooms_test
 
 import (
 	"encoding/json"
@@ -18,14 +18,14 @@ func TestListRoomsTasks(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
 
-	room_id := 1
+	roomID := 1
 
 	target := client.Rooms().Tasks()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	[
 	  {
 		"task_id": 3,
@@ -49,21 +49,21 @@ func TestListRoomsTasks(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodGet,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName, roomID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
 	params := chatwork.RoomTasksListParam{
 		AccountID:           optional.Int(101),
-		AssignedByAccountId: optional.Int(78),
+		AssignedByAccountID: optional.Int(78),
 		Status:              chatwork.RoomTaskBodyStatusDone,
 	}
 
-	actual, err := target.List(room_id, params)
+	actual, err := target.List(roomID, params)
 	assert.Nil(t, err)
 
 	expected := make([]rooms.RoomTaskData, 0, 32)
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 	assert.Nil(t, err)
 
 	assert.Equal(t, expected, actual)
@@ -72,36 +72,36 @@ func TestListRoomsTasks(t *testing.T) {
 func TestCreateRoomsTask(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
-	room_id := 1
+	roomID := 1
 
 	target := client.Rooms().Tasks()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "task_ids": [123,124]
 	}
 	`
 
 	httpmock.RegisterResponder(http.MethodPost,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName, roomID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
 	params := chatwork.RoomTaskPostParam{
 		Body:      "Buy milk",
 		Limit:     optional.Int64(1385996399),
 		LimitType: chatwork.RoomTaskLimitTypeDate,
-		ToIds:     param.IntArray(1, 3, 6),
+		ToIDs:     param.IntArray(1, 3, 6),
 	}
 
-	actual, err := target.Create(room_id, params)
+	actual, err := target.Create(roomID, params)
 	assert.Nil(t, err)
 
 	expected := rooms.RoomTaskPostData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 
 	assert.Nil(t, err)
 
@@ -111,15 +111,15 @@ func TestCreateRoomsTask(t *testing.T) {
 func TestGetRoomsTask(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
-	room_id := 1
-	task_id := 1
+	roomID := 1
+	taskID := 1
 
 	target := client.Rooms().Tasks()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "task_id": 3,
 	  "account": {
@@ -141,15 +141,15 @@ func TestGetRoomsTask(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodGet,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName+"/%d", room_id, task_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName+"/%d", roomID, taskID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
-	actual, err := target.Get(room_id, task_id)
+	actual, err := target.Get(roomID, taskID)
 	assert.Nil(t, err)
 
 	expected := rooms.RoomTaskData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 
 	assert.Nil(t, err)
 
@@ -159,30 +159,30 @@ func TestGetRoomsTask(t *testing.T) {
 func TestUpdateRoomsTask(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
-	room_id := 1
-	task_id := 1
+	roomID := 1
+	taskID := 1
 
 	target := client.Rooms().Tasks()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "task_id": 1234
 	}
 	`
 
 	httpmock.RegisterResponder(http.MethodPut,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName+"/%d/status", room_id, task_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName+"/%d/status", roomID, taskID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
-	actual, err := target.Update(room_id, task_id, chatwork.RoomTaskBodyStatusDone)
+	actual, err := target.Update(roomID, taskID, chatwork.RoomTaskBodyStatusDone)
 	assert.Nil(t, err)
 
 	expected := rooms.RoomTaskPostData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 
 	assert.Nil(t, err)
 

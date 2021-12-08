@@ -1,4 +1,4 @@
-package resource
+package resource_test
 
 import (
 	"encoding/json"
@@ -21,7 +21,7 @@ func TestGetMe(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "account_id": 123,
 	  "room_id": 322,
@@ -45,15 +45,15 @@ func TestGetMe(t *testing.T) {
 	}
 	`
 
-	httpmock.RegisterResponder(http.MethodGet, fmt.Sprintf("%s%s", client.Client.ApiEndpoint, target.ResourceName),
-		httpmock.NewStringResponder(http.StatusOK, mock_json),
+	httpmock.RegisterResponder(http.MethodGet, fmt.Sprintf("%s%s", client.Client.APIEndpoint, target.ResourceName),
+		httpmock.NewStringResponder(http.StatusOK, mockBody),
 	)
 
 	actual, err := target.Get()
 	assert.Nil(t, err)
 
 	expected := resource.MeData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 	assert.Nil(t, err)
 
 	assert.Equal(t, expected, actual)

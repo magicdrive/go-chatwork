@@ -15,7 +15,7 @@ import (
 // RoomFilesResource chatwork api rooms/files resouce
 type RoomFilesResource struct {
 	ResourceName string
-	Client       *api.ChatworkApiClient
+	Client       *api.ChatworkAPIClient
 }
 
 // RoomFileData chatwork api resp rooms/file data
@@ -38,7 +38,7 @@ type RoomFileUploadData struct {
 }
 
 // NewRoomFilesResource new chatwork api rooms/files resouce.
-func NewRoomFilesResource(parent string, client *api.ChatworkApiClient) RoomFilesResource {
+func NewRoomFilesResource(parent string, client *api.ChatworkAPIClient) RoomFilesResource {
 	data := RoomFilesResource{
 		ResourceName: parent + `/%d/files`,
 		Client:       client,
@@ -47,13 +47,13 @@ func NewRoomFilesResource(parent string, client *api.ChatworkApiClient) RoomFile
 }
 
 // List chatwork api get rooms/files list.
-func (c RoomFilesResource) List(room_id int, account_id *optional.NullableInt) ([]RoomFileData, error) {
-	spec := api.ApiSpec{
+func (c RoomFilesResource) List(roomID int, accountID *optional.NullableInt) ([]RoomFileData, error) {
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
-		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
+		ResouceName: fmt.Sprintf(c.ResourceName, roomID),
 		Params: map[string]*optional.NullableString{
-			"account_id": account_id.ToNullableString(),
+			"account_id": accountID.ToNullableString(),
 		},
 	}
 
@@ -68,24 +68,24 @@ func (c RoomFilesResource) List(room_id int, account_id *optional.NullableInt) (
 }
 
 // Upload chatwork api upload rooms/files.
-func (c RoomFilesResource) Upload(room_id int, filepath string, message *optional.NullableString) (RoomFileUploadData, error) {
+func (c RoomFilesResource) Upload(roomID int, filePath string, message *optional.NullableString) (RoomFileUploadData, error) {
 
-	file_entity, err := os.Open(filepath)
+	fileEntity, err := os.Open(filePath)
 	if err != nil {
 		return RoomFileUploadData{}, err
 	}
 	params := map[string]io.Reader{
-		"file": file_entity,
+		"file": fileEntity,
 	}
 	if message.IsPresent() {
 		s := message.Valid().Get()
 		params["message"] = strings.NewReader(s)
 	}
 
-	spec := api.ApiSpecMultipart{
+	spec := api.APISpecMultipart{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodPost,
-		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
+		ResouceName: fmt.Sprintf(c.ResourceName, roomID),
 		Params:      params,
 	}
 
@@ -99,14 +99,14 @@ func (c RoomFilesResource) Upload(room_id int, filepath string, message *optiona
 	return result, err
 }
 
-// Upload chatwork api get rooms/file.
-func (c RoomFilesResource) Get(room_id int, file_id int, create_download_flag *optional.NullableBool) (RoomFileData, error) {
-	spec := api.ApiSpec{
+// Get chatwork api get rooms/file.
+func (c RoomFilesResource) Get(roomID int, fileID int, createDownloadFlag *optional.NullableBool) (RoomFileData, error) {
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
-		ResouceName: fmt.Sprintf(c.ResourceName+`/%d`, room_id, file_id),
+		ResouceName: fmt.Sprintf(c.ResourceName+`/%d`, roomID, fileID),
 		Params: map[string]*optional.NullableString{
-			"create_download_flag": create_download_flag.ToNullableString(),
+			"create_download_flag": createDownloadFlag.ToNullableString(),
 		},
 	}
 

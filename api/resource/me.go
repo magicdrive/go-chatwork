@@ -10,10 +10,10 @@ import (
 // MeResource chatwork api me resource.
 type MeResource struct {
 	ResourceName string
-	Client   *api.ChatworkApiClient
+	Client   *api.ChatworkAPIClient
 }
 
-// MeResource chatwork api me resp data.
+// MeData chatwork api me resp data.
 type MeData struct {
 	AccountID        int    `json:"account_id"`
 	RoomID           int    `json:"room_id"`
@@ -37,7 +37,7 @@ type MeData struct {
 }
 
 // NewMeResource new chatwork api me resource.
-func NewMeResource(client *api.ChatworkApiClient) MeResource {
+func NewMeResource(client *api.ChatworkAPIClient) MeResource {
 	data := MeResource{
 		ResourceName: `/me`,
 		Client:   client,
@@ -47,7 +47,7 @@ func NewMeResource(client *api.ChatworkApiClient) MeResource {
 
 // Get new chatwork api get me data.
 func (c MeResource) Get() (MeData, error) {
-	spec := api.ApiSpec{
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: c.ResourceName,

@@ -8,11 +8,11 @@ import (
 // MyResource chatwork api my resource.
 type MyResource struct {
 	ResourceName string
-	Client       *api.ChatworkApiClient
+	Client       *api.ChatworkAPIClient
 }
 
 // NewMyResource new chatwork api my resource.
-func NewMyResource(client *api.ChatworkApiClient) MyResource {
+func NewMyResource(client *api.ChatworkAPIClient) MyResource {
 	data := MyResource{
 		ResourceName: `/my`,
 		Client:       client,

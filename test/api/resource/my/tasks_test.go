@@ -1,4 +1,4 @@
-package my
+package my_test
 
 import (
 	"encoding/json"
@@ -12,7 +12,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-
 func TestMyTasks(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
@@ -22,7 +21,7 @@ func TestMyTasks(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	[
 	  {
 		"task_id": 3,
@@ -45,12 +44,12 @@ func TestMyTasks(t *testing.T) {
 	]
 	`
 
-	httpmock.RegisterResponder("GET", fmt.Sprintf("%s%s", client.Client.ApiEndpoint, target.ResourceName),
-		httpmock.NewStringResponder(200, mock_json),
+	httpmock.RegisterResponder("GET", fmt.Sprintf("%s%s", client.Client.APIEndpoint, target.ResourceName),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
 	params := chatwork.MyTasksListParam{
-		AssignedByAccountId: optional.Int(456),
+		AssignedByAccountID: optional.Int(456),
 		Status:              chatwork.MyTaskStatusOpen,
 	}
 
@@ -58,7 +57,7 @@ func TestMyTasks(t *testing.T) {
 	assert.Nil(t, err)
 
 	expected := make([]my.MyTaskData, 0, 32)
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 
 	assert.Nil(t, err)
 

@@ -1,4 +1,4 @@
-package rooms
+package rooms_test
 
 import (
 	"encoding/json"
@@ -18,14 +18,14 @@ func TestListRoomsMembers(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
 
-	room_id := 1
+	roomID := 1
 
 	target := client.Rooms().Members()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	[
 	  {
 		"account_id": 123,
@@ -41,17 +41,17 @@ func TestListRoomsMembers(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodGet,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName, roomID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
 	force := optional.NilBool()
 
-	actual, err := target.List(room_id, force)
+	actual, err := target.List(roomID, force)
 	assert.Nil(t, err)
 
 	expected := make([]rooms.RoomMemberData, 0, 32)
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 	assert.Nil(t, err)
 
 	assert.Equal(t, expected, actual)
@@ -60,14 +60,14 @@ func TestListRoomsMembers(t *testing.T) {
 func TestUpdateRoomsMembers(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
-	room_id := 1
+	roomID := 1
 
 	target := client.Rooms().Members()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "admin": [123, 542, 1001],
 	  "member": [10, 103],
@@ -76,21 +76,21 @@ func TestUpdateRoomsMembers(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodPost,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName, roomID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
 	params := chatwork.RoomMembersUpdateParam{
-		MembersAdminIds:    param.IntArray(1, 2, 3),
-		MembersMemberIds:   optional.IntArray(10, 11, 12, 13),
-		MembersReadonlyIds: optional.IntArray(111, 112, 114),
+		MembersAdminIDs:    param.IntArray(1, 2, 3),
+		MembersMemberIDs:   optional.IntArray(10, 11, 12, 13),
+		MembersReadonlyIDs: optional.IntArray(111, 112, 114),
 	}
 
-	actual, err := target.Update(room_id, params)
+	actual, err := target.Update(roomID, params)
 	assert.Nil(t, err)
 
 	expected := rooms.RoomMembersAuthorityData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 
 	assert.Nil(t, err)
 

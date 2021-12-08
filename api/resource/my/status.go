@@ -11,7 +11,7 @@ import (
 // MyStatusResource chatwork api my/status resource.
 type MyStatusResource struct {
 	ResourceName string
-	Client       *api.ChatworkApiClient
+	Client       *api.ChatworkAPIClient
 }
 
 // MyStatusData chatwork api resp my/status data.
@@ -25,7 +25,7 @@ type MyStatusData struct {
 }
 
 // NewMyStatus new chatwork api resp my/status resource.
-func NewMyStatus(parent string, client *api.ChatworkApiClient) MyStatusResource {
+func NewMyStatus(parent string, client *api.ChatworkAPIClient) MyStatusResource {
 	data := MyStatusResource{
 		ResourceName: parent + `/status`,
 		Client:       client,
@@ -36,7 +36,7 @@ func NewMyStatus(parent string, client *api.ChatworkApiClient) MyStatusResource 
 
 // Get chatwork api get my/status.
 func (c MyStatusResource) Get() (MyStatusData, error) {
-	spec := api.ApiSpec{
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: c.ResourceName,

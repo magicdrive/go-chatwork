@@ -1,4 +1,4 @@
-package optional
+package optional_test
 
 import (
 	"testing"
@@ -10,13 +10,13 @@ import (
 )
 
 type IntTest struct {
-	Id    *optional.NullableInt
+	ID    *optional.NullableInt
 	Count *optional.NullableInt
 }
 
 func TestOptionalParamterIntPresentMarshal(t *testing.T) {
 
-	p := &IntTest{Id: optional.Int(11111), Count: optional.Int(2222)}
+	p := &IntTest{ID: optional.Int(11111), Count: optional.Int(2222)}
 
 	b, err := json.Marshal(p)
 
@@ -24,14 +24,14 @@ func TestOptionalParamterIntPresentMarshal(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	expected := `{"Id":11111,"Count":2222}`
+	expected := `{"ID":11111,"Count":2222}`
 
 	assert.Equal(t, expected, actual)
 }
 
 func TestOptionalParamterIntEmptyMarshal(t *testing.T) {
 
-	p := &IntTest{Id: optional.NilInt(), Count: optional.NilInt()}
+	p := &IntTest{ID: optional.NilInt(), Count: optional.NilInt()}
 
 	b, err := json.Marshal(p)
 
@@ -39,7 +39,7 @@ func TestOptionalParamterIntEmptyMarshal(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	expected := `{"Id":null,"Count":null}`
+	expected := `{"ID":null,"Count":null}`
 
 	assert.Equal(t, expected, actual)
 }

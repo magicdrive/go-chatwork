@@ -1,4 +1,4 @@
-package optional
+package optional_test
 
 import (
 	"testing"

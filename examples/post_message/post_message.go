@@ -7,15 +7,15 @@ import (
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 )
 
-func PostMessage() {
+func main() {
 
 	client := chatwork.NewChatworkClient(`your-api-key-here`)
 
-	room_id := 1
+	roomID := 1
 	params := chatwork.RoomMessagePostParam{Body: "Hi there.", SelfUnread: optional.BoolTrue()}
 
-	if r, err := client.Rooms().Message().Post(room_id, params); err == nil {
-		fmt.Println(r.MessageId)
+	if r, err := client.Rooms().Messages().Post(roomID, params); err == nil {
+		fmt.Println(r.MessageID)
 	} else {
 		panic(err)
 	}

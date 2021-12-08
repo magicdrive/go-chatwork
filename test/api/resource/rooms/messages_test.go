@@ -1,4 +1,4 @@
-package rooms
+package rooms_test
 
 import (
 	"encoding/json"
@@ -17,14 +17,14 @@ func TestListRoomsMessages(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
 
-	room_id := 1
+	roomID := 1
 
-	target := client.Rooms().Message()
+	target := client.Rooms().Messages()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	[
 	  {
 		"account_id": 123,
@@ -40,17 +40,17 @@ func TestListRoomsMessages(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodGet,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName, roomID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
 	force := optional.NilBool()
 
-	actual, err := target.List(room_id, force)
+	actual, err := target.List(roomID, force)
 	assert.Nil(t, err)
 
 	expected := make([]rooms.RoomMessageData, 0, 32)
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 	assert.Nil(t, err)
 
 	assert.Equal(t, expected, actual)
@@ -59,22 +59,22 @@ func TestListRoomsMessages(t *testing.T) {
 func TestPostRoomsMessage(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
-	room_id := 1
+	roomID := 1
 
-	target := client.Rooms().Message()
+	target := client.Rooms().Messages()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "message_id": "1234"
 	}
 	`
 
 	httpmock.RegisterResponder(http.MethodPost,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName, roomID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
 	params := chatwork.RoomMessagePostParam{
@@ -82,11 +82,11 @@ func TestPostRoomsMessage(t *testing.T) {
 		SelfUnread: optional.BoolFalse(),
 	}
 
-	actual, err := target.Post(room_id, params)
+	actual, err := target.Post(roomID, params)
 	assert.Nil(t, err)
 
 	expected := rooms.RoomMessagePostData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 
 	assert.Nil(t, err)
 
@@ -97,15 +97,15 @@ func TestReadRoomsMessage(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
 
-	room_id := 1
-	message_id := optional.String("1")
+	roomID := 1
+	messageID := optional.String("1")
 
-	target := client.Rooms().Message()
+	target := client.Rooms().Messages()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "unread_num": 461,
 	  "mention_num": 0
@@ -113,15 +113,15 @@ func TestReadRoomsMessage(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodPut,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName+`/read`, room_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName+`/read`, roomID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
-	actual, err := target.Read(room_id, message_id)
+	actual, err := target.Read(roomID, messageID)
 	assert.Nil(t, err)
 
 	expected := rooms.RoomMessageReadStatusData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 
 	assert.Nil(t, err)
 
@@ -132,15 +132,15 @@ func TestUnreadRoomsMessage(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
 
-	room_id := 1
-	message_id := optional.String("1")
+	roomID := 1
+	messageID := optional.String("1")
 
-	target := client.Rooms().Message()
+	target := client.Rooms().Messages()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "unread_num":  3,
 	  "mention_num": 0
@@ -148,15 +148,15 @@ func TestUnreadRoomsMessage(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodPut,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName+`/unread`, room_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName+`/unread`, roomID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
-	actual, err := target.Unread(room_id, message_id)
+	actual, err := target.Unread(roomID, messageID)
 	assert.Nil(t, err)
 
 	expected := rooms.RoomMessageReadStatusData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 
 	assert.Nil(t, err)
 
@@ -167,15 +167,15 @@ func TestGetRoomsMessage(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
 
-	room_id := 1
-	message_id := "1"
+	roomID := 1
+	messageID := "1"
 
-	target := client.Rooms().Message()
+	target := client.Rooms().Messages()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "message_id": "5",
 	  "account": {
@@ -190,15 +190,15 @@ func TestGetRoomsMessage(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodGet,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName+"/%s", room_id, message_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName+"/%s", roomID, messageID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
-	actual, err := target.Get(room_id, message_id)
+	actual, err := target.Get(roomID, messageID)
 	assert.Nil(t, err)
 
 	expected := rooms.RoomMessageData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 
 	assert.Nil(t, err)
 
@@ -209,32 +209,32 @@ func TestEditRoomsMessage(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
 
-	room_id := 1
-	message_id := "1"
+	roomID := 1
+	messageID := "1"
 
-	target := client.Rooms().Message()
+	target := client.Rooms().Messages()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "message_id": "1234"
 	}
 	`
 
 	httpmock.RegisterResponder(http.MethodPut,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName+"/%s", room_id, message_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName+"/%s", roomID, messageID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
 	body := "Hello. Chatwork!"
 
-	actual, err := target.Edit(room_id, message_id, body)
+	actual, err := target.Edit(roomID, messageID, body)
 	assert.Nil(t, err)
 
 	expected := rooms.RoomMessagePostData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 
 	assert.Nil(t, err)
 
@@ -245,15 +245,15 @@ func TestDeleteRoomsMessage(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
 
-	room_id := 1
-	message_id := "1"
+	roomID := 1
+	messageID := "1"
 
-	target := client.Rooms().Message()
+	target := client.Rooms().Messages()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "message_id": "5",
 	  "account": {
@@ -268,15 +268,15 @@ func TestDeleteRoomsMessage(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodDelete,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName+"/%s", room_id, message_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName+"/%s", roomID, messageID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
-	actual, err := target.Delete(room_id, message_id)
+	actual, err := target.Delete(roomID, messageID)
 	assert.Nil(t, err)
 
 	expected := rooms.RoomMessagePostData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 
 	assert.Nil(t, err)
 

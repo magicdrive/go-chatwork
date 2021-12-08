@@ -12,7 +12,7 @@ import (
 // MyTasksResource chatwork api my/tasks resource.
 type MyTasksResource struct {
 	ResourceName string
-	Client       *api.ChatworkApiClient
+	Client       *api.ChatworkAPIClient
 }
 
 // MyTaskData chatwork api resp my/task data.
@@ -37,17 +37,19 @@ type MyTaskData struct {
 
 // MyTasksListParam chatwork api get my/task list request param.
 type MyTasksListParam struct {
-	AssignedByAccountId *optional.NullableInt `json:"assigned_by_account_id"`
+	AssignedByAccountID *optional.NullableInt `json:"assigned_by_account_id"`
 	Status              *optional.NullableInt `json:"status"`
 }
 
 var (
+	// MyTaskStatusDone chatwork api my/task status param "done".
 	MyTaskStatusDone = optional.Int(1)
+	// MyTaskStatusOpen chatwork api my/task status param "open".
 	MyTaskStatusOpen = optional.Int(2)
 )
 
 // NewMyTasks new chatwork api my/task resource.
-func NewMyTasks(parent string, client *api.ChatworkApiClient) MyTasksResource {
+func NewMyTasks(parent string, client *api.ChatworkAPIClient) MyTasksResource {
 	data := MyTasksResource{
 		ResourceName: parent + `/tasks`,
 		Client:       client,
@@ -60,9 +62,9 @@ func NewMyTasks(parent string, client *api.ChatworkApiClient) MyTasksResource {
 func (c MyTasksResource) List(params MyTasksListParam) ([]MyTaskData, error) {
 
 	b, _ := json.Marshal(params)
-	p, _ := api.JsonToMap(b)
+	p, _ := api.JSONToMap(b)
 
-	spec := api.ApiSpec{
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: c.ResourceName,

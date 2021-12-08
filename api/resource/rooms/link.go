@@ -12,7 +12,7 @@ import (
 // RoomLinkResource chatwork api rooms/link resouce
 type RoomLinkResource struct {
 	ResourceName string
-	Client   *api.ChatworkApiClient
+	Client   *api.ChatworkAPIClient
 }
 
 // RoomLinkData chatwork api resp rooms/link data
@@ -36,7 +36,7 @@ type RoomLinkParam struct {
 }
 
 // NewRoomLinkResource new chatwork api rooms/link resouce.
-func NewRoomLinkResource(parent string, client *api.ChatworkApiClient) RoomLinkResource {
+func NewRoomLinkResource(parent string, client *api.ChatworkAPIClient) RoomLinkResource {
 	data := RoomLinkResource{
 		ResourceName: parent + `/%d/link`,
 		Client:   client,
@@ -45,11 +45,11 @@ func NewRoomLinkResource(parent string, client *api.ChatworkApiClient) RoomLinkR
 }
 
 // Get chatwork api get rooms/link .
-func (c RoomLinkResource) Get(room_id int) (RoomLinkData, error) {
-	spec := api.ApiSpec{
+func (c RoomLinkResource) Get(roomID int) (RoomLinkData, error) {
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
-		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
+		ResouceName: fmt.Sprintf(c.ResourceName, roomID),
 		Params:      nil,
 	}
 
@@ -64,13 +64,13 @@ func (c RoomLinkResource) Get(room_id int) (RoomLinkData, error) {
 }
 
 // Create chatwork api create rooms/link.
-func (c RoomLinkResource) Create(room_id int, params RoomLinkParam) (RoomLinkData, error) {
+func (c RoomLinkResource) Create(roomID int, params RoomLinkParam) (RoomLinkData, error) {
 	b, _ := json.Marshal(params)
-	p, _ := api.JsonToMap(b)
-	spec := api.ApiSpec{
+	p, _ := api.JSONToMap(b)
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodPost,
-		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
+		ResouceName: fmt.Sprintf(c.ResourceName, roomID),
 		Params:      p,
 	}
 
@@ -86,13 +86,13 @@ func (c RoomLinkResource) Create(room_id int, params RoomLinkParam) (RoomLinkDat
 }
 
 // Edit chatwork api edit rooms/link.
-func (c RoomLinkResource) Edit(room_id int, params RoomLinkParam) (RoomLinkData, error) {
+func (c RoomLinkResource) Edit(roomID int, params RoomLinkParam) (RoomLinkData, error) {
 	b, _ := json.Marshal(params)
-	p, _ := api.JsonToMap(b)
-	spec := api.ApiSpec{
+	p, _ := api.JSONToMap(b)
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodPut,
-		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
+		ResouceName: fmt.Sprintf(c.ResourceName, roomID),
 		Params:      p,
 	}
 
@@ -108,11 +108,11 @@ func (c RoomLinkResource) Edit(room_id int, params RoomLinkParam) (RoomLinkData,
 }
 
 // Delete chatwork api delete rooms/link.
-func (c RoomLinkResource) Delete(room_id int) (RoomLinkDeleteData, error) {
-	spec := api.ApiSpec{
+func (c RoomLinkResource) Delete(roomID int) (RoomLinkDeleteData, error) {
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodDelete,
-		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
+		ResouceName: fmt.Sprintf(c.ResourceName, roomID),
 		Params:      nil,
 	}
 

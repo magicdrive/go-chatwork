@@ -14,10 +14,10 @@ import (
 // RoomTasksResource chatwork api rooms/tasks resouce.
 type RoomTasksResource struct {
 	ResourceName string
-	Client       *api.ChatworkApiClient
+	Client       *api.ChatworkAPIClient
 }
 
-// RoomTasksData chatwork api resp rooms/task data.
+// RoomTaskData chatwork api resp rooms/task data.
 type RoomTaskData struct {
 	TaskID  int `json:"task_id"`
 	Account struct {
@@ -40,7 +40,7 @@ type RoomTaskData struct {
 // RoomTasksListParam chatwork api rooms/task request param.
 type RoomTasksListParam struct {
 	AccountID           *optional.NullableInt    `json:"account_id"`
-	AssignedByAccountId *optional.NullableInt    `json:"assigned_by_account_id"`
+	AssignedByAccountID *optional.NullableInt    `json:"assigned_by_account_id"`
 	Status              *optional.NullableString `json:"status"`
 }
 
@@ -49,26 +49,31 @@ type RoomTaskPostParam struct {
 	Body      string                   `json:"body"`
 	Limit     *optional.NullableInt64  `json:"limit"`
 	LimitType *optional.NullableString `json:"limit_type"`
-	ToIds     *param.IntArrayParam     `json:"to_ids"`
+	ToIDs     *param.IntArrayParam     `json:"to_ids"`
 }
 
-// RoomTasksPostData chatwork api resp rooms/task post data.
+// RoomTaskPostData chatwork api resp rooms/task post data.
 type RoomTaskPostData struct {
-	TaskId []int `json:"task_ids"`
+	TaskID []int `json:"task_ids"`
 }
 
 var (
+	// RoomTaskLimitTypeNone binding room/task limit type param "none".
 	RoomTaskLimitTypeNone = optional.String("none")
+	// RoomTaskLimitTypeDate binding room/task limit type param "date".
 	RoomTaskLimitTypeDate = optional.String("date")
+	// RoomTaskLimitTypeTime binding room/task limit type param "time".
 	RoomTaskLimitTypeTime = optional.String("time")
 )
 var (
+	// RoomTaskBodyStatusOpen binding room/task body status param "open".
 	RoomTaskBodyStatusOpen = optional.String("open")
+	// RoomTaskBodyStatusDone binding room/task body status param "done".
 	RoomTaskBodyStatusDone = optional.String("done")
 )
 
 // NewRoomTasksResource new chatwork api rooms/task resouce.
-func NewRoomTasksResource(parent string, client *api.ChatworkApiClient) RoomTasksResource {
+func NewRoomTasksResource(parent string, client *api.ChatworkAPIClient) RoomTasksResource {
 	data := RoomTasksResource{
 		ResourceName: parent + `/%d/tasks`,
 		Client:       client,
@@ -78,14 +83,14 @@ func NewRoomTasksResource(parent string, client *api.ChatworkApiClient) RoomTask
 }
 
 // List chatwork api get rooms/tasks list.
-func (c RoomTasksResource) List(room_id int, params RoomTasksListParam) ([]RoomTaskData, error) {
+func (c RoomTasksResource) List(roomID int, params RoomTasksListParam) ([]RoomTaskData, error) {
 	b, _ := json.Marshal(params)
-	p, _ := api.JsonToMap(b)
+	p, _ := api.JSONToMap(b)
 
-	spec := api.ApiSpec{
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
-		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
+		ResouceName: fmt.Sprintf(c.ResourceName, roomID),
 		Params:      p,
 	}
 
@@ -100,15 +105,15 @@ func (c RoomTasksResource) List(room_id int, params RoomTasksListParam) ([]RoomT
 }
 
 // Create chatwork api create rooms/task.
-func (c RoomTasksResource) Create(room_id int, params RoomTaskPostParam) (RoomTaskPostData, error) {
+func (c RoomTasksResource) Create(roomID int, params RoomTaskPostParam) (RoomTaskPostData, error) {
 
 	b, _ := json.Marshal(params)
-	p, _ := api.JsonToMap(b)
+	p, _ := api.JSONToMap(b)
 
-	spec := api.ApiSpec{
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodPost,
-		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
+		ResouceName: fmt.Sprintf(c.ResourceName, roomID),
 		Params:      p,
 	}
 
@@ -123,11 +128,11 @@ func (c RoomTasksResource) Create(room_id int, params RoomTaskPostParam) (RoomTa
 }
 
 // Get chatwork api get rooms/task.
-func (c RoomTasksResource) Get(room_id int, task_id int) (RoomTaskData, error) {
-	spec := api.ApiSpec{
+func (c RoomTasksResource) Get(roomID int, taskID int) (RoomTaskData, error) {
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
-		ResouceName: fmt.Sprintf(c.ResourceName+"/%d", room_id, task_id),
+		ResouceName: fmt.Sprintf(c.ResourceName+"/%d", roomID, taskID),
 		Params:      nil,
 	}
 
@@ -143,11 +148,11 @@ func (c RoomTasksResource) Get(room_id int, task_id int) (RoomTaskData, error) {
 }
 
 // Update chatwork api update rooms/task.
-func (c RoomTasksResource) Update(room_id int, task_id int, body *optional.NullableString) (RoomTaskPostData, error) {
-	spec := api.ApiSpec{
+func (c RoomTasksResource) Update(roomID int, taskID int, body *optional.NullableString) (RoomTaskPostData, error) {
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodPut,
-		ResouceName: fmt.Sprintf(c.ResourceName+"/%d/status", room_id, task_id),
+		ResouceName: fmt.Sprintf(c.ResourceName+"/%d/status", roomID, taskID),
 		Params:      map[string]*optional.NullableString{"body": body},
 	}
 

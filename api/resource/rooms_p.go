@@ -14,10 +14,10 @@ import (
 // RoomsResource chatwork api rooms resource
 type RoomsResource struct {
 	ResourceName string
-	Client       *api.ChatworkApiClient
+	Client       *api.ChatworkAPIClient
 }
 
-// RoomsData chatwork api room resp data.
+// RoomData chatwork api room resp data.
 type RoomData struct {
 	RoomID         int    `json:"room_id"`
 	Name           string `json:"name"`
@@ -39,7 +39,7 @@ type RoomsCreateData struct {
 	RoomID int `json:"room_id"`
 }
 
-// RoomsUpdateData chatwork api rooms update resp data.
+// RoomUpdateData chatwork api rooms update resp data.
 type RoomUpdateData RoomsCreateData
 
 // RoomsCreateParam chatwork api rooms create request param.
@@ -63,32 +63,51 @@ type RoomsUpdateParam struct {
 }
 
 var (
+	// IconPresetGroup binding icon_preset param "group".
 	IconPresetGroup    = optional.String("group")
+	// IconPresetCheck binding icon_preset param "check".
 	IconPresetCheck    = optional.String("check")
+	// IconPresetDocument binding icon_preset param "document".
 	IconPresetDocument = optional.String("document")
+	// IconPresetMeeting binding icon_preset param "meeting".
 	IconPresetMeeting  = optional.String("meeting")
+	// IconPresetEvent binding icon_preset param "event".
 	IconPresetEvent    = optional.String("event")
+	// IconPresetProject binding icon_preset param "project".
 	IconPresetProject  = optional.String("project")
+	// IconPresetBusiness binding icon_preset param "business".
 	IconPresetBusiness = optional.String("business")
+	// IconPresetStudy binding icon_preset param "study".
 	IconPresetStudy    = optional.String("study")
+	// IconPresetSecurity binding icon_preset param "security".
 	IconPresetSecurity = optional.String("security")
+	// IconPresetStar binding icon_preset param "star".
 	IconPresetStar     = optional.String("star")
+	// IconPresetIdea binding icon_preset param "idea".
 	IconPresetIdea     = optional.String("idea")
+	// IconPresetHeart binding icon_preset param "heart".
 	IconPresetHeart    = optional.String("heart")
+	// IconPresetMagcup binding icon_preset param "magcup".
 	IconPresetMagcup   = optional.String("magcup")
+	// IconPresetBeer binding icon_preset param "beer".
 	IconPresetBeer     = optional.String("beer")
+	// IconPresetMusic binding icon_preset param "music".
 	IconPresetMusic    = optional.String("music")
+	// IconPresetSports binding icon_preset param "sports".
 	IconPresetSports   = optional.String("sports")
+	// IconPresetTravel binding icon_preset param "travel".
 	IconPresetTravel   = optional.String("travel")
 )
 
 const (
+	// RoomLeave binding room delete status param "leave".
 	RoomLeave  = "leave"
+	// RoomDelete binding room delete status param "delete".
 	RoomDelete = "delete"
 )
 
 // NewRoomsResource new chatwork api rooms resource.
-func NewRoomsResource(client *api.ChatworkApiClient) RoomsResource {
+func NewRoomsResource(client *api.ChatworkAPIClient) RoomsResource {
 	data := RoomsResource{
 		ResourceName: `/rooms`,
 		Client:       client,
@@ -98,7 +117,7 @@ func NewRoomsResource(client *api.ChatworkApiClient) RoomsResource {
 
 // List chatwork api get rooms list.
 func (c RoomsResource) List() ([]RoomData, error) {
-	spec := api.ApiSpec{
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: c.ResourceName,
@@ -119,9 +138,9 @@ func (c RoomsResource) List() ([]RoomData, error) {
 func (c RoomsResource) Create(params RoomsCreateParam) (RoomsCreateData, error) {
 
 	b, _ := json.Marshal(params)
-	p, _ := api.JsonToMap(b)
+	p, _ := api.JSONToMap(b)
 
-	spec := api.ApiSpec{
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodPost,
 		ResouceName: c.ResourceName,
@@ -138,13 +157,13 @@ func (c RoomsResource) Create(params RoomsCreateParam) (RoomsCreateData, error) 
 	return result, err
 }
 
-// Create chatwork api get room data.
-func (c RoomsResource) Get(room_id int) (RoomData, error) {
+// Get chatwork api get room data.
+func (c RoomsResource) Get(roomID int) (RoomData, error) {
 
-	spec := api.ApiSpec{
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
-		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, room_id),
+		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, roomID),
 		Params:      nil,
 	}
 
@@ -159,16 +178,16 @@ func (c RoomsResource) Get(room_id int) (RoomData, error) {
 
 }
 
-// Create chatwork api update room data.
-func (c RoomsResource) Update(room_id int, params RoomsUpdateParam) (RoomUpdateData, error) {
+// Update chatwork api update room data.
+func (c RoomsResource) Update(roomID int, params RoomsUpdateParam) (RoomUpdateData, error) {
 
 	b, _ := json.Marshal(params)
-	p, _ := api.JsonToMap(b)
+	p, _ := api.JSONToMap(b)
 
-	spec := api.ApiSpec{
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodPut,
-		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, room_id),
+		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, roomID),
 		Params:      p,
 	}
 
@@ -183,13 +202,13 @@ func (c RoomsResource) Update(room_id int, params RoomsUpdateParam) (RoomUpdateD
 
 }
 
-// Create chatwork api delete room.
-func (c RoomsResource) Delete(room_id int, action string) error {
+// Delete chatwork api delete room.
+func (c RoomsResource) Delete(roomID int, action string) error {
 
-	spec := api.ApiSpec{
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodDelete,
-		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, room_id),
+		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, roomID),
 		Params: map[string]*optional.NullableString{
 			"action_type": optional.String(action),
 		},
@@ -215,8 +234,8 @@ func (c RoomsResource) Members() rooms.RoomMembersResource {
 	return rooms.NewRoomMembersResource(c.ResourceName, c.Client)
 }
 
-// Message chatwork api rooms/message resource.
-func (c RoomsResource) Message() rooms.RoomMessagesResource {
+// Messages chatwork api rooms/message resource.
+func (c RoomsResource) Messages() rooms.RoomMessagesResource {
 	return rooms.NewRoomMessagesResource(c.ResourceName, c.Client)
 }
 

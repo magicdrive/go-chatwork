@@ -48,10 +48,10 @@ func NilBool() *NullableBool {
 }
 
 // NewNullableBool new chatwork api optional bool with detailed.
-func NewNullableBool(v bool, as_null bool) *NullableBool {
+func NewNullableBool(v bool, asNull bool) *NullableBool {
 	return &NullableBool{
 		value:  v,
-		asNull: as_null,
+		asNull: asNull,
 		valid:  false,
 	}
 }

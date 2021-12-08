@@ -31,10 +31,10 @@ func NilString() *NullableString {
 }
 
 // NewNullableString new chatwork api optional string with detailed
-func NewNullableString(v string, as_null bool) *NullableString {
+func NewNullableString(v string, asNull bool) *NullableString {
 	return &NullableString{
 		value:  v,
-		asNull: as_null,
+		asNull: asNull,
 		valid:  false,
 	}
 }

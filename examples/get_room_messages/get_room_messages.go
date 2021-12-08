@@ -7,14 +7,14 @@ import (
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 )
 
-func GetRoomMessage() {
+func main() {
 
 	client := chatwork.NewChatworkClient(`your-api-key-here`)
 
-	room_id := 1
-	force_flang := optional.BoolTrue()
+	roomID := 1
+	force := optional.BoolTrue()
 
-	mlist, err := client.Rooms().Message().List(room_id, force_flang)
+	mlist, err := client.Rooms().Messages().List(roomID, force)
 	if err != nil {
 		panic(err)
 	}

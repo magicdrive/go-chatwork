@@ -31,10 +31,10 @@ func NilInt() *NullableInt {
 }
 
 // NewNullableInt new chatwork api optional int with detailed.
-func NewNullableInt(v int, as_null bool) *NullableInt {
+func NewNullableInt(v int, asNull bool) *NullableInt {
 	return &NullableInt{
 		value:  v,
-		asNull: as_null,
+		asNull: asNull,
 		valid:  false,
 	}
 }

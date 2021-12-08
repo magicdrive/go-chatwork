@@ -31,10 +31,10 @@ func NilInt64() *NullableInt64 {
 }
 
 // NewNullableInt64 new chatwork api optional int64 with detailed.
-func NewNullableInt64(v int64, as_null bool) *NullableInt64 {
+func NewNullableInt64(v int64, asNull bool) *NullableInt64 {
 	return &NullableInt64{
 		value:  v,
-		asNull: as_null,
+		asNull: asNull,
 		valid:  false,
 	}
 }

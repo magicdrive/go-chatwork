@@ -11,11 +11,13 @@ import (
 	"github.com/magicdrive/go-chatwork/api/param/optional"
 )
 
+// RoomMembersResource chatwork api rooms/members resouce.
 type RoomMembersResource struct {
 	ResourceName string
-	Client       *api.ChatworkApiClient
+	Client       *api.ChatworkAPIClient
 }
 
+// RoomMemberData chatwork api resp rooms/member data.
 type RoomMemberData struct {
 	AccountID        int    `json:"account_id"`
 	Role             string `json:"role"`
@@ -27,19 +29,22 @@ type RoomMemberData struct {
 	AvatarImageURL   string `json:"avatar_image_url"`
 }
 
+// RoomMembersAuthorityData chatwork api resp rooms/member autority data.
 type RoomMembersAuthorityData struct {
 	Admin    []int `json:"admin"`
 	Member   []int `json:"member"`
 	Readonly []int `json:"readonly"`
 }
 
+// RoomMembersUpdateParam chatwork api update rooms/members request param.
 type RoomMembersUpdateParam struct {
-	MembersAdminIds    *param.IntArrayParam       `json:"members_admin_ids"`
-	MembersMemberIds   *optional.NullableIntArray `json:"members_member_ids"`
-	MembersReadonlyIds *optional.NullableIntArray `json:"members_readonly_ids"`
+	MembersAdminIDs    *param.IntArrayParam       `json:"members_admin_ids"`
+	MembersMemberIDs   *optional.NullableIntArray `json:"members_member_ids"`
+	MembersReadonlyIDs *optional.NullableIntArray `json:"members_readonly_ids"`
 }
 
-func NewRoomMembersResource(parent string, client *api.ChatworkApiClient) RoomMembersResource {
+// NewRoomMembersResource new chatwork api rooms/members resource.
+func NewRoomMembersResource(parent string, client *api.ChatworkAPIClient) RoomMembersResource {
 	data := RoomMembersResource{
 		ResourceName: parent + `/%d/members`,
 		Client:   client,
@@ -47,12 +52,13 @@ func NewRoomMembersResource(parent string, client *api.ChatworkApiClient) RoomMe
 	return data
 }
 
-func (c RoomMembersResource) List(room_id int, force *optional.NullableBool) ([]RoomMemberData, error) {
+// List chatwork api get rooms/members list.
+func (c RoomMembersResource) List(roomID int, force *optional.NullableBool) ([]RoomMemberData, error) {
 
-	spec := api.ApiSpec{
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
-		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
+		ResouceName: fmt.Sprintf(c.ResourceName, roomID),
 		Params: map[string]*optional.NullableString{
 			"force": force.ToNullableString(),
 		},
@@ -68,15 +74,16 @@ func (c RoomMembersResource) List(room_id int, force *optional.NullableBool) ([]
 	return result, err
 }
 
-func (c RoomMembersResource) Update(room_id int, params RoomMembersUpdateParam) (RoomMembersAuthorityData, error) {
+// Update chatwork api update rooms/members.
+func (c RoomMembersResource) Update(roomID int, params RoomMembersUpdateParam) (RoomMembersAuthorityData, error) {
 
 	b, _ := json.Marshal(params)
-	p, _ := api.JsonToMap(b)
+	p, _ := api.JSONToMap(b)
 
-	spec := api.ApiSpec{
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodPost,
-		ResouceName: fmt.Sprintf(c.ResourceName, room_id),
+		ResouceName: fmt.Sprintf(c.ResourceName, roomID),
 		Params:      p,
 	}
 

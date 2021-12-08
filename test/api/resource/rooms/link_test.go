@@ -1,4 +1,4 @@
-package rooms
+package rooms_test
 
 import (
 	"encoding/json"
@@ -17,14 +17,14 @@ func TestGetRoomsLink(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
 
-	room_id := 1
+	roomID := 1
 
 	target := client.Rooms().Link()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "public": true,
 	  "url": "https://example.chatwork.com/g/randomcode42",
@@ -34,15 +34,15 @@ func TestGetRoomsLink(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodGet,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName, roomID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
-	actual, err := target.Get(room_id)
+	actual, err := target.Get(roomID)
 	assert.Nil(t, err)
 
 	expected := rooms.RoomLinkData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 	assert.Nil(t, err)
 
 	assert.Equal(t, expected, actual)
@@ -51,14 +51,14 @@ func TestGetRoomsLink(t *testing.T) {
 func TestCreateRoomsLink(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
-	room_id := 1
+	roomID := 1
 
 	target := client.Rooms().Link()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "file_id":3,
 	  "account": {
@@ -74,8 +74,8 @@ func TestCreateRoomsLink(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodPost,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName, roomID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
 	params := chatwork.RoomLinkParam{
@@ -84,11 +84,11 @@ func TestCreateRoomsLink(t *testing.T) {
 		NeedAcceptance: optional.BoolTrue(),
 	}
 
-	actual, err := target.Create(room_id, params)
+	actual, err := target.Create(roomID, params)
 	assert.Nil(t, err)
 
 	expected := rooms.RoomLinkData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 
 	assert.Nil(t, err)
 
@@ -98,14 +98,14 @@ func TestCreateRoomsLink(t *testing.T) {
 func TestEditRoomsLink(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
-	room_id := 1
+	roomID := 1
 
 	target := client.Rooms().Link()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "file_id":3,
 	  "account": {
@@ -121,8 +121,8 @@ func TestEditRoomsLink(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodPut,
-		fmt.Sprintf("%s%s", client.Client.ApiEndpoint, fmt.Sprintf(target.ResourceName, room_id)),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf("%s%s", client.Client.APIEndpoint, fmt.Sprintf(target.ResourceName, roomID)),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
 	params := chatwork.RoomLinkParam{
@@ -131,11 +131,11 @@ func TestEditRoomsLink(t *testing.T) {
 		NeedAcceptance: optional.BoolTrue(),
 	}
 
-	actual, err := target.Edit(room_id, params)
+	actual, err := target.Edit(roomID, params)
 	assert.Nil(t, err)
 
 	expected := rooms.RoomLinkData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 
 	assert.Nil(t, err)
 
@@ -145,29 +145,29 @@ func TestEditRoomsLink(t *testing.T) {
 func TestDeleteRoomsLink(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
-	room_id := 1
+	roomID := 1
 
 	target := client.Rooms().Link()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "public": false
 	}
 	`
 
 	httpmock.RegisterResponder(http.MethodDelete,
-		fmt.Sprintf(fmt.Sprintf("%s%s", client.Client.ApiEndpoint, target.ResourceName), room_id),
-		httpmock.NewStringResponder(200, mock_json),
+		fmt.Sprintf(fmt.Sprintf("%s%s", client.Client.APIEndpoint, target.ResourceName), roomID),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
-	actual, err := target.Delete(room_id)
+	actual, err := target.Delete(roomID)
 	assert.Nil(t, err)
 
 	expected := rooms.RoomLinkDeleteData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 
 	assert.Nil(t, err)
 

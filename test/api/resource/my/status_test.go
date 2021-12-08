@@ -1,4 +1,4 @@
-package my
+package my_test
 
 import (
 	"encoding/json"
@@ -20,7 +20,7 @@ func TestGetMyStatus(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	{
 	  "unread_room_num": 2,
 	  "mention_room_num": 1,
@@ -31,15 +31,15 @@ func TestGetMyStatus(t *testing.T) {
 	}
 	`
 
-	httpmock.RegisterResponder("GET", fmt.Sprintf("%s%s", client.Client.ApiEndpoint, target.ResourceName),
-		httpmock.NewStringResponder(200, mock_json),
+	httpmock.RegisterResponder("GET", fmt.Sprintf("%s%s", client.Client.APIEndpoint, target.ResourceName),
+		httpmock.NewStringResponder(200, mockBody),
 	)
 
 	actual, err := target.Get()
 	assert.Nil(t, err)
 
 	expected := my.MyStatusData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 	assert.Nil(t, err)
 
 	assert.Equal(t, expected, actual)

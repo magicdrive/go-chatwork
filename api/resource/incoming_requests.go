@@ -11,7 +11,7 @@ import (
 // IncomingRequestsResource chatwork api incoming_requests resource.
 type IncomingRequestsResource struct {
 	ResourceName string
-	Client       *api.ChatworkApiClient
+	Client       *api.ChatworkAPIClient
 }
 
 // IncomingRequestData chatwork api resp incoming_request data.
@@ -27,7 +27,7 @@ type IncomingRequestData struct {
 }
 
 // NewIncomingRequestsResource chatwork api new incoming_request resource.
-func NewIncomingRequestsResource(client *api.ChatworkApiClient) IncomingRequestsResource {
+func NewIncomingRequestsResource(client *api.ChatworkAPIClient) IncomingRequestsResource {
 	data := IncomingRequestsResource{
 		ResourceName: `/incoming_requests`,
 		Client:       client,
@@ -37,7 +37,7 @@ func NewIncomingRequestsResource(client *api.ChatworkApiClient) IncomingRequests
 
 // List chatwork api get incoming_request list.
 func (c IncomingRequestsResource) List() ([]IncomingRequestData, error) {
-	spec := api.ApiSpec{
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodGet,
 		ResouceName: c.ResourceName,
@@ -55,11 +55,11 @@ func (c IncomingRequestsResource) List() ([]IncomingRequestData, error) {
 }
 
 // Accept chatwork api accept incoming_request.
-func (c IncomingRequestsResource) Accept(incoming_request_id int) (IncomingRequestData, error) {
-	spec := api.ApiSpec{
+func (c IncomingRequestsResource) Accept(incomingRequestID int) (IncomingRequestData, error) {
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodPut,
-		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, incoming_request_id),
+		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, incomingRequestID),
 		Params:      nil,
 	}
 
@@ -74,11 +74,11 @@ func (c IncomingRequestsResource) Accept(incoming_request_id int) (IncomingReque
 }
 
 // Delete chatwork api delete incoming_request.
-func (c IncomingRequestsResource) Delete(incoming_request_id int) error {
-	spec := api.ApiSpec{
+func (c IncomingRequestsResource) Delete(incomingRequestID int) error {
+	spec := api.APISpec{
 		Credential:  c.Client.Credential,
 		Method:      http.MethodDelete,
-		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, incoming_request_id),
+		ResouceName: fmt.Sprintf("%s/%d", c.ResourceName, incomingRequestID),
 		Params:      nil,
 	}
 

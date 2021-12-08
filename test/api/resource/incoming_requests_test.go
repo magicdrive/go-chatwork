@@ -1,4 +1,4 @@
-package resource
+package resource_test
 
 import (
 	"encoding/json"
@@ -21,7 +21,7 @@ func TestGetIncomingRequests(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
 	[
 	  {
 		"account_id": 123,
@@ -36,15 +36,15 @@ func TestGetIncomingRequests(t *testing.T) {
 	]
 	`
 
-	httpmock.RegisterResponder(http.MethodGet, fmt.Sprintf("%s%s", client.Client.ApiEndpoint, target.ResourceName),
-		httpmock.NewStringResponder(http.StatusOK, mock_json),
+	httpmock.RegisterResponder(http.MethodGet, fmt.Sprintf("%s%s", client.Client.APIEndpoint, target.ResourceName),
+		httpmock.NewStringResponder(http.StatusOK, mockBody),
 	)
 
 	actual, err := target.List()
 	assert.Nil(t, err)
 
 	expected := make([]resource.IncomingRequestData, 0, 32)
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 	assert.Nil(t, err)
 
 	assert.Equal(t, expected, actual)
@@ -54,14 +54,14 @@ func TestPutIncomingRequests(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
 
-	request_id := 1
+	requestID := 1
 
 	target := client.IncomingRequests()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
     {
       "account_id": 123,
       "room_id": 322,
@@ -75,16 +75,16 @@ func TestPutIncomingRequests(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodPut, fmt.Sprintf("%s%s/%d",
-		client.Client.ApiEndpoint, target.ResourceName, request_id,
+		client.Client.APIEndpoint, target.ResourceName, requestID,
 	),
-		httpmock.NewStringResponder(http.StatusOK, mock_json),
+		httpmock.NewStringResponder(http.StatusOK, mockBody),
 	)
 
-	actual, err := target.Accept(request_id)
+	actual, err := target.Accept(requestID)
 	assert.Nil(t, err)
 
 	expected := resource.IncomingRequestData{}
-	err = json.Unmarshal([]byte(mock_json), &expected)
+	err = json.Unmarshal([]byte(mockBody), &expected)
 	assert.Nil(t, err)
 
 	assert.Equal(t, expected, actual)
@@ -94,14 +94,14 @@ func TestDeleteIncomingRequests(t *testing.T) {
 
 	client := chatwork.NewChatworkClient(`test-api-key`)
 
-	request_id := 1
+	requestID := 1
 
 	target := client.IncomingRequests()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mock_json := `
+	mockBody := `
     {
       "account_id": 123,
       "room_id": 322,
@@ -115,12 +115,12 @@ func TestDeleteIncomingRequests(t *testing.T) {
 	`
 
 	httpmock.RegisterResponder(http.MethodDelete, fmt.Sprintf("%s%s/%d",
-		client.Client.ApiEndpoint, target.ResourceName, request_id,
+		client.Client.APIEndpoint, target.ResourceName, requestID,
 	),
-		httpmock.NewStringResponder(http.StatusOK, mock_json),
+		httpmock.NewStringResponder(http.StatusOK, mockBody),
 	)
 
-	err := target.Delete(request_id)
+	err := target.Delete(requestID)
 	assert.Nil(t, err)
 
 }
