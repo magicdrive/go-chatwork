@@ -50,7 +50,7 @@ type RoomMessageReadStatusData struct {
 func NewRoomMessagesResource(parent string, client *api.ChatworkAPIClient) RoomMessagesResource {
 	data := RoomMessagesResource{
 		ResourceName: parent + `/%d/messages`,
-		Client:   client,
+		Client:       client,
 	}
 	return data
 

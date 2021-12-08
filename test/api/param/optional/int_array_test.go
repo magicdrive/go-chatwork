@@ -15,7 +15,7 @@ type IntArrayTest struct {
 
 func TestOptionalParamterIntArrayPresentMarshal(t *testing.T) {
 
-	p := &IntArrayTest{Ids: optional.IntArray(1,2,3)}
+	p := &IntArrayTest{Ids: optional.IntArray(1, 2, 3)}
 
 	b, err := json.Marshal(p)
 

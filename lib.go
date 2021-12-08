@@ -22,7 +22,7 @@ func NewChatworkClient(credential string) ChatworkClientWrapper {
 }
 
 // NewChatworkClientWithDetailed new this chatwork library client with detailed.
-func NewChatworkClientWithDetailed(credential string, client *http.Client, altChatworkAPIHost string) ChatworkClientWrapper{
+func NewChatworkClientWithDetailed(credential string, client *http.Client, altChatworkAPIHost string) ChatworkClientWrapper {
 	return ChatworkClientWrapper{
 		Client: api.NewChatworkAPIClient(credential, client, altChatworkAPIHost),
 	}
@@ -62,44 +62,44 @@ type RoomCreateParam = resource.RoomsCreateParam
 
 var (
 	// IconPresetGroup    = resource.IconPresetGroup
-	IconPresetGroup    = resource.IconPresetGroup
+	IconPresetGroup = resource.IconPresetGroup
 	// IconPresetCheck    = resource.IconPresetCheck
-	IconPresetCheck    = resource.IconPresetCheck
+	IconPresetCheck = resource.IconPresetCheck
 	// IconPresetDocument = resource.IconPresetDocument
 	IconPresetDocument = resource.IconPresetDocument
 	// IconPresetMeeting  = resource.IconPresetMeeting
-	IconPresetMeeting  = resource.IconPresetMeeting
+	IconPresetMeeting = resource.IconPresetMeeting
 	// IconPresetEvent    = resource.IconPresetEvent
-	IconPresetEvent    = resource.IconPresetEvent
+	IconPresetEvent = resource.IconPresetEvent
 	// IconPresetProject  = resource.IconPresetProject
-	IconPresetProject  = resource.IconPresetProject
+	IconPresetProject = resource.IconPresetProject
 	// IconPresetBusiness = resource.IconPresetBusiness
 	IconPresetBusiness = resource.IconPresetBusiness
 	// IconPresetStudy    = resource.IconPresetStudy
-	IconPresetStudy    = resource.IconPresetStudy
+	IconPresetStudy = resource.IconPresetStudy
 	// IconPresetSecurity = resource.IconPresetSecurity
 	IconPresetSecurity = resource.IconPresetSecurity
 	// IconPresetStar     = resource.IconPresetStar
-	IconPresetStar     = resource.IconPresetStar
+	IconPresetStar = resource.IconPresetStar
 	// IconPresetIdea     = resource.IconPresetIdea
-	IconPresetIdea     = resource.IconPresetIdea
+	IconPresetIdea = resource.IconPresetIdea
 	// IconPresetHeart    = resource.IconPresetHeart
-	IconPresetHeart    = resource.IconPresetHeart
+	IconPresetHeart = resource.IconPresetHeart
 	// IconPresetMagcup   = resource.IconPresetMagcup
-	IconPresetMagcup   = resource.IconPresetMagcup
+	IconPresetMagcup = resource.IconPresetMagcup
 	// IconPresetBeer     = resource.IconPresetBeer
-	IconPresetBeer     = resource.IconPresetBeer
+	IconPresetBeer = resource.IconPresetBeer
 	// IconPresetMusic    = resource.IconPresetMusic
-	IconPresetMusic    = resource.IconPresetMusic
+	IconPresetMusic = resource.IconPresetMusic
 	// IconPresetSports   = resource.IconPresetSports
-	IconPresetSports   = resource.IconPresetSports
+	IconPresetSports = resource.IconPresetSports
 	// IconPresetTravel   = resource.IconPresetTravel
-	IconPresetTravel   = resource.IconPresetTravel
+	IconPresetTravel = resource.IconPresetTravel
 )
 
 const (
 	// RoomLeave  = resource.RoomLeave
-	RoomLeave  = resource.RoomLeave
+	RoomLeave = resource.RoomLeave
 	// RoomDelete = resource.RoomDelete
 	RoomDelete = resource.RoomDelete
 )

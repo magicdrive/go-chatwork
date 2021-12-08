@@ -64,44 +64,44 @@ type RoomsUpdateParam struct {
 
 var (
 	// IconPresetGroup binding icon_preset param "group".
-	IconPresetGroup    = optional.String("group")
+	IconPresetGroup = optional.String("group")
 	// IconPresetCheck binding icon_preset param "check".
-	IconPresetCheck    = optional.String("check")
+	IconPresetCheck = optional.String("check")
 	// IconPresetDocument binding icon_preset param "document".
 	IconPresetDocument = optional.String("document")
 	// IconPresetMeeting binding icon_preset param "meeting".
-	IconPresetMeeting  = optional.String("meeting")
+	IconPresetMeeting = optional.String("meeting")
 	// IconPresetEvent binding icon_preset param "event".
-	IconPresetEvent    = optional.String("event")
+	IconPresetEvent = optional.String("event")
 	// IconPresetProject binding icon_preset param "project".
-	IconPresetProject  = optional.String("project")
+	IconPresetProject = optional.String("project")
 	// IconPresetBusiness binding icon_preset param "business".
 	IconPresetBusiness = optional.String("business")
 	// IconPresetStudy binding icon_preset param "study".
-	IconPresetStudy    = optional.String("study")
+	IconPresetStudy = optional.String("study")
 	// IconPresetSecurity binding icon_preset param "security".
 	IconPresetSecurity = optional.String("security")
 	// IconPresetStar binding icon_preset param "star".
-	IconPresetStar     = optional.String("star")
+	IconPresetStar = optional.String("star")
 	// IconPresetIdea binding icon_preset param "idea".
-	IconPresetIdea     = optional.String("idea")
+	IconPresetIdea = optional.String("idea")
 	// IconPresetHeart binding icon_preset param "heart".
-	IconPresetHeart    = optional.String("heart")
+	IconPresetHeart = optional.String("heart")
 	// IconPresetMagcup binding icon_preset param "magcup".
-	IconPresetMagcup   = optional.String("magcup")
+	IconPresetMagcup = optional.String("magcup")
 	// IconPresetBeer binding icon_preset param "beer".
-	IconPresetBeer     = optional.String("beer")
+	IconPresetBeer = optional.String("beer")
 	// IconPresetMusic binding icon_preset param "music".
-	IconPresetMusic    = optional.String("music")
+	IconPresetMusic = optional.String("music")
 	// IconPresetSports binding icon_preset param "sports".
-	IconPresetSports   = optional.String("sports")
+	IconPresetSports = optional.String("sports")
 	// IconPresetTravel binding icon_preset param "travel".
-	IconPresetTravel   = optional.String("travel")
+	IconPresetTravel = optional.String("travel")
 )
 
 const (
 	// RoomLeave binding room delete status param "leave".
-	RoomLeave  = "leave"
+	RoomLeave = "leave"
 	// RoomDelete binding room delete status param "delete".
 	RoomDelete = "delete"
 )

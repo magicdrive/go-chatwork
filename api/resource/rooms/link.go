@@ -12,7 +12,7 @@ import (
 // RoomLinkResource chatwork api rooms/link resouce
 type RoomLinkResource struct {
 	ResourceName string
-	Client   *api.ChatworkAPIClient
+	Client       *api.ChatworkAPIClient
 }
 
 // RoomLinkData chatwork api resp rooms/link data
@@ -39,7 +39,7 @@ type RoomLinkParam struct {
 func NewRoomLinkResource(parent string, client *api.ChatworkAPIClient) RoomLinkResource {
 	data := RoomLinkResource{
 		ResourceName: parent + `/%d/link`,
-		Client:   client,
+		Client:       client,
 	}
 	return data
 }

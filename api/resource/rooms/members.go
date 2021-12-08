@@ -47,7 +47,7 @@ type RoomMembersUpdateParam struct {
 func NewRoomMembersResource(parent string, client *api.ChatworkAPIClient) RoomMembersResource {
 	data := RoomMembersResource{
 		ResourceName: parent + `/%d/members`,
-		Client:   client,
+		Client:       client,
 	}
 	return data
 }

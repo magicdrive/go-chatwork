@@ -44,4 +44,3 @@ func TestGetMyStatus(t *testing.T) {
 
 	assert.Equal(t, expected, actual)
 }
-

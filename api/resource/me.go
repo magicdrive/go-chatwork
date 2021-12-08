@@ -10,7 +10,7 @@ import (
 // MeResource chatwork api me resource.
 type MeResource struct {
 	ResourceName string
-	Client   *api.ChatworkAPIClient
+	Client       *api.ChatworkAPIClient
 }
 
 // MeData chatwork api me resp data.
@@ -40,7 +40,7 @@ type MeData struct {
 func NewMeResource(client *api.ChatworkAPIClient) MeResource {
 	data := MeResource{
 		ResourceName: `/me`,
-		Client:   client,
+		Client:       client,
 	}
 	return data
 }
