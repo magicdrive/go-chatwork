@@ -29,7 +29,7 @@ type RoomMemberData struct {
 	AvatarImageURL   string `json:"avatar_image_url"`
 }
 
-// RoomMembersAuthorityData chatwork api resp rooms/member autority data.
+// RoomMembersAuthorityData chatwork api resp rooms/member authority data.
 type RoomMembersAuthorityData struct {
 	Admin    []int `json:"admin"`
 	Member   []int `json:"member"`
