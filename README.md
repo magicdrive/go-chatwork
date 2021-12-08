@@ -3,7 +3,7 @@
 [![CircleCI](https://circleci.com/gh/magicdrive/go-chatwork/tree/main.svg?style=svg)](https://circleci.com/gh/magicdrive/go-chatwork/tree/main)
 [![CircleCIBuild](https://img.shields.io/circleci/build/github/magicdrive/go-chatwork)](https://circleci.com/gh/magicdrive/go-chatwork/tree/main)
 [![GoDoc](https://godoc.org/github.com/magicdrive/go-chatwork?status.svg)](https://godoc.org/github.com/magicdrive/go-chatwork)
-[![Go Report Card](https://goreportcard.com/badge/github.com/magicdrive/go-chatwork)](https://goreportcard.com/report/github.com/magicdrive/go-chatwork)
+[![Go Report Card](https://goreportcard.com/badge/github.com/magicdrive/go-chatwork?1)](https://goreportcard.com/report/github.com/magicdrive/go-chatwork)
 [![codecov](https://codecov.io/gh/magicdrive/go-chatwork/branch/main/graph/badge.svg?token=RWP0GEUWPA)](https://codecov.io/gh/magicdrive/go-chatwork)
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/magicdrive/go-chatwork/blob/main/LICENSE)
 
