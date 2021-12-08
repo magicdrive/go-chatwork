@@ -36,7 +36,7 @@ $ go get -u github.com/magicdrive/go-chatwork@latest
 
 ```go
 import (
-    "github.com/magicdrive/go-chatwork"
+	"github.com/magicdrive/go-chatwork"
 )
 
 func main() {
@@ -46,25 +46,27 @@ func main() {
 
 ```
 
-## Configuration with detailed ##
+### Configuration with detailed ###
 
 ```go
 import (
-    "net/http"
+	"net/http"
 
-    "github.com/magicdrive/go-chatwork"
+	"github.com/magicdrive/go-chatwork"
 )
 
 func main() {
-	http_client := &http.Client{}
-	alt_host := "audit-chatwork-api.yourcompany.com"
-	client := chatwork.NewChatworkClientWithDetailed(`your-api-key-here`, client, alt_host)
+	httpClient := &http.Client{}
+	altHost := "audit-chatwork-api.yourcompany.com"
+	client := chatwork.NewChatworkClientWithDetailed(`your-api-key-here`, httpClient, altHost)
 	...
 }
 
 ```
 
 ## Post Message ##
+
+POST /rooms/{room_id}/messages
 
 ```go
 import (
@@ -78,11 +80,11 @@ func main() {
 
 	client := chatwork.NewChatworkClient(`your-api-key-here`)
 
-	room_id := 1
+	roomID := 1
 	params := chatwork.RoomMessagePostParam{Body: "Hi there.", SelfUnread: optional.BoolTrue()}
 
-	if r, err := client.Rooms().Message().Post(room_id, params); err == nil {
-		fmt.Println(r.MessageId)
+	if r, err := client.Rooms().Messages().Post(roomID, params); err == nil {
+		fmt.Println(r.MessageID)
 	} else {
 		panic(err)
 	}
@@ -92,6 +94,8 @@ func main() {
 ```
 
 ## Create Task ##
+
+POST /rooms/{room_id}/tasks
 
 ```go
 import (
@@ -107,22 +111,22 @@ func main() {
 
 	client := chatwork.NewChatworkClient(`your-api-key-here`)
 
-	task_assign_account_id_1 := 1
-	task_assign_account_id_2 := 2
+	taskAssignAccountID1 := 1
+	taskAssignAccountID2 := 2
 
 	date := "2022/01/01"
 	t, _ := time.Parse("2006/01/02", date)
 
-	room_id := 1
+	roomID := 1
 	params := chatwork.RoomTaskPostParam{
 		Body:      "Do it now!",
 		Limit:     optional.Int64(t.Unix()),
 		LimitType: chatwork.RoomTaskLimitTypeDate,
-		ToIds:     param.IntArray(task_assign_account_id_1, task_assign_account_id_2),
+		ToIDs:     param.IntArray(taskAssignAccountID1, taskAssignAccountID2),
 	}
 
-	if r, err := client.Rooms().Tasks().Create(room_id, params); err == nil {
-		fmt.Println(r.TaskId)
+	if r, err := client.Rooms().Tasks().Create(roomID, params); err == nil {
+		fmt.Println(r.TaskID)
 	} else {
 		panic(err)
 	}
@@ -131,6 +135,8 @@ func main() {
 ```
 
 ## Get Room Messages ##
+
+GET /rooms/{room_id}/messages
 
 ```go
 import (
@@ -144,10 +150,10 @@ func main() {
 
 	client := chatwork.NewChatworkClient(`your-api-key-here`)
 
-	room_id := 1
-	force_flang := optional.BoolTrue()
+	roomID := 1
+	force := optional.BoolTrue()
 
-	mlist, err := client.Rooms().Message().List(room_id, force_flang)
+	mlist, err := client.Rooms().Messages().List(roomID, force)
 	if err != nil {
 		panic(err)
 	}
