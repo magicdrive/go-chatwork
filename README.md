@@ -29,7 +29,7 @@ This library requires Go 1.11 or later.
 ## Installation ##
 
 ```sh
-$ go get -u github.com/magicdrive/go-chatwork@latest
+$ go get -u github.com/magicdrive/go-chatwork@v0.1.0
 ```
 
 ## Configuration ##
